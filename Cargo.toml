@@ -1,0 +1,11 @@
+[package]
+name = "rust-lua-doc"
+version = "0.1.0"
+authors = ["Soviet Kitsune <SovietKitsune@soviet.solutions>"]
+edition = "2018"
+
+[dependencies]
+askama = "0.8"
+rslua = "0.2.6"
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
