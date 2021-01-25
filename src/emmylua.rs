@@ -179,7 +179,7 @@ enum EmmyLuaTags {
         property: String
     },
     Overload {
-        int_type: Box<dyn LuaType>, // Must be callable
+        int_type: Box<dyn LuaType>, // NOTE; Must be callable
     },
     Deprecated {
         comment: String
