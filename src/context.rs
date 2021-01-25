@@ -9,6 +9,7 @@ enum Name {
     Index(Vec<String>),
 }
 
+/// TODO; should this be separate structures instead?
 enum Context {
     /// Represents a bare variable, no sort of comments have been looked at so types and visibility are a guess.
     Variable {
@@ -47,7 +48,6 @@ enum HasContext {
 
 enum Error {
     UnexpectedNone(NoneError),
-    ExpectingName,
     UnexpectedExpression,
 }
 
@@ -177,6 +177,22 @@ fn parse_context(ctx: HasContext) -> Result<Context, Error> {
                 visibility,
             })
         }
-        _ => todo!(),
+        HasContext::Function(stat) => {
+            let mut fields: Vec<String> = stat.func_name.fields;
+            let mut is_static = true;
+
+            if stat.func_name.method.is_some() {
+                fields.push(stat.func_name.method.unwrap());
+                is_static = false;
+            }
+
+            let name = match fields.len() {
+                1 => Name::Plain(fields.get(1)?.clone()),
+                _ => Name::Index(fields),
+            };
+
+            Ok(from_func_body(name, &stat.body, Some(is_static)))
+        }
+        _ => todo!(), // TODO; tables can hold multiple functions while this function currently only returns a singular context
     }
 }

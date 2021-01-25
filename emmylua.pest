@@ -1,0 +1,75 @@
+id = @{ (ASCII_ALPHANUMERIC | "." | "_")+ }
+name = @{ id }
+key = @{ TYPE }
+value = @{ TYPE }
+
+TYPE = @{
+  array |
+  inline_table |
+  fun |
+  (id+ ~ WHITESPACE* ~ "|" ~ WHITESPACE* ~ TYPE)+ |
+  id+
+}
+
+start = _{ "---" }
+
+inline_table = {
+  "table<" ~ key ~ WHITESPACE* ~ "," ~ WHITESPACE* ~ value ~ ">"
+}
+
+// TODO; Should use `TYPE` instead
+array = {
+  id+ ~ "[]"
+}
+
+fun_param = {
+  name ~ ":" ~ TYPE
+}
+
+fun = {
+  "fun(" ~ (fun_param ~ ",") ~ ")" ~ (":" ~ (name ~ ","?))?
+}
+
+comment = { (!"\n" ~ ANY)+ }
+
+generic = { (TYPE ~ (":" ~ TYPE)?) }
+
+field_type = {
+  "public" |
+  "protected" |
+  "private"
+}
+
+// Tags
+
+class_tag = { start ~ "@class" ~ name ~ (":" ~ TYPE)? }
+param_tag = { start ~ "@param" ~ name ~ TYPE ~ comment* }
+return_tag = { start ~ "@return" ~ TYPE ~ ((name)? ~ comment*) }
+// TODO; should check for existence of a class or field before it
+field_tag = { start ~ "@field" ~ field_type ~ name ~ TYPE ~ comment* }
+generic_tag = { start ~ "@generic" ~ ( generic ~ ","?)+ }
+vararg_tag = { start ~ "@vararg" ~ TYPE }
+see_tag = { start ~ "@see" ~ name ~ "#" ~ name }
+overload_tag = { start ~ "@overload" ~ TYPE }
+deprecated_tag = { start ~ "@deprecated" ~ comment*}
+
+file = {
+  SOI
+  ~ (
+    class_tag |
+    param_tag |
+    return_tag |
+    field_tag |
+    generic_tag |
+    vararg_tag |
+    see_tag |
+    overload_tag |
+    deprecated_tag |
+    ANY
+  )*
+  ~ EOI
+}
+
+// Other
+
+WHITESPACE = _{ " " | "\t" }

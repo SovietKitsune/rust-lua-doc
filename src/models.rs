@@ -10,9 +10,9 @@ pub trait LuaType {}
 
 /// The visibility of Lua types
 pub enum LuaVisibility {
-    PUBLIC = 1,
-    PROTECTED = 2,
-    PRIVATE = 3,
+    PUBLIC,
+    PROTECTED,
+    PRIVATE,
 }
 
 // Structures
@@ -77,13 +77,13 @@ pub struct LuaParam {
     pub name: String,
     pub desc: String,
     pub int_type: Box<dyn LuaType>,
-    pub is_opt: bool,
-    pub default: Option<Box<dyn LuaType>>,
+    pub is_generic: bool,
 }
 impl LuaType for LuaParam {}
 /// A return to a function
 pub struct LuaReturn {
     pub desc: String,
+    pub name: String,
     pub int_type: Box<dyn LuaType>,
 }
 impl LuaType for LuaReturn {}
@@ -93,10 +93,11 @@ pub struct LuaFunction {
     pub desc: String,
     pub params: Vec<LuaParam>,
     pub returns: Vec<LuaReturn>,
-    pub is_abstract: bool,
     pub is_static: bool,
     pub is_deprecated: (bool, Option<String>),
     pub visibility: LuaVisibility,
+    pub overloads: Vec<LuaCallable>,
+    pub generics: Vec<String>,
 }
 impl LuaType for LuaFunction {}
 /// A field part of a class or module
