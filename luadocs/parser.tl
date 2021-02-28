@@ -1,6 +1,3 @@
---; TODO comment below line out
-global p: function(...: any)
-
 local tl = require 'tl'
 
 -- Functions
@@ -388,21 +385,7 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
    end
 end
 
-local sample = [[
-local record Test
-   test: Test
-end
-
-return Test
-]]
-
-local mods = { add = sample }
-
-local state = getReport(mods, true)
-local indexes = extractModules(state, mods)
-
--- local json = require 'json'
-
--- for _, v in pairs(indexes) do
---    print(json.encode(createType(v, state)))
--- end
+return {
+   getReport = getReport,
+   extractModules = extractModules
+}
