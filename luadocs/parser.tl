@@ -49,7 +49,7 @@ local record Type
       'union' -- T | V
       'tuple' -- {T, V}
       'poly' -- ?
-      'nominal'
+      'nominal' -- Records within records
       'enum'
       'generic' -- T
    end
@@ -327,7 +327,7 @@ local function createType(index: number, report: State): Type
       local name: string
 
       for i = 1, #tokensAtSig do
-         if tokensAtSig[i].kind == 'identifier' and tokensAtSig[i - 1].tk == 'record' then
+         if tokensAtSig[i].kind == 'identifier' and tokensAtSig[i - 1] and tokensAtSig[i - 1].tk == 'record' then
             name = tokensAtSig[i].tk
             break
          end
@@ -380,12 +380,21 @@ local function createType(index: number, report: State): Type
 end
 
 local sample = [[
---- So this function adds 2 numbers together
-local function add(x: number, y: number): number
-   return x + y
+--- This is a user account
+local record User
+   record Email
+      name: string
+      domain: string
+   end
+   --- This is the name of the user
+   name: string
+   --- This is the id of the user
+   id: number
+   --- This is the email address of the user
+   email: Email
 end
 
-return add
+return User
 ]]
 
 local mods = { add = sample }
