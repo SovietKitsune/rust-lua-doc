@@ -243,7 +243,6 @@ local function createType(index: number, report: State): Type
       for i = 1, #tp.args do
          --; TODO - collect argument names by backtracking to the source
          --; then use the symbols list
-         p(tp.args[i])
          table.insert(params, {
             type = createType(tp.args[i][1], report)
          })
