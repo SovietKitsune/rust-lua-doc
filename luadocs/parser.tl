@@ -49,7 +49,7 @@ local record Type
       'union' -- T | V
       'tuple' -- {T, V}
       'poly' -- ?
-      'nominal' -- Records within records
+      'nominal' -- Reference
       'enum'
       'generic' -- T
    end
@@ -243,7 +243,7 @@ local function getTokensAtLine(tokens: {Token}, y: number, x: number): {Token}
    return tokensAtSig
 end
 
-local function createType(index: number, report: State): Type
+local function createType(index: number, report: State, noNominal: boolean): Type
    local tp = report.report.types[index]
    local codes = tl.typecodes
 
@@ -287,13 +287,13 @@ local function createType(index: number, report: State): Type
 
       for i = 1, #tp.args do
          table.insert(params, {
-            type = createType(tp.args[i][1], report),
+            type = createType(tp.args[i][1], report, noNominal),
             name = paramNames[i]
          })
       end
 
       for i = 1, #tp.rets do
-         table.insert(rets, createType(tp.rets[i][1], report))
+         table.insert(rets, createType(tp.rets[i][1], report, noNominal))
       end
 
       return {
@@ -311,15 +311,9 @@ local function createType(index: number, report: State): Type
          key = {
             kind = 'number'
          },
-         value = createType(tp.elements, report)
+         value = createType(tp.elements, report, noNominal)
       }
    elseif tp.t == codes.RECORD or tp.t == codes.ARRAYRECORD then
-      local fields = {}
-
-      for i, v in pairs(tp.fields) do
-         fields[i] = createType(v, report)
-      end
-
       local tokens = tl.lex(report.files[tp.file])
 
       local tokensAtSig = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
@@ -333,6 +327,16 @@ local function createType(index: number, report: State): Type
          end
       end
 
+      local fields = {}
+
+      for i, v in pairs(tp.fields) do
+         fields[i] = {
+            --; TODO - get description of field
+            description = '',
+            type = createType(v, report, noNominal)
+         }
+      end
+
       return {
          kind = 'custom',
          struct = {
@@ -344,14 +348,14 @@ local function createType(index: number, report: State): Type
    elseif tp.t == codes.MAP then
       return {
          kind = 'table',
-         key = createType(tp.keys, report),
-         value = createType(tp.values, report)
+         key = createType(tp.keys, report, noNominal),
+         value = createType(tp.values, report, noNominal)
       }
    elseif tp.t == codes.TUPLE or tp.t == codes.IS_UNION or tp.t == codes.IS_POLY then
       local types = {}
 
       for i = 1, #tp.types do
-         table.insert(types, createType(tp.types[i], report))
+         table.insert(types, createType(tp.types[i], report, noNominal))
       end
       
       return {
@@ -361,10 +365,15 @@ local function createType(index: number, report: State): Type
             tp.t == codes.IS_POLY and 'poly',
          types = types
       }
-   elseif tp.t == codes.NOMINAL then
+   elseif tp.t == codes.NOMINAL and not noNominal then
+      -- Reference to another record
+      local ref = createType(tp.ref, report, true)
+
+      local struct = ref and ref.struct as Record
+
       return {
          type = 'nominal',
-         ref = createType(tp.ref, report),
+         ref = struct and struct.name or 'recursion',
       }
    elseif tp.t == codes.ENUM then
       return {
@@ -380,21 +389,11 @@ local function createType(index: number, report: State): Type
 end
 
 local sample = [[
---- This is a user account
-local record User
-   record Email
-      name: string
-      domain: string
-   end
-   --- This is the name of the user
-   name: string
-   --- This is the id of the user
-   id: number
-   --- This is the email address of the user
-   email: Email
+local record Test
+   test: Test
 end
 
-return User
+return Test
 ]]
 
 local mods = { add = sample }
@@ -402,6 +401,8 @@ local mods = { add = sample }
 local state = getReport(mods, true)
 local indexes = extractModules(state, mods)
 
+-- local json = require 'json'
+
 -- for _, v in pairs(indexes) do
---    p(createType(v, state))
+--    print(json.encode(createType(v, state)))
 -- end
