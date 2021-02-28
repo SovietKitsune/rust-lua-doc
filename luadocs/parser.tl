@@ -13,7 +13,7 @@ local record Function
 end
 
 local record Param
-   -- name: string
+   name: string
    type: Type
 end
 --}}}
@@ -21,7 +21,7 @@ end
 -- Records
 --{{{
 local record Record
-   -- name: string
+   name: string
    description: string
    fields: {string: Field}
 end
@@ -72,6 +72,15 @@ end
 local record State
    report: tl.TypeReport
    files: {string: string}
+end
+
+-- Token isn't exposed
+local record Token
+   x: number
+   y: number
+   i: number
+   tk: string
+   kind: string
 end
 
 local function generateGlobals(modules: {string}): string
@@ -215,6 +224,25 @@ local function getDescription(contents: string, y: number): string
    return table.concat(reversed, '\n')
 end
 
+local function getTokensAtLine(tokens: {Token}, y: number, x: number): {Token}
+   --; TODO, use a binary search
+   local started = false
+   local tokensAtSig = {}
+
+   for i = 1, #tokens do
+      local token = tokens[i]
+
+      if token.y == y and token.x >= x then
+         started = true
+         table.insert(tokensAtSig, token)
+      elseif token.y ~= y and started then
+         break
+      end
+   end
+
+   return tokensAtSig
+end
+
 local function createType(index: number, report: State): Type
    local tp = report.report.types[index]
    local codes = tl.typecodes
@@ -240,11 +268,27 @@ local function createType(index: number, report: State): Type
       local params = {}
       local rets = {}
 
+      local tokens = tl.lex(report.files[tp.file])
+
+      local paramNames = {}
+
+      local started = false
+      local tokensAtSig = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
+
+      for i = 1, #tokensAtSig do
+         if tokensAtSig[i].tk == '(' then
+            started = true
+         elseif started and tokensAtSig[i].tk == ')' then
+            break
+         elseif started and tokensAtSig[i].kind == 'identifier' and tokensAtSig[i - 1].kind ~= ':' then
+            table.insert(paramNames, tokensAtSig[i].tk)
+         end
+      end
+
       for i = 1, #tp.args do
-         --; TODO - collect argument names by backtracking to the source
-         --; then use the symbols list
          table.insert(params, {
-            type = createType(tp.args[i][1], report)
+            type = createType(tp.args[i][1], report),
+            name = paramNames[i]
          })
       end
 
@@ -276,11 +320,23 @@ local function createType(index: number, report: State): Type
          fields[i] = createType(v, report)
       end
 
+      local tokens = tl.lex(report.files[tp.file])
+
+      local tokensAtSig = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
+
+      local name: string
+
+      for i = 1, #tokensAtSig do
+         if tokensAtSig[i].kind == 'identifier' and tokensAtSig[i - 1].tk == 'record' then
+            name = tokensAtSig[i].tk
+            break
+         end
+      end
+
       return {
          kind = 'custom',
          struct = {
-            --; TODO - collect record names by backtracking to the source
-            --; then use the symbols list
+            name = name,
             description = getDescription(report.files[tp.file], tp.y),
             fields = fields
          }
@@ -336,3 +392,7 @@ local mods = { add = sample }
 
 local state = getReport(mods, true)
 local indexes = extractModules(state, mods)
+
+-- for _, v in pairs(indexes) do
+--    p(createType(v, state))
+-- end

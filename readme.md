@@ -19,22 +19,19 @@ This would parse as
 {
    func = {
       params = {
-         { type = { kind = 'number' } },
-         { type = { kind = 'number' } }
+         { type = { kind = 'number' }, name = 'x' },
+         { type = { kind = 'number' }, name = 'y' }
       },
       returns = {
          { kind = 'number' }
       },
+      vararg = false,
       description = 'So this function adds 2 numbers together'
    },
    kind = 'function'
 }
 ```
 
-Currently parameter names are not extracted due to `tl.get_types` not exposing them.
-
-This would change in the future by using `tl.get_tokens_at` or `TypeInfo.symbols`.
-
-With the change, comments for record fields should also come.
+Comments for record fields should come soon.
 
 The functions and properties used within the final document would be the ones returned from the module instead of whatever is.
