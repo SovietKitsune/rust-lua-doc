@@ -1,0 +1,339 @@
+--; TODO comment below line out
+global p: function(...: any)
+
+local tl = require 'tl'
+
+-- Functions
+--{{{
+local record Function
+   description: string
+   params: {Param}
+   returns: {Type}
+   vararg: boolean
+end
+
+local record Param
+   -- name: string
+   type: Type
+end
+--}}}
+
+-- Records
+--{{{
+local record Record
+   -- name: string
+   description: string
+   fields: {string: Field}
+end
+
+local record Field
+   type: Type
+   description: string
+end
+--}}}
+
+-- Types
+local record Type
+   enum TypeNames
+      'nil'
+      'boolean'
+      'number'
+      'string'
+      'function' -- Recursion is cool
+      'userdata'
+      'thread'
+      'table'
+      'any'
+      'unknown'
+      'custom' -- Records
+      'union' -- T | V
+      'tuple' -- {T, V}
+      'poly' -- ?
+      'nominal'
+      'enum'
+      'generic' -- T
+   end
+   kind: TypeNames
+   -- Exists on function types
+   func: Function | nil
+   -- Exists on table types
+   key: Type | nil
+   value: Type | nil
+   -- Exists on custom types or generics
+   name: string | nil
+   -- Exists on custom types
+   struct: Record | nil
+   -- Exists on unions, tuples, and polys
+   types: {Type} | nil
+   -- Exists on enums
+   values: {string} | nil
+end
+
+local record State
+   report: tl.TypeReport
+   files: {string: string}
+end
+
+local function generateGlobals(modules: {string}): string
+   local mod = {}
+
+   for i = 1, #modules do
+      local str = modules[i]
+      -- globals are easier to find
+      table.insert(mod, 'global ' .. str .. ' = require \'' .. str .. '\'')
+   end
+
+   return table.concat(mod, '\n')
+end
+
+-- Replaces teals search for one which indexes the virtual modules
+local function new_search(modules: {string: string}, virtual: boolean, state: State): function(module: string): string, FILE, {string}
+   return function(module: string): string, FILE, {string}
+      if modules[module] then
+         local mod = modules[module]
+
+         local f: FILE
+         local filename: string
+
+         -- Virtual
+         if virtual then 
+            local name = os.tmpname() .. '.tl'
+            do
+               local tmp = io.open(name, 'w')
+               tmp:write(mod)
+               tmp:close()
+               state.files[name] = mod
+            end
+            f = io.open(name, 'r')
+            filename = name
+         else
+            do
+               local tmp = io.open(mod, 'r')
+               state.files[mod] = tmp:read('*a')
+               tmp:close()
+            end
+            f = io.open(mod, 'r')
+            filename = mod
+         end
+
+         return filename, f
+      else 
+         return nil, nil, {'We tried everything...'}
+      end
+   end
+end
+
+local function getReport(modules: {string: string}, virtual: boolean): State
+   local keys: {string} = {}
+
+   for i in pairs(modules) do
+      table.insert(keys, i)
+   end
+
+   local str = generateGlobals(keys)
+
+   local oldSearch = tl.search_module
+
+   local state: State = {
+      files = {}
+   }
+
+   tl.search_module = new_search(modules, virtual, state)
+
+   local result = tl.process_string(str)
+
+   if #result.syntax_errors > 1 then
+      error(result.syntax_errors[1].msg)
+   end
+
+   local types = tl.get_types(result)
+
+   tl.search_module = oldSearch
+
+   state.report = types
+
+   return state
+end
+
+local function extractModules(state: State, mods: {string: string}): {string: number}
+   local collected: {string: number} = {}
+
+   for i, v in pairs(state.report.globals) do
+      if mods[i] then
+         collected[i] = v
+      end
+   end
+
+   return collected
+end
+
+local function getDescription(contents: string, y: number): string
+   local split = {}
+
+   do
+      local pos = 1
+
+      while true do
+         local nextNewline = contents:find('\n', pos, true)
+
+         if not nextNewline then
+            break
+         end
+
+         table.insert(split, contents:sub(pos, nextNewline - 1))
+
+         pos = nextNewline + 1
+      end
+   end
+
+   local descLines: {string} = {}
+
+   local i = y - 1
+
+   while true do
+      local line = split[i]
+
+      if i < 0 then
+         break
+      else
+         i = i - 1
+
+         if line and line:match('%s*%-%-%-%.*') then
+            table.insert(descLines, line:match('%s*%-%-%- ?(.*)'))
+         else
+            break
+         end
+      end
+   end
+
+   local reversed = {}
+
+   for i = #descLines, 1, -1 do
+      table.insert(reversed, descLines[i])
+   end
+
+   return table.concat(reversed, '\n')
+end
+
+local function createType(index: number, report: State): Type
+   local tp = report.report.types[index]
+   local codes = tl.typecodes
+
+   local conversions = {
+      [codes.NIL] = 'nil',
+      [codes.BOOLEAN] = 'boolean',
+      [codes.NUMBER] = 'number',
+      [codes.STRING] = 'string',
+      [codes.USERDATA] = 'userdata',
+      [codes.THREAD] = 'thread',
+      [codes.TABLE] = 'table',
+      [codes.ANY] = 'any',
+      [codes.UNKNOWN] = 'unknown'
+   }
+
+   if conversions[tp.t] then
+      -- Basic type
+      return {
+         kind = conversions[tp.t]
+      }
+   elseif tp.t == codes.FUNCTION then
+      local params = {}
+      local rets = {}
+
+      for i = 1, #tp.args do
+         --; TODO - collect argument names by backtracking to the source
+         --; then use the symbols list
+         p(tp.args[i])
+         table.insert(params, {
+            type = createType(tp.args[i][1], report)
+         })
+      end
+
+      for i = 1, #tp.rets do
+         table.insert(rets, createType(tp.rets[i][1], report))
+      end
+
+      return {
+         kind = 'function',
+         func = {
+            description = getDescription(report.files[tp.file], tp.y),
+            params = params,
+            returns = rets,
+            vararg = tp.vararg
+         }
+      }
+   elseif tp.t == codes.ARRAY then
+      return {
+         kind = 'table',
+         key = {
+            kind = 'number'
+         },
+         value = createType(tp.elements, report)
+      }
+   elseif tp.t == codes.RECORD or tp.t == codes.ARRAYRECORD then
+      local fields = {}
+
+      for i, v in pairs(tp.fields) do
+         fields[i] = createType(v, report)
+      end
+
+      return {
+         kind = 'custom',
+         struct = {
+            --; TODO - collect record names by backtracking to the source
+            --; then use the symbols list
+            description = getDescription(report.files[tp.file], tp.y),
+            fields = fields
+         }
+      }
+   elseif tp.t == codes.MAP then
+      return {
+         kind = 'table',
+         key = createType(tp.keys, report),
+         value = createType(tp.values, report)
+      }
+   elseif tp.t == codes.TUPLE or tp.t == codes.IS_UNION or tp.t == codes.IS_POLY then
+      local types = {}
+
+      for i = 1, #tp.types do
+         table.insert(types, createType(tp.types[i], report))
+      end
+      
+      return {
+         kind =
+            tp.t == codes.TUPLE and 'tuple' or
+            tp.t == codes.IS_UNION and 'union' or
+            tp.t == codes.IS_POLY and 'poly',
+         types = types
+      }
+   elseif tp.t == codes.NOMINAL then
+      return {
+         type = 'nominal',
+         ref = createType(tp.ref, report),
+      }
+   elseif tp.t == codes.ENUM then
+      return {
+         type = 'enum',
+         types = tp.enums
+      }
+   elseif tp.t == codes.TYPE_VARIABLE then
+      return {
+         type = 'generic',
+         name = tp.str
+      }
+   end
+end
+
+local sample = [[
+--- So this function adds 2 numbers together
+local function add(x: number, y: number): number
+   return x + y
+end
+
+return add
+]]
+
+local mods = { add = sample }
+
+local state = getReport(mods, true)
+local indexes = extractModules(state, mods)
