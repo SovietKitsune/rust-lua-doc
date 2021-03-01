@@ -7,6 +7,8 @@ local record Function
    params: {Param}
    returns: {Type}
    vararg: boolean
+   source: string
+   y: number
 end
 
 local record Param
@@ -21,6 +23,8 @@ local record Record
    name: string
    description: string
    fields: {string: Field}
+   source: string
+   y: number
 end
 
 local record Field
@@ -36,18 +40,18 @@ local record Type
       'boolean'
       'number'
       'string'
-      'function' -- Recursion is cool
       'userdata'
       'thread'
       'table'
       'any'
       'unknown'
+      'function' -- fun(x): y
       'custom' -- Records
       'union' -- T | V
       'tuple' -- {T, V}
       'poly' -- ?
       'nominal' -- Reference
-      'enum'
+      'enum' -- List of possible strings
       'generic' -- T
    end
    kind: TypeNames
@@ -64,6 +68,8 @@ local record Type
    types: {Type} | nil
    -- Exists on enums
    values: {string} | nil
+   -- Things part of records
+   parent: string | nil
 end
 
 local record State
@@ -93,7 +99,7 @@ local function generateGlobals(modules: {string}): string
 end
 
 -- Replaces teals search for one which indexes the virtual modules
-local function new_search(modules: {string: string}, virtual: boolean, state: State): function(module: string): string, FILE, {string}
+local function newSearch(modules: {string: string}, virtual: boolean, state: State): function(module: string): string, FILE, {string}
    return function(module: string): string, FILE, {string}
       if modules[module] then
          local mod = modules[module]
@@ -144,7 +150,7 @@ local function getReport(modules: {string: string}, virtual: boolean): State
       files = {}
    }
 
-   tl.search_module = new_search(modules, virtual, state)
+   tl.search_module = newSearch(modules, virtual, state)
 
    local result = tl.process_string(str)
 
@@ -277,7 +283,7 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
             started = true
          elseif started and tokensAtSig[i].tk == ')' then
             break
-         elseif started and tokensAtSig[i].kind == 'identifier' and tokensAtSig[i - 1].kind ~= ':' then
+         elseif started and (tokensAtSig[i].kind == 'identifier' or tokensAtSig[i].kind == '...') and tokensAtSig[i - 1].kind ~= ':' then
             table.insert(paramNames, tokensAtSig[i].tk)
          end
       end
@@ -299,7 +305,9 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
             description = getDescription(report.files[tp.file], tp.y),
             params = params,
             returns = rets,
-            vararg = tp.vararg
+            vararg = tp.vararg,
+            source = tp.file,
+            y = tp.y
          }
       }
    elseif tp.t == codes.ARRAY then
@@ -327,10 +335,13 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       local fields = {}
 
       for i, v in pairs(tp.fields) do
+         local typ = createType(v, report, noNominal)
+         typ.parent = i
+
          fields[i] = {
             --; TODO - get description of field
             description = '',
-            type = createType(v, report, noNominal)
+            type = typ
          }
       end
 
@@ -339,7 +350,9 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          struct = {
             name = name,
             description = getDescription(report.files[tp.file], tp.y),
-            fields = fields
+            fields = fields,
+            source = tp.file,
+            y = tp.y
          }
       }
    elseif tp.t == codes.MAP then
@@ -387,5 +400,6 @@ end
 
 return {
    getReport = getReport,
+   createType = createType,
    extractModules = extractModules
 }

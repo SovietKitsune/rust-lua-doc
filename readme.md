@@ -32,6 +32,14 @@ This would parse as
 }
 ```
 
-Comments for record fields should come soon.
-
 The functions and properties used within the final document would be the ones returned from the module instead of whatever is.
+
+## TODO
+
+* Cross-package linking
+* Current-package linking
+* (Better) Lua support
+* Better source inspection
+* Field descriptions
+* Complete basic documentation generation
+* Cleanup

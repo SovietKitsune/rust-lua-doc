@@ -1,0 +1,218 @@
+<%
+local genFn
+
+local primitive = {
+    ['nil'] = true,
+    ['boolean'] = true,
+    ['number'] = true,
+    ['string'] = true,
+    ['userdata'] = true,
+    ['thread'] = true,
+    ['table'] = true,
+    ['any'] = true,
+    ['unknown'] = true
+}
+
+local links = {
+    ['nil'] = 'https://www.lua.org/pil/2.1.html',
+    ['boolean'] = 'https://www.lua.org/pil/2.2.html',
+    ['number'] = 'https://www.lua.org/pil/2.3.html',
+    ['string'] = 'https://www.lua.org/pil/2.4.html',
+    ['table'] = 'https://www.lua.org/pil/2.5.html',
+    ['function'] = 'https://www.lua.org/pil/2.6.html',
+    ['userdata'] = 'https://www.lua.org/pil/2.7.html',
+    ['thread'] = 'https://www.lua.org/pil/2.7.html',
+    ['any'] = 'https://www.lua.org/pil/contents.html#2'
+}
+
+local function humanize(type, style)
+    local kind = type.kind
+
+    if primitive[kind] then
+        return style and '<a href="' .. links[kind] .. '" class="text-blue-500">' .. kind .. '</a>' or kind
+    elseif kind == 'function' then
+        return genFn(type.func, style)
+    elseif kind == 'table' then
+        return (style and '<a href="' .. links.table .. '" class="text-blue-500">table</a>' or 'table') .. '&lt;' .. humanize(type.key, style) .. ', ' .. humanize(type.value, style) .. '&gt;'
+    elseif type.kind == 'generic' then
+        return style and '<span class="text-blue-500">' .. type.name .. '</span>' or type.name
+    elseif kind == 'custom' or kind == 'enum' then
+        local struct = struct.struct
+
+        local name = (struct.name or type.name or '')
+        --; TODO - Get link for records and enums
+        return style and '<span class="text-blue-500">' .. name .. '</span>' or name
+    elseif kind == 'union' or kind == 'tuple' then
+        local types = {}
+
+        for i = 1, #type.types do
+            table.insert(types, humanize(type.types[i], style))
+        end
+
+        local res = table.concat(types, kind == 'union' and ' | ' or ', ')
+
+        if kind == 'tuple' then
+            return '{ ' .. res .. ' }'
+        else
+            return res
+        end
+    elseif kind == 'nominal' then
+        --; TODO
+    end
+end
+
+genFn = function(fn, style)
+    local fnName = fn.parent or ''
+    local src
+
+    if project.functionStyle == 'moon' then
+        src = (style and '<b>' .. fnName .. '</b>' or fnName) .. ' = '
+    else
+        src = (style and '<b>function</b>' or 'function') .. (fnName ~= '' and ' ' or '') .. fnName
+    end
+
+    local parens = {}
+    local generics = {}
+    local rets = {}
+
+    for i = 1, #fn.params do
+        local param = fn.params[i]
+
+        if param.type.kind == 'generic' then
+            table.insert(generics, param.name)
+        end
+
+        local paramName
+
+        paramName = (param.name or '') .. ': ' .. humanize(param.type, style)
+
+        table.insert(parens, paramName)
+    end
+
+    for i = 1, #fn.returns do
+        table.insert(rets, humanize(fn.returns[i], style))
+    end
+
+    generics = #generics > 0 and '<' .. table.concat(generics, ', ') .. '>' or ''
+    parens = '(' .. table.concat(parens, ', ') .. ')'
+
+    if project.functionStyle == 'fir' then
+        rets = #rets > 0 and ' -> ' .. table.concat(rets, ', ') or ''
+    else
+        rets = #rets > 0 and ': ' .. table.concat(rets, ', ') or ''
+    end
+
+    src = src .. generics .. parens .. rets
+
+    return src
+end
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- When I say `all in one tool` I mean it -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Sure it adds quite a lot but eh -->
+
+    <%- include 'assets/prism.html' %>
+</head>
+
+<body>
+    <div>
+        <%- include 'assets/navbar.html' %>
+
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <h1 class="text-3xl font-bold text-gray-900">
+                    <%= current.name %>
+                </h1>
+            </div>
+        </header>
+
+        <main>
+            <div class="max-w-7xl mx-auto py-6 px-8">
+                <% if package.deprecated then %>
+                    <div class="alert alert-danger">
+                        <h4 class="alert-heading">Deprecated</h4>
+        
+                        <%- markdown(package.deprecated) %>
+                    </div>
+                <% end %>
+
+                <%- markdown(current.struct and current.struct.description or current.func.description) %>
+
+                <h2 class="text-2xl pt-6">Documentation</h2>
+
+                <div class="container">
+                    <% if current.kind == 'custom' then %>
+                        <%
+                        local functions = {}
+                        local properties = {}
+
+                        local hasFunctions = false
+                        local hasProperties = false
+
+                        for i, v in pairs(current.struct.fields) do
+                            if v.type.kind == 'function' then
+                                hasFunctions = true
+
+                                local type = v.type
+
+                                type.func.parent = type.parent
+
+                                functions[i] = type
+                            else
+                                hasProperties = true
+                                properties[i] = v.type
+                            end
+                        end
+                        %>
+
+                        <% if hasFunctions then %>
+                            <h3 class="text-xl pt-6">Functions</h3>
+
+                            <% for name, func in pairs(functions) do %>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <h4 class="text-lg pt-4" id="fn.<%= name %>"> <%- humanize(func, true) %> </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <a href="#fn.<%= name %>" class="text-gray-400">#</a>
+                                                <!-- TODO; get stop of function -->
+                                                <a href="./<%= func.func.source:gsub('/', '-') %>.html#code.<%= func.func.y %>-<%= func.func.y %>" class="text-gray-400">Source</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <%- markdown(func.func.description) %>
+                            <% end %>
+                        <% end %>
+                    <% else %>
+                        <h4 class="text-lg pt-6">Returns</h4>
+
+                        <%= humanize(current) %>
+                    <% end %>
+                </div>
+            </div>
+        </main>
+
+        <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            Generated by LuaDocs
+        </footer>
+    </div>
+</body>
+
+</html>

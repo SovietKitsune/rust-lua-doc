@@ -1,0 +1,34 @@
+<%
+local tl = require 'tl'
+
+local function highlight(src)
+    local tokens = tl.lex(src)
+end
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%- include 'assets/prism.html' %>
+</head>
+<body>
+    <!-- 
+    TODO
+    > * Show you the types of identifiers on hover.
+    > * Take you to the definition of a variable on click.
+    > * Both of these work cross-package.
+    Basically use the teal compiler to extract all of this at compile time,
+
+    Cross-package is going to be more tricky
+    -->
+    <pre id="code" class="linkable-line-numbers">
+        <code class="language-lua">
+<%= code %>
+        </code>
+    </pre>
+</body>
+</html>
