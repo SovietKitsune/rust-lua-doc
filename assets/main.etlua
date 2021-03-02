@@ -98,4 +98,6 @@ local humanize = util.humanize
             <% end %>
         </div>
     </main>
+
+    <%- include 'assets/footer.etlua' %>
 </body>
