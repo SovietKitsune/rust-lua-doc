@@ -1,111 +1,16 @@
 <%
-local genFn
+local util = require 'assets.util'(project)
 
-local primitive = {
-    ['nil'] = true,
-    ['boolean'] = true,
-    ['number'] = true,
-    ['string'] = true,
-    ['userdata'] = true,
-    ['thread'] = true,
-    ['table'] = true,
-    ['any'] = true,
-    ['unknown'] = true
-}
+local humanize = util.humanize
 
-local links = {
-    ['nil'] = 'https://www.lua.org/pil/2.1.html',
-    ['boolean'] = 'https://www.lua.org/pil/2.2.html',
-    ['number'] = 'https://www.lua.org/pil/2.3.html',
-    ['string'] = 'https://www.lua.org/pil/2.4.html',
-    ['table'] = 'https://www.lua.org/pil/2.5.html',
-    ['function'] = 'https://www.lua.org/pil/2.6.html',
-    ['userdata'] = 'https://www.lua.org/pil/2.7.html',
-    ['thread'] = 'https://www.lua.org/pil/2.7.html',
-    ['any'] = 'https://www.lua.org/pil/contents.html#2'
-}
-
-local function humanize(type, style)
-    local kind = type.kind
-
-    if primitive[kind] then
-        return style and '<a href="' .. links[kind] .. '" class="text-blue-500">' .. kind .. '</a>' or kind
-    elseif kind == 'function' then
-        return genFn(type.func, style)
-    elseif kind == 'table' then
-        return (style and '<a href="' .. links.table .. '" class="text-blue-500">table</a>' or 'table') .. '&lt;' .. humanize(type.key, style) .. ', ' .. humanize(type.value, style) .. '&gt;'
-    elseif type.kind == 'generic' then
-        return style and '<span class="text-blue-500">' .. type.name .. '</span>' or type.name
-    elseif kind == 'custom' or kind == 'enum' then
-        local struct = struct.struct
-
-        local name = (struct.name or type.name or '')
-        --; TODO - Get link for records and enums
-        return style and '<span class="text-blue-500">' .. name .. '</span>' or name
-    elseif kind == 'union' or kind == 'tuple' then
-        local types = {}
-
-        for i = 1, #type.types do
-            table.insert(types, humanize(type.types[i], style))
-        end
-
-        local res = table.concat(types, kind == 'union' and ' | ' or ', ')
-
-        if kind == 'tuple' then
-            return '{ ' .. res .. ' }'
-        else
-            return res
-        end
-    elseif kind == 'nominal' then
-        --; TODO
-    end
+if current.kind == 'nominal' then
+    current = current.ref
 end
 
-genFn = function(fn, style)
-    local fnName = fn.parent or ''
-    local src
-
-    if project.functionStyle == 'moon' then
-        src = (style and '<b>' .. fnName .. '</b>' or fnName) .. ' = '
-    else
-        src = (style and '<b>function</b>' or 'function') .. (fnName ~= '' and ' ' or '') .. fnName
-    end
-
-    local parens = {}
-    local generics = {}
-    local rets = {}
-
-    for i = 1, #fn.params do
-        local param = fn.params[i]
-
-        if param.type.kind == 'generic' then
-            table.insert(generics, param.name)
-        end
-
-        local paramName
-
-        paramName = (param.name or '') .. ': ' .. humanize(param.type, style)
-
-        table.insert(parens, paramName)
-    end
-
-    for i = 1, #fn.returns do
-        table.insert(rets, humanize(fn.returns[i], style))
-    end
-
-    generics = #generics > 0 and '<' .. table.concat(generics, ', ') .. '>' or ''
-    parens = '(' .. table.concat(parens, ', ') .. ')'
-
-    if project.functionStyle == 'fir' then
-        rets = #rets > 0 and ' -> ' .. table.concat(rets, ', ') or ''
-    else
-        rets = #rets > 0 and ': ' .. table.concat(rets, ', ') or ''
-    end
-
-    src = src .. generics .. parens .. rets
-
-    return src
-end
+local data = current.name or
+    current.struct and current.struct or
+    current.func and current.func or
+    current.en and current.en
 %>
 
 <!DOCTYPE html>
@@ -120,37 +25,48 @@ end
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <!-- Sure it adds quite a lot but eh -->
 
-    <%- include 'assets/prism.html' %>
+    <%- include 'assets/prism.etlua' %>
 </head>
 
 <body>
     <div>
-        <%- include 'assets/navbar.html' %>
+        <%- include 'assets/navbar.etlua' %>
 
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 <h1 class="text-3xl font-bold text-gray-900">
-                    <%= current.name %>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="block">
+                                <div class="flex items-baseline space-x-4">
+                                    <%= current.kind:sub(0, 1):upper() .. current.kind:sub(2) %> <%= current.name or data.name %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="block">
+                                <div class="flex items-baseline space-x-4">
+                                    <% if current.kind == 'function' or current.kind == 'custom' or current.kind == 'enum' then %>
+                                        <%
+                                        local section = current[current.kind == 'function' and 'func' or current.kind == 'custom' and 'struct' or 'en']
+                                        %>
+                                        <a href="./<%= section.source:gsub('/', '-') %>.html#code.<%= section.y %>-<%= section.y %>" class="text-gray-400">Source</a>
+                                    <% end %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </h1>
             </div>
         </header>
 
         <main>
             <div class="max-w-7xl mx-auto py-6 px-8">
-                <% if package.deprecated then %>
-                    <div class="alert alert-danger">
-                        <h4 class="alert-heading">Deprecated</h4>
-        
-                        <%- markdown(package.deprecated) %>
-                    </div>
-                <% end %>
-
-                <%- markdown(current.struct and current.struct.description or current.func.description) %>
-
-                <h2 class="text-2xl pt-6">Documentation</h2>
-
                 <div class="container">
                     <% if current.kind == 'custom' then %>
+                        <%- markdown(data.description) %>
+
                         <%
                         local functions = {}
                         local properties = {}
@@ -159,17 +75,12 @@ end
                         local hasProperties = false
 
                         for i, v in pairs(current.struct.fields) do
-                            if v.type.kind == 'function' then
+                            if v.kind == 'function' then
                                 hasFunctions = true
-
-                                local type = v.type
-
-                                type.func.parent = type.parent
-
-                                functions[i] = type
+                                functions[i] = v
                             else
                                 hasProperties = true
-                                properties[i] = v.type
+                                properties[i] = v
                             end
                         end
                         %>
@@ -200,10 +111,50 @@ end
                                 <%- markdown(func.func.description) %>
                             <% end %>
                         <% end %>
-                    <% else %>
-                        <h4 class="text-lg pt-6">Returns</h4>
 
-                        <%= humanize(current) %>
+                        <% if hasProperties then %>
+                            <h3 class="text-xl pt-6">Properties</h3>
+
+                            <div class="grid grid-cols-3 gap-2">
+                                <% for i, v in pairs(properties) do %>
+                                    <div>
+                                        <% if v.kind == 'custom' then %>
+                                            <% build((current.name or data.name) .. '-' .. i, v) %>
+                                            <a href="./<%= current.name or data.name %>-<%= i %>.html" class="text-blue-500"><%= i %></a>
+                                        <% else %>
+                                            <%= i %>
+                                        <% end %>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <% if v.kind == 'custom' then %>
+                                            <%- markdown(v.struct.description:match('^(.-)\n') or v.struct.description) %>
+                                        <% elseif v.kind == 'enum' then %>
+                                            <%- markdown(v.description:match('^(.-)\n') or v.description) %>
+                                        <% else %>
+                                            <!-- TODO -->
+                                        <% end %>
+                                    </div>
+                                <% end %>
+                            </div>
+                        <% end %>
+                    <% else %>
+                        <% if current.kind == 'function' then %>
+                            <h3 class="text-xl pt-6">Signature</h3>
+
+                            <pre>
+                                <code class="language-lua">
+<%= humanize(current) or '' %>
+                                </code>
+                            </pre>
+
+                            <h3 class="text-xl pt-6">Description</h3>
+
+                            <%- markdown(current.func.description) %>
+                        <% else %>
+                            <% if current.description or data.description then %>
+                                <%- markdown(current.description or data.description) %>
+                            <% end %>
+                        <% end %>
                     <% end %>
                 </div>
             </div>

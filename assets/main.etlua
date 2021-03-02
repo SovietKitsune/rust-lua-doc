@@ -1,0 +1,95 @@
+<%
+local util = require 'assets.util'(project)
+
+local humanize = util.humanize
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+    <%- include 'assets/prism.etlua' %>
+</head>
+
+<body>
+    <%- include 'assets/navbar.etlua' %>
+
+    <main>
+        <div class="max-w-7xl mx-auto py-6 px-8">
+            <% if project.deprecated then %>
+                <div class="alert alert-danger">
+                    <h4 class="alert-heading">Deprecated</h4>
+    
+                    <%- markdown(project.deprecated) %>
+                </div>
+            <% end %>
+
+            <%- markdown(project.description) %>
+
+            <%
+            local contents = {
+                Records = nil,
+                Enums = nil,
+                Modules = nil,
+                Variables = nil,
+                Functions = nil
+                --; TODO - extract defined globals
+                -- Globals = {}
+            }
+
+            local modules = #project.modules ~= 0 and project.modules or project.modules.struct.fields
+
+            for i, v in pairs(modules) do
+                if v.kind == 'nominal' then
+                    v = v.ref
+                end
+                if v.kind == 'custom' and v.struct.isRecord then
+                    if not contents.Records then contents.Records = {} end
+                    contents.Records[i] = v
+                elseif v.kind == 'custom' then
+                    if not contents.Modules then contents.Modules = {} end
+                    contents.Modules[i] = v
+                elseif v.kind == 'enum' then
+                    if not contents.Enums then contents.Enums = {} end
+                    contents.Enums[i] = v
+                elseif v.kind == 'function' then
+                    if not contents.Functions then contents.Functions = {} end
+                    contents.Functions[i] = v
+                else
+                    if not contents.Variables then contents.Variables = {} end
+                    contents.Variables[i] = v
+                end
+            end
+            %>
+
+            <% for name, secContents in pairs(contents) do %>
+                <h3 class="text-xl pt-6"><%= name %></h3>
+                <hr>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <% for i, v in pairs(secContents) do %>
+                        <div>
+                            <a href="./<%= i %>.html" class="text-blue-500"><%= i %></a>
+                        </div>
+                        <div class="col-span-2">
+                            <% if v.kind == 'custom' then %>
+                                <%- markdown(v.struct.description:match('^(.-)\n') or v.struct.description) %>
+                            <% elseif v.kind == 'function' then %>
+                                <%- markdown(v.func.description:match('^(.-)\n') or v.func.description) %>
+                            <% elseif v.kind == 'enum' then %>
+                                <%- markdown(v.en.description:match('^(.-)\n') or v.en.description) %>
+                            <% else %>
+                                <!-- TODO -->
+                            <% end %>
+                        </div>
+                    <% end %>
+                </div>
+            <% end %>
+        </div>
+    </main>
+</body>

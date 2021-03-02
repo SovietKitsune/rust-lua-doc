@@ -25,11 +25,22 @@ local record Record
    fields: {string: Field}
    source: string
    y: number
+   isRecord: boolean
 end
 
 local record Field
    type: Type
    description: string
+end
+--}}}
+
+-- Enums
+--{{{
+local record Enum
+   types: {string}
+   description: string
+   source: string
+   y: number
 end
 --}}}
 
@@ -70,6 +81,8 @@ local record Type
    values: {string} | nil
    -- Things part of records
    parent: string | nil
+   -- Enums
+   en: Enum | nil
 end
 
 local record State
@@ -135,7 +148,7 @@ local function newSearch(modules: {string: string}, virtual: boolean, state: Sta
    end
 end
 
-local function getReport(modules: {string: string}, virtual: boolean): State
+local function getReport(modules: {string: string}, virtual: boolean, isLua: boolean): State
    local keys: {string} = {}
 
    for i in pairs(modules) do
@@ -152,7 +165,7 @@ local function getReport(modules: {string: string}, virtual: boolean): State
 
    tl.search_module = newSearch(modules, virtual, state)
 
-   local result = tl.process_string(str)
+   local result = tl.process_string(str, isLua)
 
    if #result.syntax_errors > 1 then
       error(result.syntax_errors[1].msg)
@@ -278,12 +291,15 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       local started = false
       local tokensAtSig = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
 
+      global p: function(...: any)
+
       for i = 1, #tokensAtSig do
-         if tokensAtSig[i].tk == '(' then
+         local token = tokensAtSig[i]
+         if token.tk == '(' then
             started = true
-         elseif started and tokensAtSig[i].tk == ')' then
+         elseif started and token.tk == ')' then
             break
-         elseif started and (tokensAtSig[i].kind == 'identifier' or tokensAtSig[i].kind == '...') and tokensAtSig[i - 1].kind ~= ':' then
+         elseif started and (token.kind == 'identifier' or token.kind == '...') and (tokensAtSig[i - 1].kind == ',' or tokensAtSig[i - 1].kind == '(') then
             table.insert(paramNames, tokensAtSig[i].tk)
          end
       end
@@ -325,7 +341,13 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
 
       local name: string
 
+      local isRecord = false
+
       for i = 1, #tokensAtSig do
+         if tokensAtSig[i].tk == 'record' then
+            isRecord = true
+         end
+
          if tokensAtSig[i].kind == 'identifier' and tokensAtSig[i - 1] and tokensAtSig[i - 1].tk == 'record' then
             name = tokensAtSig[i].tk
             break
@@ -338,11 +360,7 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          local typ = createType(v, report, noNominal)
          typ.parent = i
 
-         fields[i] = {
-            --; TODO - get description of field
-            description = '',
-            type = typ
-         }
+         fields[i] = typ
       end
 
       return {
@@ -352,7 +370,8 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
             description = getDescription(report.files[tp.file], tp.y),
             fields = fields,
             source = tp.file,
-            y = tp.y
+            y = tp.y,
+            isRecord = isRecord
          }
       }
    elseif tp.t == codes.MAP then
@@ -377,22 +396,40 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       }
    elseif tp.t == codes.NOMINAL and not noNominal then
       -- Reference to another record
+      -- As long as its not recursion we *should* be fine
       local ref = createType(tp.ref, report, true)
 
-      local struct = ref and ref.struct as Record
-
       return {
-         type = 'nominal',
-         ref = struct and struct.name or 'recursion',
+         kind = 'nominal',
+         ref = ref,
       }
    elseif tp.t == codes.ENUM then
+      local name: string
+
+      local tokens = tl.lex(report.files[tp.file])
+
+      local tokensAtSig = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
+
+      for i = 1, #tokensAtSig do
+         if tokensAtSig[i].kind == 'identifier' and tokensAtSig[i - 1] and tokensAtSig[i - 1].tk == 'enum' then
+            name = tokensAtSig[i].tk
+            break
+         end
+      end
+
       return {
-         type = 'enum',
-         types = tp.enums
+         kind = 'enum',
+         en = {
+            types = tp.enums,
+            name = name,
+            description = getDescription(report.files[tp.file], tp.y),
+            source = tp.file,
+            y = tp.y
+         }
       }
    elseif tp.t == codes.TYPE_VARIABLE then
       return {
-         type = 'generic',
+         kind = 'generic',
          name = tp.str
       }
    end

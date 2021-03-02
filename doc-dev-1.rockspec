@@ -1,15 +1,16 @@
-package = "doc"
+package = "tealdoc"
 version = "dev-1"
 source = {
-   url = "git+https://github.com/SovietKitsune/lua-docs.git"
+   url = "git+https://github.com/SovietKitsune/tealdoc.git"
 }
 description = {
-   homepage = "https://github.com/SovietKitsune/lua-docs",
+   homepage = "https://github.com/SovietKitsune/tealdoc",
    license = "MIT"
 }
 dependencies = {
    "sundown",
-   "etlua"
+   "etlua",
+   "tl"
 }
 build = {
    type = "builtin",

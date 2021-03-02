@@ -36,10 +36,11 @@ The functions and properties used within the final document would be the ones re
 
 ## TODO
 
-* Cross-package linking
-* Current-package linking
-* (Better) Lua support
-* Better source inspection
-* Field descriptions
-* Complete basic documentation generation
-* Cleanup
+* [ ] Cross-package linking
+* [ ] Current-package linking
+* [ ] (Better) Lua support
+* [ ] Better source inspection
+* [ ] Field descriptions
+* [x] Complete basic documentation generation
+* [ ] Fix some record generation issues
+* [ ] Cleanup (aka rewrite the code to be terrible)

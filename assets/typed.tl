@@ -1,3 +1,18 @@
+--- The configuration options that can affect Typed
+local record config
+   strict: boolean
+   format: string
+end
+
+--- The style of errors that can be generated
+---
+--- * `rust` - Like rustc errors
+--- * `lua` - Like Lua errors
+local enum style
+   'rust'
+   'lua'
+end
+
 --- A module to aid in allowing for typed code
 ---
 --- Typed gives clean errors that look like errors from misused standard functions
@@ -20,7 +35,10 @@
 --- hi('hello') -- No errors
 --- hi(1) -- bad argument #1 to 'hi' (string expected, got number)
 --- ```
-local typed = {}
+local typed = {
+   config = {} as config,
+   style = 'lua' as style
+}
 
 -- Utilities
 
