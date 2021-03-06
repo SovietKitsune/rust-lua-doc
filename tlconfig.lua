@@ -1,7 +1,9 @@
 return {
    include_dir = {
-      'types/'
+      'types/',
+      'src/'
    },
-   source_dir = 'luadocs',
-   build_dir = 'out'
+   source_dir = 'src',
+   build_dir = 'out',
+   gen_compat = 'off'
 }

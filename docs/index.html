@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta property="og:title" content="Typed - Tealdoc">
-    <meta property="og:description" content="API documentation for the `Typed` rock">
+    <meta property="og:title" content="math - Tealdoc">
+    <meta property="og:description" content="API documentation for the `math` rock">
 
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
-    <title>Typed - Tealdoc</title>
+    <title>math - Tealdoc</title>
 
     <script>
     /* PrismJS 1.23.0
@@ -294,7 +292,7 @@ pre[class*="language-"].line-numbers > code {
                             href="index.html"
                             class="text-white text-lg font-medium"
                         >
-                            Typed-1.0.0
+                            math-1.0.0-rc1
                         </a>
                     </div>
                 </div>
@@ -315,27 +313,7 @@ pre[class*="language-"].line-numbers > code {
         <div class="max-w-7xl mx-auto py-6 px-8">
             
 
-            <p>A module to aid in allowing for typed code</p>
-
-<p>Typed gives clean errors that look like errors from misused standard functions</p>
-
-<pre><code>bad argument #1 to &#39;tostring&#39; (string | function expected, got nil)
-</code></pre>
-
-<h2>Quick example</h2>
-
-<pre><code class="language-lua">local typed = require &#39;typed&#39;
-
-local function hi(msg)
-   typed.func(_, &#39;string&#39;)(msg)
-
-   print(msg)
-end
-
-hi(&#39;hello&#39;) -- No errors
-hi(1) -- bad argument #1 to &#39;hi&#39; (string expected, got number)
-</code></pre>
-
+            The worlds best math library to ever be created
 
             
 
@@ -346,96 +324,36 @@ hi(1) -- bad argument #1 to &#39;hi&#39; (string expected, got number)
                 <div class="grid grid-cols-3 gap-2">
                     
                         <div>
-                            <a href="./resolve.html" class="text-blue-500">resolve</a>
+                            <a href="./math.complex.html" class="text-blue-500">math.complex</a>
                         </div>
                         <div class="col-span-2">
                             
-                                <p>Create a new function to validate types</p>
-
+                                Preform the most complex equation
                             
                         </div>
                     
                         <div>
-                            <a href="./typedDict.html" class="text-blue-500">typedDict</a>
+                            <a href="./math.util.log.html" class="text-blue-500">math.util.log</a>
                         </div>
                         <div class="col-span-2">
                             
-                                <p>Create a typed dictionary allowing only specific key and value types</p>
-
-                            
-                        </div>
-                    
-                        <div>
-                            <a href="./func.html" class="text-blue-500">func</a>
-                        </div>
-                        <div class="col-span-2">
-                            
-                                <p>Create a new typed function.</p>
-
-                            
-                        </div>
-                    
-                        <div>
-                            <a href="./is.html" class="text-blue-500">is</a>
-                        </div>
-                        <div class="col-span-2">
-                            
-                                <p>Check if the <code>value</code> matches the <code>validator</code>.</p>
-
-                            
-                        </div>
-                    
-                        <div>
-                            <a href="./whatIs.html" class="text-blue-500">whatIs</a>
-                        </div>
-                        <div class="col-span-2">
-                            
-                                <p>What is this specific item?</p>
-
-                            
-                        </div>
-                    
-                        <div>
-                            <a href="./isArray.html" class="text-blue-500">isArray</a>
-                        </div>
-                        <div class="col-span-2">
-                            
-                                <p>Is this an array?</p>
-
+                                Log things
                             
                         </div>
                     
                 </div>
             
-                <h3 class="text-xl pt-6">Records</h3>
+                <h3 class="text-xl pt-6">Modules</h3>
                 <hr>
 
                 <div class="grid grid-cols-3 gap-2">
                     
                         <div>
-                            <a href="./config.html" class="text-blue-500">config</a>
+                            <a href="./math.core.html" class="text-blue-500">math.core</a>
                         </div>
                         <div class="col-span-2">
                             
-                                <p>The configuration options that can affect Typed</p>
-
-                            
-                        </div>
-                    
-                </div>
-            
-                <h3 class="text-xl pt-6">Enums</h3>
-                <hr>
-
-                <div class="grid grid-cols-3 gap-2">
-                    
-                        <div>
-                            <a href="./style.html" class="text-blue-500">style</a>
-                        </div>
-                        <div class="col-span-2">
-                            
-                                <p>The style of errors that can be generated</p>
-
+                                The core functions of math, addition, subtraction, multiplication, and division
                             
                         </div>
                     

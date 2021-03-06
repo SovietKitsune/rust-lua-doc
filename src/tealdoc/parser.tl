@@ -1,4 +1,5 @@
-local tl = require 'tl'
+local logger = require('tealdoc.logger')
+local tl = require('tl')
 
 -- Functions
 --{{{
@@ -8,6 +9,7 @@ local record Function
    returns: {Type}
    vararg: boolean
    source: string
+   parent: string
    y: number
 end
 
@@ -83,6 +85,8 @@ local record Type
    parent: string | nil
    -- Enums
    en: Enum | nil
+   -- Nominal
+   ref: Type | nil
 end
 
 local record State
@@ -100,13 +104,15 @@ local record Token
 end
 
 local function generateGlobals(modules: {string}): string
-   local mod = {}
+   local mod = {'global toLoad = {'}
 
    for i = 1, #modules do
       local str = modules[i]
       -- globals are easier to find
-      table.insert(mod, 'global ' .. str .. ' = require \'' .. str .. '\'')
+      table.insert(mod, '["' .. str .. '"] = require \'' .. str .. '\',')
    end
+
+   table.insert(mod, '}')
 
    return table.concat(mod, '\n')
 end
@@ -168,7 +174,11 @@ local function getReport(modules: {string: string}, virtual: boolean, isLua: boo
    local result = tl.process_string(str, isLua)
 
    if #result.syntax_errors > 1 then
-      error(result.syntax_errors[1].msg)
+      for i= 1, #result.syntax_errors do
+         logger.error(result.syntax_errors[i].msg)
+      end
+
+      os.exit(-1)
    end
 
    local types = tl.get_types(result)
@@ -183,7 +193,9 @@ end
 local function extractModules(state: State, mods: {string: string}): {string: number}
    local collected: {string: number} = {}
 
-   for i, v in pairs(state.report.globals) do
+   local pos = state.report.globals.toLoad
+
+   for i, v in pairs(state.report.types[pos].fields) do
       if mods[i] then
          collected[i] = v
       end
@@ -358,6 +370,7 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
 
       for i, v in pairs(tp.fields) do
          local typ = createType(v, report, noNominal)
+
          typ.parent = i
 
          fields[i] = typ
@@ -384,7 +397,9 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       local types = {}
 
       for i = 1, #tp.types do
-         table.insert(types, createType(tp.types[i], report, noNominal))
+         local parsed = createType(tp.types[i], report, noNominal)
+
+         table.insert(types, parsed)
       end
       
       return {
@@ -432,11 +447,21 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          kind = 'generic',
          name = tp.str
       }
+   else
+      return {
+         kind = 'unknown'
+      }
    end
 end
 
 return {
    getReport = getReport,
    createType = createType,
-   extractModules = extractModules
+   extractModules = extractModules,
+   Type = Type,
+   Function = Function,
+   Param = Param,
+   Record = Record,
+   Field = Field,
+   Enum = Enum
 }

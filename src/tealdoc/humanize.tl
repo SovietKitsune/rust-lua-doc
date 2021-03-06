@@ -1,7 +1,9 @@
-local project
-local genFn
+local parser = require('tealdoc.parser')
 
-local primitive = {
+local project: table
+local genFn: function(fn: parser.Type, style: boolean)
+
+local primitive: {parser.Type.TypeNames: boolean} = {
     ['nil'] = true,
     ['boolean'] = true,
     ['number'] = true,
@@ -12,7 +14,7 @@ local primitive = {
     ['unknown'] = true
 }
 
-local links = {
+local links: {parser.Type.TypeNames: string} = {
     ['nil'] = 'https://www.lua.org/pil/2.1.html',
     ['boolean'] = 'https://www.lua.org/pil/2.2.html',
     ['number'] = 'https://www.lua.org/pil/2.3.html',
@@ -24,34 +26,34 @@ local links = {
     ['any'] = 'https://www.lua.org/pil/contents.html#2'
 }
 
-local function humanize(type, style)
-    local kind = type.kind
+local function humanize(typ: parser.Type, style: boolean): string
+    local kind = typ.kind
 
     if primitive[kind] then
         return style and '<a href="' .. links[kind] .. '" class="text-blue-500">' .. kind .. '</a>' or kind
     elseif kind == 'function' then
-        return genFn(type.func, style)
+        return genFn(typ, style)
     elseif kind == 'table' then
-        if type.key.kind == 'number' then
-            return '{' .. humanize(type.value, style) .. '}'
-        elseif type.key.kind == 'any' and type.value.kind == 'any' then
+        if (typ.key as parser.Type).kind == 'number' then
+            return '{' .. humanize(typ.value, style) .. '}'
+        elseif (typ.key as parser.Type).kind == 'any' and (typ.value as parser.Type).kind == 'any' then
             return style and '<a href="' .. links[kind] .. '" class="text-blue-500">' .. kind .. '</a>' or kind
         else
-            return '{' .. humanize(type.key, style) .. ': ' .. humanize(type.value, style) .. '}'
+            return '{' .. humanize(typ.key, style) .. ': ' .. humanize(typ.value, style) .. '}'
         end
     elseif kind == 'generic' then
-        return style and '<span class="text-green-500">' .. type.name .. '</span>' or type.name
+        return style and '<span class="text-green-500">' .. typ.name .. '</span>' or typ.name
     elseif kind == 'custom' or kind == 'enum' then
-        local struct = type.struct
+        local struct = typ.struct as parser.Record
 
-        local name = (struct.name or type.name or '')
+        local name = (struct.name or typ.name or '')
         --; TODO - Use a better solution
         return style and '<a href="./' .. name .. '.html" class="text-blue-500">' .. name .. '</a>' or name
     elseif kind == 'union' or kind == 'tuple' then
         local types = {}
 
-        for i = 1, #type.types do
-            local humanized = humanize(type.types[i], style)
+        for i = 1, #typ.types do
+            local humanized = humanize((typ.types as {parser.Type})[i], style)
             table.insert(types, humanized)
         end
 
@@ -63,13 +65,14 @@ local function humanize(type, style)
             return res
         end
     elseif kind == 'nominal' then
-        return humanize(type.ref, style)
+        return humanize(typ.ref, style)
     end
 end
 
-genFn = function(fn, style)
-    local fnName = fn.parent or ''
-    local src
+genFn = function(tp: parser.Type, style: boolean): string
+    local fn = tp.func as parser.Function
+    local fnName = tp.parent or ''
+    local src: string
 
     if project.functionStyle == 'moon' then
         src = (style and '<b>' .. fnName .. '</b>' or fnName) .. (fnName ~= '' and ' = ' or '')
@@ -98,24 +101,24 @@ genFn = function(fn, style)
         table.insert(rets, humanized)
     end
 
-    generics = #generics > 0 and '<' .. table.concat(generics, ', ') .. '>' or ''
-    parens = '(' .. table.concat(parens, ', ') .. ')'
+    local retStr: string
+
+    local genericsStr = #generics > 0 and '<' .. table.concat(generics, ', ') .. '>' or ''
+    local parensStr = '(' .. table.concat(parens, ', ') .. ')'
 
     if project.functionStyle == 'moon' then
-        rets = #rets > 0 and ' -> ' .. table.concat(rets, ', ') or ''
+        retStr = #rets > 0 and ' -> ' .. table.concat(rets, ', ') or ''
     else
-        rets = #rets > 0 and ': ' .. table.concat(rets, ', ') or ''
+        retStr = #rets > 0 and ': ' .. table.concat(rets, ', ') or ''
     end
 
-    src = src .. generics .. parens .. rets
+    src = src .. genericsStr .. parensStr .. retStr
 
     return src
 end
 
-return function(proj)
-    project = proj
-    return {
-        genFn = genFn,
-        humanize = humanize
-    }
+return function(pro: table): function(tp: parser.Type, style: boolean): string
+    project = pro
+
+    return humanize
 end

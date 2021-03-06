@@ -1,8 +1,4 @@
 <%
-local util = require 'assets.util'(project)
-
-local humanize = util.humanize
-
 if current.kind == 'nominal' then
     current = current.ref
 end
@@ -29,12 +25,12 @@ local data = current.name or
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <!-- Sure it adds quite a lot but eh -->
 
-    <%- include 'assets/prism.etlua' %>
+    <%- include 'prism.etlua' %>
 </head>
 
 <body>
     <div>
-        <%- include 'assets/navbar.etlua' %>
+        <%- include 'navbar.etlua' %>
 
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -69,7 +65,7 @@ local data = current.name or
             <div class="max-w-7xl mx-auto py-6 px-8">
                 <div class="container">
                     <% if current.kind == 'custom' then %>
-                        <%- markdown(data.description) %>
+                        <%- markdown(data.description or '') %>
 
                         <%
                         local functions = {}
@@ -151,9 +147,11 @@ local data = current.name or
                                 </code>
                             </pre>
 
-                            <h3 class="text-xl pt-6">Description</h3>
+                            <% if current.func.description ~= '' then %>
+                                <h3 class="text-xl pt-6">Description</h3>
 
-                            <%- markdown(current.func.description) %>
+                                <%- markdown(current.func.description) %>
+                            <% end %>
                         <% else %>
                             <% if current.description or data.description then %>
                                 <%- markdown(current.description or data.description) %>
@@ -164,7 +162,7 @@ local data = current.name or
             </div>
         </main>
 
-        <%- include 'assets/footer.etlua' %>
+        <%- include 'footer.etlua' %>
     </div>
 </body>
 

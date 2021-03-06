@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- TODO; trace parents -->
-    <meta property="og:title" content="Typed.typedDict - Tealdoc">
-    <meta property="og:description" content="API documentation for the typedDict function in rock `Typed`">
+    <meta property="og:title" content="math.math.core - Tealdoc">
+    <meta property="og:description" content="API documentation for the math.core custom in rock `math`">
 
     <!-- When I say `all in one tool` I mean it -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
@@ -296,7 +296,7 @@ pre[class*="language-"].line-numbers > code {
                             href="index.html"
                             class="text-white text-lg font-medium"
                         >
-                            Typed-1.0.0
+                            math-1.0.0-rc1
                         </a>
                     </div>
                 </div>
@@ -321,7 +321,7 @@ pre[class*="language-"].line-numbers > code {
                         <div class="flex items-center">
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
-                                    Function typedDict
+                                    Custom math.core
                                 </div>
                             </div>
                         </div>
@@ -330,7 +330,7 @@ pre[class*="language-"].line-numbers > code {
                                 <div class="flex items-baseline space-x-4">
                                     
                                         
-                                        <a href="./assets-typed.tl.html#code.281-281" class="text-gray-400">Source</a>
+                                        <a href="./examples-math-core.tl.html#code.2-2" class="text-gray-400">Source</a>
                                     
                                 </div>
                             </div>
@@ -345,17 +345,110 @@ pre[class*="language-"].line-numbers > code {
                 <div class="container">
                     
                         
-                            <h3 class="text-xl pt-6">Signature</h3>
 
-                            <pre>
-                                <code class="language-lua">
-function(keyType: string, valueType: string): table
-                                </code>
-                            </pre>
+                        
 
-                            <h3 class="text-xl pt-6">Description</h3>
+                        
+                            <h3 class="text-xl pt-6">Functions</h3>
 
-                            <p>Create a typed dictionary allowing only specific key and value types</p>
+                            
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <h4 class="text-lg pt-4" id="fn.mul"> <b>function</b> mul(a: <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a>, b: <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a>): <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <a href="#fn.mul" class="text-gray-400">#</a>
+                                                <!-- TODO; get stop of function -->
+                                                <a href="./examples-math-core.tl.html#code.24-24" class="text-gray-400">Source</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>Multiply two numbers together</p>
+
+<pre class="language-lua"><code>core.multiply(1, 2) -- 2
+</code></pre>
+                            
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <h4 class="text-lg pt-4" id="fn.add"> <b>function</b> add(a: <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a>, b: <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a>): <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <a href="#fn.add" class="text-gray-400">#</a>
+                                                <!-- TODO; get stop of function -->
+                                                <a href="./examples-math-core.tl.html#code.8-8" class="text-gray-400">Source</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>Add two numbers together</p>
+
+<pre class="language-lua"><code>core.add(1, 2) -- 3
+</code></pre>
+                            
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <h4 class="text-lg pt-4" id="fn.sub"> <b>function</b> sub(a: <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a>, b: <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a>): <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <a href="#fn.sub" class="text-gray-400">#</a>
+                                                <!-- TODO; get stop of function -->
+                                                <a href="./examples-math-core.tl.html#code.16-16" class="text-gray-400">Source</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>Subtract two numbers apart</p>
+
+<pre class="language-lua"><code>core.subtract(1, 2) -- -1
+</code></pre>
+                            
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <h4 class="text-lg pt-4" id="fn.div"> <b>function</b> div(a: <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a>, b: <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a>): <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="block">
+                                            <div class="flex items-baseline space-x-4">
+                                                <a href="#fn.div" class="text-gray-400">#</a>
+                                                <!-- TODO; get stop of function -->
+                                                <a href="./examples-math-core.tl.html#code.32-32" class="text-gray-400">Source</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>Divide two numbers apart</p>
+
+<pre class="language-lua"><code>core.divide(1, 2) -- 0.5
+</code></pre>
+                            
+                        
 
                         
                     

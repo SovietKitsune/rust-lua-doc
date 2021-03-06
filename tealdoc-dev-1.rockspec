@@ -8,9 +8,12 @@ description = {
    license = "MIT"
 }
 dependencies = {
-   "sundown",
+   "argparse",
    "etlua",
-   "tl"
+   "luafilesystem",
+   "lua-toml",
+
+   "tl" -- *casually depend on an entire compiler*
 }
 build = {
    type = "builtin",
