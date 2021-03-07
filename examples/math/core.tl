@@ -1,5 +1,7 @@
 --- The core functions of math, addition, subtraction, multiplication, and division
-return {
+local core = {
+   --- This is a fun variable
+   isFun = true,
    --- Add two numbers together
    ---
    --- ```lua
@@ -33,3 +35,5 @@ return {
       return a / b
    end
 }
+
+return core

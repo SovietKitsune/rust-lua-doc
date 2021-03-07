@@ -2,11 +2,6 @@
 if current.kind == 'nominal' then
     current = current.ref
 end
-
-local data = current.name or
-    current.struct and current.struct or
-    current.func and current.func or
-    current.en and current.en
 %>
 
 <!DOCTYPE html>
@@ -18,8 +13,8 @@ local data = current.name or
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- TODO; trace parents -->
-    <meta property="og:title" content="<%= project.name %>.<%= current.name or data.name or 'unknown' %> - Tealdoc">
-    <meta property="og:description" content="API documentation for the <%= current.name or data.name or 'unknown' %> <%= current.kind %> in rock `<%= project.name %>`">
+    <meta property="og:title" content="<%= project.name %> - <%= current.name %> - Tealdoc">
+    <meta property="og:description" content="API documentation for the <%= current.name or 'unknown' %> <%= current.kind %> in rock `<%= project.name %>`">
 
     <!-- When I say `all in one tool` I mean it -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
@@ -40,18 +35,22 @@ local data = current.name or
                         <div class="flex items-center">
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
-                                    <%= current.kind:sub(0, 1):upper() .. current.kind:sub(2) %> <%= current.name or data.name %>
+                                    <%
+                                    local realKind = current.kind
+
+                                    if realKind == 'custom' then
+                                        realKind = current.isRecord and 'record' or 'table'
+                                    end
+                                    %>
+                                    <%= realKind:sub(0, 1):upper() .. realKind:sub(2) %> <%= current.name %>
                                 </div>
                             </div>
                         </div>
                         <div class="flex items-center">
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
-                                    <% if current.kind == 'function' or current.kind == 'custom' or current.kind == 'enum' then %>
-                                        <%
-                                        local section = current[current.kind == 'function' and 'func' or current.kind == 'custom' and 'struct' or 'en']
-                                        %>
-                                        <a href="./<%= section.source:gsub('/', '-') %>.html#code.<%= section.y %>-<%= section.y %>" class="text-gray-400">Source</a>
+                                    <% if current.source then %>
+                                        <a href="/<%= project.output %>/sources/<%= current.source:gsub('/', '-') %>.html#code.<%= current.yPos %>-<%= current.stopY or current.yPos %>" class="text-gray-400">Source</a>
                                     <% end %>
                                 </div>
                             </div>
@@ -65,7 +64,7 @@ local data = current.name or
             <div class="max-w-7xl mx-auto py-6 px-8">
                 <div class="container">
                     <% if current.kind == 'custom' then %>
-                        <%- markdown(data.description or '') %>
+                        <%- markdown(current.description or '') %>
 
                         <%
                         local functions = {}
@@ -101,60 +100,52 @@ local data = current.name or
                                         <div class="block">
                                             <div class="flex items-baseline space-x-4">
                                                 <a href="#fn.<%= name %>" class="text-gray-400">#</a>
-                                                <!-- TODO; get stop of function -->
-                                                <a href="./<%= func.func.source:gsub('/', '-') %>.html#code.<%= func.func.y %>-<%= func.func.y %>" class="text-gray-400">Source</a>
+                                                <a href="/<%= project.output %>/sources/<%= func.source:gsub('/', '-') %>.html#code.<%= func.yPos %>-<%= current.stopY or current.yPos %>" class="text-gray-400">Source</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <%- markdown(func.func.description) %>
+                                <%- markdown(func.description) %>
                             <% end %>
                         <% end %>
 
                         <% if hasProperties then %>
                             <h3 class="text-xl pt-6">Properties</h3>
 
-                            <div class="grid grid-cols-3 gap-2">
-                                <% for i, v in pairs(properties) do %>
-                                    <div>
-                                        <% if v.kind == 'custom' then %>
-                                            <% build((current.name or data.name) .. '-' .. i, v) %>
-                                            <a href="./<%= current.name or data.name %>-<%= i %>.html" class="text-blue-500"><%= i %></a>
-                                        <% else %>
-                                            <%= i %>
-                                        <% end %>
-                                    </div>
-                                    <div class="col-span-2">
-                                        <% if v.kind == 'custom' then %>
-                                            <%- markdown(v.struct.description:match('^(.-)\n') or v.struct.description) %>
-                                        <% elseif v.kind == 'enum' then %>
-                                            <%- markdown(v.description:match('^(.-)\n') or v.description) %>
-                                        <% else %>
-                                            <!-- TODO -->
-                                        <% end %>
-                                    </div>
-                                <% end %>
-                            </div>
+                            <% for i, v in pairs(properties) do %>
+                                <h4 class="text-lg pt-2">
+                                    <% if v.kind == 'custom' then %>
+                                        <% build((current.name or data.name) .. '-' .. i, v) %>
+                                        <a href="./<%= current.name or data.name %>-<%= i %>.html" class="text-blue-500"><%= i %></a>
+                                    <% else %>
+                                        <%= i %>
+                                    <% end %>
+                                    : <%- humanize(v, true) %>
+                                </h4>
+                                <div>
+                                    <%- markdown(v.description) %>
+                                </div>
+                            <% end %>
                         <% end %>
                     <% else %>
                         <% if current.kind == 'function' then %>
                             <h3 class="text-xl pt-6">Signature</h3>
 
                             <pre>
-                                <code class="language-lua">
+                                <code class="language-<%= project.functionStyle %>">
 <%= humanize(current) or '' %>
                                 </code>
                             </pre>
 
-                            <% if current.func.description ~= '' then %>
+                            <% if current.description ~= '' then %>
                                 <h3 class="text-xl pt-6">Description</h3>
 
-                                <%- markdown(current.func.description) %>
+                                <%- markdown(current.description) %>
                             <% end %>
                         <% else %>
-                            <% if current.description or data.description then %>
-                                <%- markdown(current.description or data.description) %>
+                            <% if current.description then %>
+                                <%- markdown(current.description) %>
                             <% end %>
                         <% end %>
                     <% end %>

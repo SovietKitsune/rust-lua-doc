@@ -1,54 +1,23 @@
 local logger = require('tealdoc.logger')
 local tl = require('tl')
 
--- Functions
---{{{
+--- A structure that represents a bare function
 local record Function
-   description: string
-   params: {Param}
+   params: {Type}
    returns: {Type}
    vararg: boolean
-   source: string
-   parent: string
-   y: number
 end
 
-local record Param
-   name: string
-   type: Type
-end
---}}}
-
--- Records
---{{{
-local record Record
-   name: string
-   description: string
-   fields: {string: Field}
-   source: string
-   y: number
+--- A structure that represents a bare record or table
+local record Struct
+   fields: {string: Type}
    isRecord: boolean
 end
 
-local record Field
-   type: Type
-   description: string
-end
---}}}
-
--- Enums
---{{{
-local record Enum
-   types: {string}
-   description: string
-   source: string
-   y: number
-end
---}}}
-
--- Types
+--- A structure that represents every type
 local record Type
-   enum TypeNames
+   --- A list of all valid type names
+   enum Kinds
       'nil'
       'boolean'
       'number'
@@ -56,36 +25,56 @@ local record Type
       'userdata'
       'thread'
       'table'
+      --- Explicit type as any
       'any'
+      --- A type which couldn't be figured out
       'unknown'
-      'function' -- fun(x): y
-      'custom' -- Records
-      'union' -- T | V
-      'tuple' -- {T, V}
-      'poly' -- ?
-      'nominal' -- Reference
-      'enum' -- List of possible strings
-      'generic' -- T
+      --- Either an inline function or an actual function
+      'function'
+      --- A custom type like a record or module
+      'custom'
+      --- A union type that combines multiple types
+      'union'
+      --- A table which must contain a certain number of types in the correct order
+      'tuple'
+      'poly'
+      --- A reference to another type
+      'nominal'
+      --- A list of strings of what the string could be
+      'enum'
+      --- A generic found within function definitions
+      'generic'
    end
-   kind: TypeNames
-   -- Exists on function types
+
+   --- The kind of type this is
+   kind: Kinds
+   --- The description of the type, every type can have a description since of records
+   description: string
+   --- The name of the type, usually inherited from their parent
+   name: string
+   --- The parent of the type, this doesn't exist for top-level types
+   parent: Type | nil
+   --- The file-system tree that needs to be followed
+   tree: string
+   --- The Y position of a type
+   yPos: number | nil
+   --- The stopping point of a type
+   stopY: number | nil
+   --- The source of where the type was found
+   source: string | nil
+   --- Exists on function types
    func: Function | nil
-   -- Exists on table types
+   --- Either a record or a module
+   struct: Struct
+   --- The key of the table
    key: Type | nil
+   --- The value of the table
    value: Type | nil
-   -- Exists on custom types or generics
-   name: string | nil
-   -- Exists on custom types
-   struct: Record | nil
-   -- Exists on unions, tuples, and polys
+   --- The types that form this type, eg `type1 | type2` or `{type1, type2}`
    types: {Type} | nil
-   -- Exists on enums
-   values: {string} | nil
-   -- Things part of records
-   parent: string | nil
-   -- Enums
-   en: Enum | nil
-   -- Nominal
+   --- The values of an enum, its separate from types due to enums being "complex" aka blocked
+   values: {Type} | nil
+   --- A reference to another type
    ref: Type | nil
 end
 
@@ -154,6 +143,13 @@ local function newSearch(modules: {string: string}, virtual: boolean, state: Sta
    end
 end
 
+--- Get a report on all the files
+---
+--- The report contains all indexed files as well as the types
+---
+--- If the modules being passed don't exist on disk, pass `true` to the virtual flag
+---
+--- If the files are Lua, pass `true` to the isLua flag
 local function getReport(modules: {string: string}, virtual: boolean, isLua: boolean): State
    local keys: {string} = {}
 
@@ -190,6 +186,7 @@ local function getReport(modules: {string: string}, virtual: boolean, isLua: boo
    return state
 end
 
+--- Extract all the indexes of generated modules
 local function extractModules(state: State, mods: {string: string}): {string: number}
    local collected: {string: number} = {}
 
@@ -252,10 +249,11 @@ local function getDescription(contents: string, y: number): string
    return table.concat(reversed, '\n')
 end
 
-local function getTokensAtLine(tokens: {Token}, y: number, x: number): {Token}
+local function getTokensAtLine(tokens: {Token}, y: number, x: number): {Token}, {Token}
    --; TODO, use a binary search
    local started = false
    local tokensAtSig = {}
+   local before = {}
 
    for i = 1, #tokens do
       local token = tokens[i]
@@ -265,17 +263,113 @@ local function getTokensAtLine(tokens: {Token}, y: number, x: number): {Token}
          table.insert(tokensAtSig, token)
       elseif token.y ~= y and started then
          break
+      elseif not started then
+         table.insert(before, token)
       end
    end
 
-   return tokensAtSig
+   return tokensAtSig, before
 end
 
+local function getTokensBetween(tokens: {Token}, y1: number, y2: number, x1: number, x2: number): {Token}
+   --; TODO, use a binary search
+   local started = false
+   local tokensBetween = {}
+
+   for i = 1, #tokens do
+      local token = tokens[i]
+
+      if token.y >= y1 and token.x >= x1 then
+         started = true
+      end
+
+      if token.y > y2 or (token.y == y2 and token.x >= x2) then
+         break
+      end
+
+      if started then
+         table.insert(tokensBetween, token)
+      end
+   end
+
+   return tokensBetween
+end
+
+local function getStop(tokens: {Token}, y: number, x: number, allowFunction: boolean): Token, number
+   local canStart = false
+   local started = false
+
+   -- These are what you can use **within a record** which can open a scope
+   local opensScope: {string: boolean} = {
+      ['enum'] = true,
+      ['record'] = true,
+      -- This expects a record and records can only have inline functions
+      ['function'] = allowFunction
+   }
+
+   local deepness = 0
+   local lastToken: Token
+
+   for i = 1, #tokens do
+      local token = tokens[i]
+
+      if token.y == y and token.x >= x then
+         canStart = true
+      end
+
+      if canStart and opensScope[token.tk] then
+         started = true
+      end
+
+      if started and (token.kind == 'keyword' and token.tk == 'end') then
+         deepness = deepness - 1
+      elseif started and opensScope[token.tk] then
+         deepness = deepness + 1
+      end
+
+      if started and deepness == 0 then
+         lastToken = token
+
+         return lastToken, i
+      end
+   end
+end
+
+local function getWithinTable(tokens: {Token}, y: number, x: number): {Token}, number
+   local started = false
+   local within = {}
+
+   local stack = 1
+
+   for i = 1, #tokens do
+      local token = tokens[i]
+
+      if started then
+         if token.kind == '{' then
+            stack = stack + 1
+         elseif token.kind == '}' then
+            stack = stack - 1
+         end
+
+         if stack > 0 then
+            table.insert(within, token)
+         end
+      elseif token.x == x and token.y == y then
+         started = true
+      end
+
+      if stack == 0 and started then
+         return within, i
+      end
+   end
+end
+
+--- Create a (parsable) type from an index and a report
 local function createType(index: number, report: State, noNominal: boolean): Type
    local tp = report.report.types[index]
    local codes = tl.typecodes
 
-   local conversions = {
+   local conversions: {number: Type.kind} = {
       [codes.NIL] = 'nil',
       [codes.BOOLEAN] = 'boolean',
       [codes.NUMBER] = 'number',
@@ -287,23 +381,20 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       [codes.UNKNOWN] = 'unknown'
    }
 
+   local out: Type
+
    if conversions[tp.t] then
       -- Basic type
-      return {
+      out = {
          kind = conversions[tp.t]
       }
    elseif tp.t == codes.FUNCTION then
-      local params = {}
-      local rets = {}
-
       local tokens = tl.lex(report.files[tp.file])
 
       local paramNames = {}
 
       local started = false
       local tokensAtSig = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
-
-      global p: function(...: any)
 
       for i = 1, #tokensAtSig do
          local token = tokensAtSig[i]
@@ -316,30 +407,36 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          end
       end
 
+      local params = {}
+
       for i = 1, #tp.args do
-         table.insert(params, {
-            type = createType(tp.args[i][1], report, noNominal),
-            name = paramNames[i]
-         })
+         local argType = createType(tp.args[i][1], report, noNominal)
+
+         argType.name = paramNames[i]
+         table.insert(params, argType)
       end
+
+      local rets = {}
 
       for i = 1, #tp.rets do
          table.insert(rets, createType(tp.rets[i][1], report, noNominal))
       end
 
-      return {
+      --; TODO - get functions stop
+
+      out = {
          kind = 'function',
+         description = getDescription(report.files[tp.file], tp.y),
+         source = tp.file,
+         yPos = tp.y,
          func = {
-            description = getDescription(report.files[tp.file], tp.y),
             params = params,
             returns = rets,
-            vararg = tp.vararg,
-            source = tp.file,
-            y = tp.y
+            vararg = tp.vararg
          }
       }
    elseif tp.t == codes.ARRAY then
-      return {
+      out = {
          kind = 'table',
          key = {
             kind = 'number'
@@ -349,9 +446,10 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
    elseif tp.t == codes.RECORD or tp.t == codes.ARRAYRECORD then
       local tokens = tl.lex(report.files[tp.file])
 
-      local tokensAtSig = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
+      local tokensAtSig, before = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
 
       local name: string
+      local lastSig = tokens[#tokensAtSig + #before + 1] as Token
 
       local isRecord = false
 
@@ -366,29 +464,161 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          end
       end
 
-      local fields = {}
+      if not name then
+         -- It's a sub-record
+         if before[#before].kind == 'identifier' and before[#before - 1] and before[#before - 1].tk == 'record' then
+            name = before[#before].tk
+            -- Correct the X position to include `record`
+            tp.x = before[#before - 1].x
+            -- Same with the Y
+            tp.y = before[#before - 1].y
+
+            lastSig = tokensAtSig[1]
+         end
+      end
+
+      out = {
+         kind = 'custom',
+         name = name,
+         description = getDescription(report.files[tp.file], tp.y),
+         source = tp.file,
+         yPos = tp.y,
+         struct = {
+            fields = {},
+            isRecord = isRecord
+         }
+      }
 
       for i, v in pairs(tp.fields) do
          local typ = createType(v, report, noNominal)
 
-         typ.parent = i
+         typ.name = i
+         typ.parent = out
 
-         fields[i] = typ
+         out.struct.fields[i] = typ
       end
 
-      return {
-         kind = 'custom',
-         struct = {
-            name = name,
-            description = getDescription(report.files[tp.file], tp.y),
-            fields = fields,
-            source = tp.file,
-            y = tp.y,
-            isRecord = isRecord
+      if not name then
+         -- This is a table
+
+         local within = getWithinTable(tokens as {Token}, tp.y, tp.x)
+
+         -- Here we cannot just jump to the next `=` since it could be within a function
+
+         local i = 1
+
+         local blocks: {string: boolean} = {
+            ['enum'] = true,
+            ['record'] = true,
+            ['function'] = true
          }
-      }
+
+         while i <= #within do
+            -- Blocks already have their descriptions filled out
+            if within[i].kind == 'identifier' and blocks[within[i + 2].tk] then
+               local stack = 1
+
+               for k = i + 3, #within do
+                  local token = within[k]
+
+                  if blocks[token.tk] then
+                     stack = stack + 1
+                  elseif token.kind == 'keyword' and token.tk == 'end' then
+                     stack = stack - 1
+                  end
+
+                  if stack == 0 then
+                     i = k + 2
+                     break
+                  end
+               end
+            elseif within[i + 2].kind == '{' then
+               local _, stop = getWithinTable(tokens as {Token}, within[i + 2].y, within[i + 2].x)
+
+               i = stop
+            else
+               -- A type
+               local fieldToken = within[i]
+
+               local found = false
+
+               out.struct.fields[fieldToken.tk].description = getDescription(report.files[tp.file], fieldToken.y)
+
+               for k = i + 3, #within do
+                  -- Find next equal
+                  -- We will not run into anything that could be a mistake here
+
+                  if within[k].kind == 'op' and within[k].tk == '=' then
+                     i = k - 1
+
+                     found = true
+                  end
+               end
+
+               if not found then
+                  break
+               end
+            end
+         end
+      else
+         local lastToken = getStop(tokens as {Token}, tp.y, tp.x)
+
+         out.stopY = lastToken.y
+
+         local tokensBetween = getTokensBetween(tokens as {Token}, lastSig.y, lastToken.y, lastSig.x, lastToken.x)
+
+         local i = 1
+
+         while i <= #tokensBetween do
+            if name == 'Config' then logger.debug(i) end
+            if tokensBetween[i].kind == 'identifier' and (tokensBetween[i].tk == 'record' or tokensBetween[i].tk == 'enum') and 
+               tokensBetween[i + 1] and tokensBetween[i + 1].kind == 'identifier' 
+            then
+               local _, pos = getStop(tokensBetween, tokensBetween[i].y, tokensBetween[i].x)
+
+               -- They already get documented since they are records
+
+               i = pos + 1
+            else
+               local fieldToken = tokensBetween[i]
+
+               if name == 'Config' then logger.debug(fieldToken) end
+
+               local found = false
+
+               out.struct.fields[fieldToken.tk].description = getDescription(report.files[tp.file], fieldToken.y)
+
+               local stack = 0
+               -- logger.debug(atLine)
+
+               for k = i + 2, #tokensBetween do
+                  -- We need to watchout for composition types eg functions, tables
+
+                  local token = tokensBetween[k]
+
+                  if token.kind == '{' or token.kind == '(' then
+                     stack = stack + 1
+                  elseif token.kind == '}' or token.kind == ')' then
+                     stack = stack - 1
+                  end
+
+                  if token.kind == ':' and token.tk == ':' and stack == 0 then
+                     i = k - 1
+
+                     found = true
+
+                     break
+                  end
+               end
+
+               if not found then
+                  break
+               end
+            end
+         end
+      end
    elseif tp.t == codes.MAP then
-      return {
+      out = {
          kind = 'table',
          key = createType(tp.keys, report, noNominal),
          value = createType(tp.values, report, noNominal)
@@ -401,8 +631,8 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
 
          table.insert(types, parsed)
       end
-      
-      return {
+
+      out = {
          kind =
             tp.t == codes.TUPLE and 'tuple' or
             tp.t == codes.IS_UNION and 'union' or
@@ -412,18 +642,21 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
    elseif tp.t == codes.NOMINAL and not noNominal then
       -- Reference to another record
       -- As long as its not recursion we *should* be fine
+
+      -- We don't set the parent on this one since it would be mostly pointless
       local ref = createType(tp.ref, report, true)
 
-      return {
+      out = {
          kind = 'nominal',
          ref = ref,
       }
    elseif tp.t == codes.ENUM then
-      local name: string
-
       local tokens = tl.lex(report.files[tp.file])
 
-      local tokensAtSig = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
+      local tokensAtSig, before = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
+
+      local name: string
+      local lastSig = tokens[#tokensAtSig + #before + 1] as Token
 
       for i = 1, #tokensAtSig do
          if tokensAtSig[i].kind == 'identifier' and tokensAtSig[i - 1] and tokensAtSig[i - 1].tk == 'enum' then
@@ -432,36 +665,68 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          end
       end
 
-      return {
+      if not name then
+         -- It's a sub-record
+         if before[#before].kind == 'identifier' and before[#before - 1] and before[#before - 1].tk == 'enum' then
+            name = before[#before].tk
+            -- Correct the X position to include `record`
+            tp.x = before[#before - 1].x
+            -- Same with the Y
+            tp.y = before[#before - 1].y
+
+            lastSig = tokensAtSig[1]
+         end
+      end
+
+      local lastToken = getStop(tokens as {Token}, tp.y, tp.x)
+
+      local between = getTokensBetween(tokens as {Token}, lastSig.y, lastToken.y, lastSig.x, lastToken.x)
+
+      local values = {}
+
+      for i = 1, #between do
+         local token = between[i]
+
+         table.insert(values, {
+            kind = 'string',
+            name = token.tk,
+            yPos = token.y,
+            stopY = token.y,
+            description = getDescription(report.files[tp.file], token.y)
+         })
+      end
+
+      out = {
          kind = 'enum',
-         en = {
-            types = tp.enums,
-            name = name,
-            description = getDescription(report.files[tp.file], tp.y),
-            source = tp.file,
-            y = tp.y
-         }
+         values = values,
+         name = name,
+         description = getDescription(report.files[tp.file], tp.y),
+         source = tp.file,
+         yPos = tp.y
       }
    elseif tp.t == codes.TYPE_VARIABLE then
-      return {
+      out = {
          kind = 'generic',
          name = tp.str
       }
    else
-      return {
+      out = {
          kind = 'unknown'
       }
    end
+
+   out.tree = ''
+   out.description = out.description or ''
+
+   return out
 end
 
+--- Utilities for extracting all the types from either virtual files or real files
 return {
    getReport = getReport,
    createType = createType,
    extractModules = extractModules,
    Type = Type,
    Function = Function,
-   Param = Param,
-   Record = Record,
-   Field = Field,
-   Enum = Enum
+   Struct = Struct
 }

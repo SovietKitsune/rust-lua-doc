@@ -1,7 +1,0 @@
-[project]
-name = 'math'
-version = '1.0.0-rc1'
-description = 'The worlds best math library to ever be created'
-functionStyle = 'lua'
-output = 'docs'
-source = 'examples/math'

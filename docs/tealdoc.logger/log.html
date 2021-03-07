@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,12 +8,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta property="og:title" content="tealdoc - Tealdoc">
-    <meta property="og:description" content="API documentation for the `tealdoc` rock">
+    <!-- TODO; trace parents -->
+    <meta property="og:title" content="tealdoc - log - Tealdoc">
+    <meta property="og:description" content="API documentation for the log function in rock `tealdoc`">
 
+    <!-- When I say `all in one tool` I mean it -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
-    <title>tealdoc - Tealdoc</title>
+    <!-- Sure it adds quite a lot but eh -->
 
     <script>
     /* PrismJS 1.23.0
@@ -283,7 +286,8 @@ pre[class*="language-"].line-numbers > code {
 </head>
 
 <body>
-    <nav class="bg-blue-600">
+    <div>
+        <nav class="bg-blue-600">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-12">
             <div class="flex items-center">
@@ -310,109 +314,62 @@ pre[class*="language-"].line-numbers > code {
 </nav>
 
 
-    <main>
-        <div class="max-w-7xl mx-auto py-6 px-8">
-            
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <h1 class="text-3xl font-bold text-gray-900">
 
-            <h1 class="text-3xl">Teal doc</h1>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="block">
+                                <div class="flex items-baseline space-x-4">
+                                    
+                                    Function log
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="block">
+                                <div class="flex items-baseline space-x-4">
+                                    
+                                        <a href="/docs/sources/src-tealdoc-logger.tl.html#code.37-37" class="text-gray-400">Source</a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h1>
+            </div>
+        </header>
 
-<p class="py-2">A demo can be found at <a href="https://sovietkitsune.github.io/tealdoc/" class="text-blue-500" >https://sovietkitsune.github.io/tealdoc/</a></p>
-
-<p class="py-2">This new idea will be based on some points brought up by <a href="https://github.com/daelvn" class="text-blue-500" >daelvn</a> with the <a href="https://github.com/daelvn/meteor/discussions/7" class="text-blue-500" >documentation discussion</a>.</p>
-
-<p class="py-2">The new parser will be written in Teal using Teal&#39;s <code>get_type</code> function along with some manual parsing for comments.</p>
-
-<p class="py-2">The functions and properties used within the final document would be the ones returned from the module instead of whatever is.</p>
-
-<h2 class="text-2xl">Customizing</h2>
-
-<p class="py-2">Customizing the output of the generator is quite simple, some require no extra dependencies!</p>
-
-<h3 class="text-xl">General structure</h3>
-
-<p class="py-2">This would be the HTML that is used within the generator. Since its written with etlua, no extra dependencies are needed.</p>
-
-<p class="py-2">All of these are located in <code>tealdoc/templates</code>. Everything within <code>tealdoc/html/templates</code> is rebuilt every time.</p>
-
-<ul>
-<li><code>document.etlua</code> - A document contains information about a single type</li>
-<li><code>footer.etlua</code> - The footer used on most pages</li>
-<li><code>main.etlua</code> - The index page which links to the top-level documents</li>
-<li><code>navbar.etlua</code> - The navbar used on most pages</li>
-<li><code>prism.etlua</code> - Prism.js configuration</li>
-<li><code>srcdoc.etlua</code> - The file used to generate linking to sources</li>
-</ul>
-
-<h3 class="text-xl">Types</h3>
-
-<p class="py-2">To customize how types look, edit the <code>humanize</code> function or the <code>genFn</code> function in <code>tealdoc/humanize.tl</code></p>
-
-<h2 class="text-2xl">TODO</h2>
-
-<ul>
-<li>[] Cross-package linking</li>
-<li>[] Current-package linking</li>
-<li>[] Tag support</li>
-<li>[] Better source inspection</li>
-<li>[x] Field descriptions</li>
-<li>[x] Enum descriptions</li>
-<li>[x] Complete basic documentation generation</li>
-<li>[] Fix some record generation issues</li>
-<li>[] Cleanup (aka rewrite the code to be terrible)</li>
-<li>[] Full documentation generation (Generate sub-records and sub-enums)</li>
-<li>[] Side-navbar (config setting)</li>
-</ul>
-
-            
-
-            
-                <h3 class="text-xl pt-6">Modules</h3>
-                <hr>
-
-                <div class="grid grid-cols-3 gap-2">
+        <main>
+            <div class="max-w-7xl mx-auto py-6 px-8">
+                <div class="container">
                     
-                        <div>
-                            <a href="./tealdoc.cli/index.html" class="text-blue-500">tealdoc.cli</a>
-                        </div>
-                        <div class="col-span-2">
-                            The main function of the documentation generator as well as the project config
-                        </div>
-                    
-                        <div>
-                            <a href="./tealdoc.parser/index.html" class="text-blue-500">tealdoc.parser</a>
-                        </div>
-                        <div class="col-span-2">
-                            Utilities for extracting all the types from either virtual files or real files
-                        </div>
-                    
-                        <div>
-                            <a href="./tealdoc.logger/index.html" class="text-blue-500">tealdoc.logger</a>
-                        </div>
-                        <div class="col-span-2">
-                            Logger for debugging and logging
-                        </div>
+                        
+                            <h3 class="text-xl pt-6">Signature</h3>
+
+                            <pre>
+                                <code class="language-lua">
+function log(level: number, message: string)
+                                </code>
+                            </pre>
+
+                            
+                                <h3 class="text-xl pt-6">Description</h3>
+
+                                Create a log message, the level must be a number between 1 and 5
+                            
+                        
                     
                 </div>
-            
-                <h3 class="text-xl pt-6">Functions</h3>
-                <hr>
+            </div>
+        </main>
 
-                <div class="grid grid-cols-3 gap-2">
-                    
-                        <div>
-                            <a href="./tealdoc.humanize.html" class="text-blue-500">tealdoc.humanize</a>
-                        </div>
-                        <div class="col-span-2">
-                            A factory used to generate a function that converts types into strings
-                        </div>
-                    
-                </div>
-            
-        </div>
-    </main>
-
-    <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
     Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-06 19:46:54
 </footer>
 
+    </div>
 </body>
+
+</html>

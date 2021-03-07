@@ -33,9 +33,12 @@ To customize how types look, edit the `humanize` function or the `genFn` functio
 
 * [ ] Cross-package linking
 * [ ] Current-package linking
-* [ ] (Better) Lua support
+* [ ] Tag support
 * [ ] Better source inspection
-* [ ] Field descriptions
+* [x] Field descriptions
+* [x] Enum descriptions
 * [x] Complete basic documentation generation
 * [ ] Fix some record generation issues
 * [ ] Cleanup (aka rewrite the code to be terrible)
+* [ ] Full documentation generation (Generate sub-records and sub-enums)
+* [ ] Side-navbar (config setting)

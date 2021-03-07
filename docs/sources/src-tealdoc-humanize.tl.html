@@ -1,17 +1,12 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta property="og:title" content="tealdoc - Tealdoc">
-    <meta property="og:description" content="API documentation for the `tealdoc` rock">
-
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
-    <title>tealdoc - Tealdoc</title>
+    <meta property="og:title" content="Source inspection - Tealdoc">
 
     <script>
     /* PrismJS 1.23.0
@@ -281,138 +276,143 @@ pre[class*="language-"].line-numbers > code {
 </style>
 
 </head>
-
 <body>
-    <nav class="bg-blue-600">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-12">
-            <div class="flex items-center">
-                <div class="block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a
-                            href="/docs/index.html"
-                            class="text-white text-lg font-medium"
-                        >
-                            tealdoc-dev-1
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex items-center">
-                <div class="block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="index.html" class="text-white text-lg font-medium">Module Index</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+    <!-- 
+    TODO
+    > * Show you the types of identifiers on hover.
+    > * Take you to the definition of a variable on click.
+    > * Both of these work cross-package.
+    Basically use the teal compiler to extract all of this at compile time,
 
+    Cross-package is going to be more tricky
+    -->
+    <pre id="code" class="linkable-line-numbers">
+        <code class="language-lua">
+local parser = require(&#039;tealdoc.parser&#039;)
 
-    <main>
-        <div class="max-w-7xl mx-auto py-6 px-8">
-            
+local project: table
+local genFn: function(fn: parser.Type, style: boolean)
 
-            <h1 class="text-3xl">Teal doc</h1>
+local primitive: {parser.Type.Kinds: boolean} = {
+    [&#039;nil&#039;] = true,
+    [&#039;boolean&#039;] = true,
+    [&#039;number&#039;] = true,
+    [&#039;string&#039;] = true,
+    [&#039;userdata&#039;] = true,
+    [&#039;thread&#039;] = true,
+    [&#039;any&#039;] = true,
+    [&#039;unknown&#039;] = true
+}
 
-<p class="py-2">A demo can be found at <a href="https://sovietkitsune.github.io/tealdoc/" class="text-blue-500" >https://sovietkitsune.github.io/tealdoc/</a></p>
+local links: {parser.Type.Kinds: string} = {
+    [&#039;nil&#039;] = &#039;https://www.lua.org/pil/2.1.html&#039;,
+    [&#039;boolean&#039;] = &#039;https://www.lua.org/pil/2.2.html&#039;,
+    [&#039;number&#039;] = &#039;https://www.lua.org/pil/2.3.html&#039;,
+    [&#039;string&#039;] = &#039;https://www.lua.org/pil/2.4.html&#039;,
+    [&#039;table&#039;] = &#039;https://www.lua.org/pil/2.5.html&#039;,
+    [&#039;function&#039;] = &#039;https://www.lua.org/pil/2.6.html&#039;,
+    [&#039;userdata&#039;] = &#039;https://www.lua.org/pil/2.7.html&#039;,
+    [&#039;thread&#039;] = &#039;https://www.lua.org/pil/2.7.html&#039;,
+    [&#039;any&#039;] = &#039;https://www.lua.org/pil/contents.html#2&#039;,
+    [&#039;unknown&#039;] = &#039;https://www.lua.org/contents.html#2&#039;
+}
 
-<p class="py-2">This new idea will be based on some points brought up by <a href="https://github.com/daelvn" class="text-blue-500" >daelvn</a> with the <a href="https://github.com/daelvn/meteor/discussions/7" class="text-blue-500" >documentation discussion</a>.</p>
+local function humanize(typ: parser.Type, style: boolean): string
+    local kind = typ.kind
 
-<p class="py-2">The new parser will be written in Teal using Teal&#39;s <code>get_type</code> function along with some manual parsing for comments.</p>
+    if primitive[kind] then
+        return style and &#039;&lt;a href=&quot;&#039; .. links[kind] .. &#039;&quot; class=&quot;text-blue-500&quot;&gt;&#039; .. kind .. &#039;&lt;/a&gt;&#039; or kind
+    elseif kind == &#039;function&#039; then
+        return genFn(typ, style)
+    elseif kind == &#039;table&#039; then
+        if (typ.key as parser.Type).kind == &#039;number&#039; then
+            return &#039;{&#039; .. humanize(typ.value, style) .. &#039;}&#039;
+        elseif (typ.key as parser.Type).kind == &#039;any&#039; and (typ.value as parser.Type).kind == &#039;any&#039; then
+            return style and &#039;&lt;a href=&quot;&#039; .. links[kind] .. &#039;&quot; class=&quot;text-blue-500&quot;&gt;&#039; .. kind .. &#039;&lt;/a&gt;&#039; or kind
+        else
+            return &#039;{&#039; .. humanize(typ.key, style) .. &#039;: &#039; .. humanize(typ.value, style) .. &#039;}&#039;
+        end
+    elseif kind == &#039;generic&#039; then
+        return style and &#039;&lt;span class=&quot;text-green-500&quot;&gt;&#039; .. typ.name .. &#039;&lt;/span&gt;&#039; or typ.name
+    elseif kind == &#039;custom&#039; or kind == &#039;enum&#039; then
+        local name = typ.name
+        return style and &#039;&lt;a href=&quot;./&#039; .. name .. &#039;.html&quot; class=&quot;text-blue-500&quot;&gt;&#039; .. name .. &#039;&lt;/a&gt;&#039; or name
+    elseif kind == &#039;union&#039; or kind == &#039;tuple&#039; then
+        local types = {}
 
-<p class="py-2">The functions and properties used within the final document would be the ones returned from the module instead of whatever is.</p>
+        for i = 1, #typ.types do
+            local humanized = humanize((typ.types as {parser.Type})[i], style)
+            table.insert(types, humanized)
+        end
 
-<h2 class="text-2xl">Customizing</h2>
+        local res = table.concat(types, kind == &#039;union&#039; and &#039; | &#039; or &#039;, &#039;)
 
-<p class="py-2">Customizing the output of the generator is quite simple, some require no extra dependencies!</p>
+        if kind == &#039;tuple&#039; then
+            return &#039;(&#039; .. res .. &#039;)&#039;
+        else
+            return res
+        end
+    elseif kind == &#039;nominal&#039; then
+        return humanize(typ.ref, style)
+    end
+end
 
-<h3 class="text-xl">General structure</h3>
+genFn = function(tp: parser.Type, style: boolean): string
+    local fn = tp.func as parser.Function
+    local fnName = tp.name or &#039;&#039;
+    local src: string
 
-<p class="py-2">This would be the HTML that is used within the generator. Since its written with etlua, no extra dependencies are needed.</p>
+    if project.functionStyle == &#039;moon&#039; then
+        src = (style and &#039;&lt;b&gt;&#039; .. fnName .. &#039;&lt;/b&gt;&#039; or fnName) .. (fnName ~= &#039;&#039; and &#039; = &#039; or &#039;&#039;)
+    else
+        src = (style and &#039;&lt;b&gt;function&lt;/b&gt;&#039; or &#039;function&#039;) .. (fnName ~= &#039;&#039; and &#039; &#039; or &#039;&#039;) .. fnName
+    end
 
-<p class="py-2">All of these are located in <code>tealdoc/templates</code>. Everything within <code>tealdoc/html/templates</code> is rebuilt every time.</p>
+    local parens = {}
+    local generics = {}
+    local rets = {}
 
-<ul>
-<li><code>document.etlua</code> - A document contains information about a single type</li>
-<li><code>footer.etlua</code> - The footer used on most pages</li>
-<li><code>main.etlua</code> - The index page which links to the top-level documents</li>
-<li><code>navbar.etlua</code> - The navbar used on most pages</li>
-<li><code>prism.etlua</code> - Prism.js configuration</li>
-<li><code>srcdoc.etlua</code> - The file used to generate linking to sources</li>
-</ul>
+    for i = 1, #fn.params do
+        local param = fn.params[i]
 
-<h3 class="text-xl">Types</h3>
+        if param.kind == &#039;generic&#039; then
+            table.insert(generics, param.name)
+        end
 
-<p class="py-2">To customize how types look, edit the <code>humanize</code> function or the <code>genFn</code> function in <code>tealdoc/humanize.tl</code></p>
+        local paramName = (param.name and param.name .. &#039;: &#039; or &#039;&#039;) .. humanize(param, style)
 
-<h2 class="text-2xl">TODO</h2>
+        table.insert(parens, paramName)
+    end
 
-<ul>
-<li>[] Cross-package linking</li>
-<li>[] Current-package linking</li>
-<li>[] Tag support</li>
-<li>[] Better source inspection</li>
-<li>[x] Field descriptions</li>
-<li>[x] Enum descriptions</li>
-<li>[x] Complete basic documentation generation</li>
-<li>[] Fix some record generation issues</li>
-<li>[] Cleanup (aka rewrite the code to be terrible)</li>
-<li>[] Full documentation generation (Generate sub-records and sub-enums)</li>
-<li>[] Side-navbar (config setting)</li>
-</ul>
+    for i = 1, #fn.returns do
+        local humanized = humanize(fn.returns[i], style)
+        table.insert(rets, humanized)
+    end
 
-            
+    local retStr: string
 
-            
-                <h3 class="text-xl pt-6">Modules</h3>
-                <hr>
+    local genericsStr = #generics &gt; 0 and &#039;&lt;&#039; .. table.concat(generics, &#039;, &#039;) .. &#039;&gt;&#039; or &#039;&#039;
+    local parensStr = &#039;(&#039; .. table.concat(parens, &#039;, &#039;) .. &#039;)&#039;
 
-                <div class="grid grid-cols-3 gap-2">
-                    
-                        <div>
-                            <a href="./tealdoc.cli/index.html" class="text-blue-500">tealdoc.cli</a>
-                        </div>
-                        <div class="col-span-2">
-                            The main function of the documentation generator as well as the project config
-                        </div>
-                    
-                        <div>
-                            <a href="./tealdoc.parser/index.html" class="text-blue-500">tealdoc.parser</a>
-                        </div>
-                        <div class="col-span-2">
-                            Utilities for extracting all the types from either virtual files or real files
-                        </div>
-                    
-                        <div>
-                            <a href="./tealdoc.logger/index.html" class="text-blue-500">tealdoc.logger</a>
-                        </div>
-                        <div class="col-span-2">
-                            Logger for debugging and logging
-                        </div>
-                    
-                </div>
-            
-                <h3 class="text-xl pt-6">Functions</h3>
-                <hr>
+    if project.functionStyle == &#039;moon&#039; then
+        retStr = #rets &gt; 0 and &#039; -&gt; &#039; .. table.concat(rets, &#039;, &#039;) or &#039;&#039;
+    else
+        retStr = #rets &gt; 0 and &#039;: &#039; .. table.concat(rets, &#039;, &#039;) or &#039;&#039;
+    end
 
-                <div class="grid grid-cols-3 gap-2">
-                    
-                        <div>
-                            <a href="./tealdoc.humanize.html" class="text-blue-500">tealdoc.humanize</a>
-                        </div>
-                        <div class="col-span-2">
-                            A factory used to generate a function that converts types into strings
-                        </div>
-                    
-                </div>
-            
-        </div>
-    </main>
+    src = src .. genericsStr .. parensStr .. retStr
 
-    <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-06 19:46:54
-</footer>
+    return src
+end
 
+--- A factory used to generate a function that converts types into strings
+return function(pro: table): function(tp: parser.Type, style: boolean): string
+    project = pro
+
+    return humanize
+end
+
+        </code>
+    </pre>
 </body>
+</html>

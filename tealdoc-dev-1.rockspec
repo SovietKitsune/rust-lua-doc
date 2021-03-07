@@ -11,7 +11,6 @@ dependencies = {
    "argparse",
    "etlua",
    "luafilesystem",
-   "lua-toml",
 
    "tl" -- *casually depend on an entire compiler*
 }

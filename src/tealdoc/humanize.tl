@@ -3,7 +3,7 @@ local parser = require('tealdoc.parser')
 local project: table
 local genFn: function(fn: parser.Type, style: boolean)
 
-local primitive: {parser.Type.TypeNames: boolean} = {
+local primitive: {parser.Type.Kinds: boolean} = {
     ['nil'] = true,
     ['boolean'] = true,
     ['number'] = true,
@@ -14,7 +14,7 @@ local primitive: {parser.Type.TypeNames: boolean} = {
     ['unknown'] = true
 }
 
-local links: {parser.Type.TypeNames: string} = {
+local links: {parser.Type.Kinds: string} = {
     ['nil'] = 'https://www.lua.org/pil/2.1.html',
     ['boolean'] = 'https://www.lua.org/pil/2.2.html',
     ['number'] = 'https://www.lua.org/pil/2.3.html',
@@ -23,7 +23,8 @@ local links: {parser.Type.TypeNames: string} = {
     ['function'] = 'https://www.lua.org/pil/2.6.html',
     ['userdata'] = 'https://www.lua.org/pil/2.7.html',
     ['thread'] = 'https://www.lua.org/pil/2.7.html',
-    ['any'] = 'https://www.lua.org/pil/contents.html#2'
+    ['any'] = 'https://www.lua.org/pil/contents.html#2',
+    ['unknown'] = 'https://www.lua.org/contents.html#2'
 }
 
 local function humanize(typ: parser.Type, style: boolean): string
@@ -44,10 +45,7 @@ local function humanize(typ: parser.Type, style: boolean): string
     elseif kind == 'generic' then
         return style and '<span class="text-green-500">' .. typ.name .. '</span>' or typ.name
     elseif kind == 'custom' or kind == 'enum' then
-        local struct = typ.struct as parser.Record
-
-        local name = (struct.name or typ.name or '')
-        --; TODO - Use a better solution
+        local name = typ.name
         return style and '<a href="./' .. name .. '.html" class="text-blue-500">' .. name .. '</a>' or name
     elseif kind == 'union' or kind == 'tuple' then
         local types = {}
@@ -71,7 +69,7 @@ end
 
 genFn = function(tp: parser.Type, style: boolean): string
     local fn = tp.func as parser.Function
-    local fnName = tp.parent or ''
+    local fnName = tp.name or ''
     local src: string
 
     if project.functionStyle == 'moon' then
@@ -87,11 +85,11 @@ genFn = function(tp: parser.Type, style: boolean): string
     for i = 1, #fn.params do
         local param = fn.params[i]
 
-        if param.type.kind == 'generic' then
+        if param.kind == 'generic' then
             table.insert(generics, param.name)
         end
 
-        local paramName = (param.name and param.name .. ': ' or '') .. humanize(param.type, style)
+        local paramName = (param.name and param.name .. ': ' or '') .. humanize(param, style)
 
         table.insert(parens, paramName)
     end
@@ -117,6 +115,7 @@ genFn = function(tp: parser.Type, style: boolean): string
     return src
 end
 
+--- A factory used to generate a function that converts types into strings
 return function(pro: table): function(tp: parser.Type, style: boolean): string
     project = pro
 

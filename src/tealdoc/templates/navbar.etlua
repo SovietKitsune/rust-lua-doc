@@ -5,7 +5,7 @@
                 <div class="block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a
-                            href="index.html"
+                            href="/<%= project.output %>/index.html"
                             class="text-white text-lg font-medium"
                         >
                             <%= project.name %>-<%= project.version %>
@@ -16,7 +16,7 @@
             <div class="flex items-center">
                 <div class="block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="index.html" class="text-white text-lg font-medium">Index</a>
+                        <a href="index.html" class="text-white text-lg font-medium">Module Index</a>
                     </div>
                 </div>
             </div>

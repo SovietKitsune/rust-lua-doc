@@ -314,82 +314,28 @@ pre[class*="language-"].line-numbers > code {
         <div class="max-w-7xl mx-auto py-6 px-8">
             
 
-            <h1 class="text-3xl">Teal doc</h1>
-
-<p class="py-2">A demo can be found at <a href="https://sovietkitsune.github.io/tealdoc/" class="text-blue-500" >https://sovietkitsune.github.io/tealdoc/</a></p>
-
-<p class="py-2">This new idea will be based on some points brought up by <a href="https://github.com/daelvn" class="text-blue-500" >daelvn</a> with the <a href="https://github.com/daelvn/meteor/discussions/7" class="text-blue-500" >documentation discussion</a>.</p>
-
-<p class="py-2">The new parser will be written in Teal using Teal&#39;s <code>get_type</code> function along with some manual parsing for comments.</p>
-
-<p class="py-2">The functions and properties used within the final document would be the ones returned from the module instead of whatever is.</p>
-
-<h2 class="text-2xl">Customizing</h2>
-
-<p class="py-2">Customizing the output of the generator is quite simple, some require no extra dependencies!</p>
-
-<h3 class="text-xl">General structure</h3>
-
-<p class="py-2">This would be the HTML that is used within the generator. Since its written with etlua, no extra dependencies are needed.</p>
-
-<p class="py-2">All of these are located in <code>tealdoc/templates</code>. Everything within <code>tealdoc/html/templates</code> is rebuilt every time.</p>
-
-<ul>
-<li><code>document.etlua</code> - A document contains information about a single type</li>
-<li><code>footer.etlua</code> - The footer used on most pages</li>
-<li><code>main.etlua</code> - The index page which links to the top-level documents</li>
-<li><code>navbar.etlua</code> - The navbar used on most pages</li>
-<li><code>prism.etlua</code> - Prism.js configuration</li>
-<li><code>srcdoc.etlua</code> - The file used to generate linking to sources</li>
-</ul>
-
-<h3 class="text-xl">Types</h3>
-
-<p class="py-2">To customize how types look, edit the <code>humanize</code> function or the <code>genFn</code> function in <code>tealdoc/humanize.tl</code></p>
-
-<h2 class="text-2xl">TODO</h2>
-
-<ul>
-<li>[] Cross-package linking</li>
-<li>[] Current-package linking</li>
-<li>[] Tag support</li>
-<li>[] Better source inspection</li>
-<li>[x] Field descriptions</li>
-<li>[x] Enum descriptions</li>
-<li>[x] Complete basic documentation generation</li>
-<li>[] Fix some record generation issues</li>
-<li>[] Cleanup (aka rewrite the code to be terrible)</li>
-<li>[] Full documentation generation (Generate sub-records and sub-enums)</li>
-<li>[] Side-navbar (config setting)</li>
-</ul>
+            Logger for debugging and logging
 
             
 
             
-                <h3 class="text-xl pt-6">Modules</h3>
+                <h3 class="text-xl pt-6">Variables</h3>
                 <hr>
 
                 <div class="grid grid-cols-3 gap-2">
                     
                         <div>
-                            <a href="./tealdoc.cli/index.html" class="text-blue-500">tealdoc.cli</a>
+                            <a href="./color.html" class="text-blue-500">color</a>
                         </div>
                         <div class="col-span-2">
-                            The main function of the documentation generator as well as the project config
+                            If there should be color in the output
                         </div>
                     
                         <div>
-                            <a href="./tealdoc.parser/index.html" class="text-blue-500">tealdoc.parser</a>
+                            <a href="./level.html" class="text-blue-500">level</a>
                         </div>
                         <div class="col-span-2">
-                            Utilities for extracting all the types from either virtual files or real files
-                        </div>
-                    
-                        <div>
-                            <a href="./tealdoc.logger/index.html" class="text-blue-500">tealdoc.logger</a>
-                        </div>
-                        <div class="col-span-2">
-                            Logger for debugging and logging
+                            The current level of the logger
                         </div>
                     
                 </div>
@@ -400,10 +346,45 @@ pre[class*="language-"].line-numbers > code {
                 <div class="grid grid-cols-3 gap-2">
                     
                         <div>
-                            <a href="./tealdoc.humanize.html" class="text-blue-500">tealdoc.humanize</a>
+                            <a href="./error.html" class="text-blue-500">error</a>
                         </div>
                         <div class="col-span-2">
-                            A factory used to generate a function that converts types into strings
+                            Send an error level message
+                        </div>
+                    
+                        <div>
+                            <a href="./debug.html" class="text-blue-500">debug</a>
+                        </div>
+                        <div class="col-span-2">
+                            Send a debug message
+                        </div>
+                    
+                        <div>
+                            <a href="./info.html" class="text-blue-500">info</a>
+                        </div>
+                        <div class="col-span-2">
+                            Send an informational message
+                        </div>
+                    
+                        <div>
+                            <a href="./trace.html" class="text-blue-500">trace</a>
+                        </div>
+                        <div class="col-span-2">
+                            Get the traceback where all build-file paths are replaced with source-file paths
+                        </div>
+                    
+                        <div>
+                            <a href="./log.html" class="text-blue-500">log</a>
+                        </div>
+                        <div class="col-span-2">
+                            Create a log message, the level must be a number between 1 and 5
+                        </div>
+                    
+                        <div>
+                            <a href="./warn.html" class="text-blue-500">warn</a>
+                        </div>
+                        <div class="col-span-2">
+                            Send a warning level message
                         </div>
                     
                 </div>

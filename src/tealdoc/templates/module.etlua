@@ -21,15 +21,15 @@
 
     <main>
         <div class="max-w-7xl mx-auto py-6 px-8">
-            <% if project.deprecated then %>
+            <% if current.deprecated then %>
                 <div class="deprecated">
                     <h4>Deprecated</h4>
     
-                    <%- markdown(project.deprecated) %>
+                    <%- markdown(current.deprecated) %>
                 </div>
             <% end %>
 
-            <%- markdown(project.description) %>
+            <%- markdown(current.description) %>
 
             <%
             local contents = {
@@ -42,7 +42,7 @@
                 -- Globals = {}
             }
 
-            local modules = project.modules and project.modules or project.module.struct.fields
+            local modules = current.modules ~= nil and current.modules or current.struct.fields
 
             for i, v in pairs(modules) do
                 if v.kind == 'nominal' then
@@ -74,18 +74,10 @@
                 <div class="grid grid-cols-3 gap-2">
                     <% for i, v in pairs(secContents) do %>
                         <div>
-                            <a href="./<%= i %>.html" class="text-blue-500"><%= i %></a>
+                            <a href="./<%= i %><%= name == 'Modules' and '/index' or '' %>.html" class="text-blue-500"><%= i %></a>
                         </div>
                         <div class="col-span-2">
-                            <% if v.kind == 'custom' then %>
-                                <%- markdown(v.struct.description:match('^(.-)\n') or v.struct.description) %>
-                            <% elseif v.kind == 'function' then %>
-                                <%- markdown(v.func.description:match('^(.-)\n') or v.func.description) %>
-                            <% elseif v.kind == 'enum' then %>
-                                <%- markdown(v.en.description:match('^(.-)\n') or v.en.description) %>
-                            <% else %>
-                                <!-- TODO -->
-                            <% end %>
+                            <%- markdown(v.description:match('^(.-)\n') or v.description) %>
                         </div>
                     <% end %>
                 </div>
