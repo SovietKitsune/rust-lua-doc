@@ -335,6 +335,8 @@ local record Type
       &#039;enum&#039;
       --- A generic found within function definitions
       &#039;generic&#039;
+      --- A type provided from outside the teal compiler
+      &#039;named&#039;
    end
 
    --- The kind of type this is
@@ -343,6 +345,8 @@ local record Type
    description: string
    --- The name of the type, usually inherited from their parent
    name: string
+   --- The custom name of a type
+   customName: string | nil
    --- The parent of the type, this doesn&#039;t exist for top-level types
    parent: Type | nil
    --- The file-system tree that needs to be followed
@@ -367,6 +371,8 @@ local record Type
    values: {Type} | nil
    --- A reference to another type
    ref: Type | nil
+   --- Signify that a type has been deprecated
+   deprecated: boolean | string
 end
 
 local record State
@@ -892,7 +898,6 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
 
                   local found = false
 
-                  --; FIXME - metamethod operators
                   local outField = out.struct.fields[fieldToken.tk]
 
                   outField.description = getDescription(report.files[tp.file], fieldToken.y)

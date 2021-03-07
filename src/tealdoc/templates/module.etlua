@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <%- include 'navbar.etlua' %>
+    <%- include('navbar.etlua', { current = current }) %>
 
     <main>
         <div class="max-w-7xl mx-auto py-6 px-8">

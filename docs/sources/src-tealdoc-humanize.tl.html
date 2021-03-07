@@ -322,6 +322,8 @@ local function humanize(typ: parser.Type, style: boolean): string
 
     if primitive[kind] then
         return style and &#039;&lt;a href=&quot;&#039; .. links[kind] .. &#039;&quot; class=&quot;text-blue-500&quot;&gt;&#039; .. kind .. &#039;&lt;/a&gt;&#039; or kind
+    elseif kind == &#039;named&#039; then
+        return typ.customName
     elseif kind == &#039;function&#039; then
         return genFn(typ, style)
     elseif kind == &#039;table&#039; then

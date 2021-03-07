@@ -292,12 +292,14 @@ local function main()
    local scriptDir = currentLocation()
    local cache: {string: function(any): string} = {}
 
-   local function include(filename: string): string
+   local function include(filename: string, base: table): string
+      base = base or {}
+
+      base.project = project
+
       cache[filename] = cache[filename] or etlua.compile(read(scriptDir .. 'templates/' .. filename))
 
-      return cache[filename]({
-         project = project
-      })
+      return cache[filename](base)
    end
 
    -- Templates --

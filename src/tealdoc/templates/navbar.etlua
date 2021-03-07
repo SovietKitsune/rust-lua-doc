@@ -1,3 +1,21 @@
+<%
+local function toRoot(parent, sub)
+    parent = parent or (not sub and current)
+
+    if parent then
+        local res = toRoot(parent.parent, true)
+
+        if res ~= '' then
+            return '../' .. res
+        else
+            return res
+        end
+    else
+        return './'
+    end
+end
+%>
+
 <nav class="bg-blue-600">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-12">
@@ -5,7 +23,7 @@
                 <div class="block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a
-                            href="/<%= project.output %>/index.html"
+                            href="<%= toRoot() %>index.html"
                             class="text-white text-lg font-medium"
                         >
                             <%= project.name %>-<%= project.version %>

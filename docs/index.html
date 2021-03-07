@@ -283,14 +283,16 @@ pre[class*="language-"].line-numbers > code {
 </head>
 
 <body>
-    <nav class="bg-blue-600">
+    
+
+<nav class="bg-blue-600">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-12">
             <div class="flex items-center">
                 <div class="block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a
-                            href="/docs/index.html"
+                            href=".././index.html"
                             class="text-white text-lg font-medium"
                         >
                             tealdoc-dev-1
@@ -314,19 +316,42 @@ pre[class*="language-"].line-numbers > code {
         <div class="max-w-7xl mx-auto py-6 px-8">
             
 
-            <h1 class="text-3xl">Teal doc</h1>
+            <h1 class="text-3xl">Tealdoc</h1>
 
-<p class="py-2">A demo can be found at <a href="https://sovietkitsune.github.io/tealdoc/" class="text-blue-500" >https://sovietkitsune.github.io/tealdoc/</a></p>
+<p class="py-2"><em>Demo can be found at <a href="https://sovietkitsune.github.io/tealdoc/" class="text-blue-500" >https://sovietkitsune.github.io/tealdoc/</a></em></p>
 
-<p class="py-2">This new idea will be based on some points brought up by <a href="https://github.com/daelvn" class="text-blue-500" >daelvn</a> with the <a href="https://github.com/daelvn/meteor/discussions/7" class="text-blue-500" >documentation discussion</a>.</p>
+<h2 class="text-2xl">Motivation</h2>
 
-<p class="py-2">The new parser will be written in Teal using Teal&#39;s <code>get_type</code> function along with some manual parsing for comments.</p>
+<p class="py-2">I like Teal and don&#39;t like LDoc/py-lua-doc.</p>
 
-<p class="py-2">The functions and properties used within the final document would be the ones returned from the module instead of whatever is.</p>
+<h2 class="text-2xl">LDoc support</h2>
+
+<p class="py-2">Tealdoc will Soon™️ support LDoc (and by extension LuaDoc) syntax (for the most part).</p>
+
+<p class="py-2">Somethings like MoonScript and C extension support won&#39;t work due to the parser using Teal.</p>
+
+<h3 class="text-xl">Not planned</h3>
+
+<ul>
+<li><code>@module</code>/<code>@classmod</code>/<code>@submodule</code> - Module names are automatically collected and can&#39;t be changed (unless explicitly within rockspec (TODO))</li>
+<li><code>@script</code> - No point (to me)</li>
+<li><code>@author</code>/<code>@copyright</code>/<code>@license</code>/<code>@release</code> - Can be specified in <code>tealdoc.lua</code> (TODO)</li>
+<li><code>@function</code>/<code>@lfunction</code> - Functions are automatically found</li>
+<li><code>@section</code> - No point (to me)</li>
+</ul>
+
+<p class="py-2">Not planned items would throw a warning with a suggested fix</p>
+
+<h3 class="text-xl">Other planned changes</h3>
+
+<ul>
+<li><code>@local</code> aliased to <code>@hidden</code></li>
+<li><code>@type</code> aliased to <code>@table</code></li>
+</ul>
 
 <h2 class="text-2xl">Customizing</h2>
 
-<p class="py-2">Customizing the output of the generator is quite simple, some require no extra dependencies!</p>
+<p class="py-2">Customizing the output of the generator is quite simple:</p>
 
 <h3 class="text-xl">General structure</h3>
 
@@ -345,37 +370,49 @@ pre[class*="language-"].line-numbers > code {
 
 <h3 class="text-xl">Types</h3>
 
-<p class="py-2">To customize how types look, edit the <code>humanize</code> function or the <code>genFn</code> function in <code>tealdoc/humanize.tl</code></p>
-
-<h2 class="text-2xl">TODO</h2>
-
-<ul>
-<li>[] Cross-package linking</li>
-<li>[] Current-package linking</li>
-<li>[] Tag support</li>
-<li>[] Better source inspection</li>
-<li>[x] Field descriptions</li>
-<li>[x] Enum descriptions</li>
-<li>[x] Complete basic documentation generation</li>
-<li>[] Fix some record generation issues</li>
-<li>[] Cleanup (aka rewrite the code to be terrible)</li>
-<li>[] Full documentation generation (Generate sub-records and sub-enums)</li>
-<li>[] Side-navbar (config setting)</li>
-</ul>
+To customize how types look, edit the <code>humanize</code> function or the <code>genFn</code> function in <code>tealdoc/humanize.tl</code>.
 
             
 
             
-                <h3 class="text-xl pt-6">Functions</h3>
+                <h3 class="text-xl pt-6">Variables</h3>
                 <hr>
 
                 <div class="grid grid-cols-3 gap-2">
                     
                         <div>
-                            <a href="./tealdoc.humanize.html" class="text-blue-500">tealdoc.humanize</a>
+                            <a href="./tealdoc.tags.metamethod.html" class="text-blue-500">tealdoc.tags.metamethod</a>
                         </div>
                         <div class="col-span-2">
-                            A factory used to generate a function that converts types into strings
+                            
+                        </div>
+                    
+                        <div>
+                            <a href="./tealdoc.tag.html" class="text-blue-500">tealdoc.tag</a>
+                        </div>
+                        <div class="col-span-2">
+                            
+                        </div>
+                    
+                        <div>
+                            <a href="./tealdoc.tags.param.html" class="text-blue-500">tealdoc.tags.param</a>
+                        </div>
+                        <div class="col-span-2">
+                            
+                        </div>
+                    
+                        <div>
+                            <a href="./tealdoc.tags.return.html" class="text-blue-500">tealdoc.tags.return</a>
+                        </div>
+                        <div class="col-span-2">
+                            
+                        </div>
+                    
+                        <div>
+                            <a href="./tealdoc.tags.deprecated.html" class="text-blue-500">tealdoc.tags.deprecated</a>
+                        </div>
+                        <div class="col-span-2">
+                            
                         </div>
                     
                 </div>
@@ -384,13 +421,6 @@ pre[class*="language-"].line-numbers > code {
                 <hr>
 
                 <div class="grid grid-cols-3 gap-2">
-                    
-                        <div>
-                            <a href="./tealdoc.parser/index.html" class="text-blue-500">tealdoc.parser</a>
-                        </div>
-                        <div class="col-span-2">
-                            Utilities for extracting all the types from either virtual files or real files
-                        </div>
                     
                         <div>
                             <a href="./tealdoc.logger/index.html" class="text-blue-500">tealdoc.logger</a>
@@ -406,13 +436,34 @@ pre[class*="language-"].line-numbers > code {
                             The main function of the documentation generator as well as the project config
                         </div>
                     
+                        <div>
+                            <a href="./tealdoc.parser/index.html" class="text-blue-500">tealdoc.parser</a>
+                        </div>
+                        <div class="col-span-2">
+                            Utilities for extracting all the types from either virtual files or real files
+                        </div>
+                    
+                </div>
+            
+                <h3 class="text-xl pt-6">Functions</h3>
+                <hr>
+
+                <div class="grid grid-cols-3 gap-2">
+                    
+                        <div>
+                            <a href="./tealdoc.humanize.html" class="text-blue-500">tealdoc.humanize</a>
+                        </div>
+                        <div class="col-span-2">
+                            A factory used to generate a function that converts types into strings
+                        </div>
+                    
                 </div>
             
         </div>
     </main>
 
     <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-06 21:41:44
+    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-06 23:31:58
 </footer>
 
 </body>

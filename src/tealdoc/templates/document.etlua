@@ -2,6 +2,22 @@
 if current.kind == 'nominal' then
     current = current.ref
 end
+
+local function toRoot(parent, sub)
+    parent = parent or (not sub and current)
+
+    if parent then
+        local res = toRoot(parent.parent, true)
+
+        if res ~= '' then
+            return '../' .. res
+        else
+            return res
+        end
+    else
+        return './'
+    end
+end
 %>
 
 <!DOCTYPE html>
@@ -25,7 +41,7 @@ end
 
 <body>
     <div>
-        <%- include 'navbar.etlua' %>
+        <%- include('navbar.etlua', { current = current }) %>
 
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -50,7 +66,7 @@ end
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
                                     <% if current.source then %>
-                                        <a href="/<%= project.output %>/sources/<%= current.source:gsub('/', '-') %>.html#code.<%= current.yPos %>-<%= current.stopY or current.yPos %>" class="text-gray-400">Source</a>
+                                        <a href="<%= toRoot() %>sources/<%= current.source:gsub('/', '-') %>.html#code.<%= current.yPos %>-<%= current.stopY or current.yPos %>" class="text-gray-400">Source</a>
                                     <% end %>
                                 </div>
                             </div>
@@ -100,7 +116,7 @@ end
                                         <div class="block">
                                             <div class="flex items-baseline space-x-4">
                                                 <a href="#fn.<%= name %>" class="text-gray-400">#</a>
-                                                <a href="/<%= project.output %>/sources/<%= func.source:gsub('/', '-') %>.html#code.<%= func.yPos %>-<%= current.stopY or current.yPos %>" class="text-gray-400">Source</a>
+                                                <a href="<%= toRoot() %>sources/<%= func.source:gsub('/', '-') %>.html#code.<%= func.yPos %>-<%= current.stopY or current.yPos %>" class="text-gray-400">Source</a>
                                             </div>
                                         </div>
                                     </div>
