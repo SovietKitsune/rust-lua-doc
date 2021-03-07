@@ -1,5 +1,9 @@
 # Changelog
 
+## dev-2
+
+* Add fix for metamethods
+
 ## dev-1
 
 * Allow for submodules
