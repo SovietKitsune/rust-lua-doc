@@ -1,16 +1,35 @@
-# Teal doc
+# Tealdoc
 
-A demo can be found at <https://sovietkitsune.github.io/tealdoc/>
+*Demo can be found at <https://sovietkitsune.github.io/tealdoc/>*
 
-This new idea will be based on some points brought up by [daelvn](https://github.com/daelvn) with the [documentation discussion](https://github.com/daelvn/meteor/discussions/7).
+## Motivation
 
-The new parser will be written in Teal using Teal's `get_type` function along with some manual parsing for comments.
+I like Teal and don't like LDoc/py-lua-doc.
 
-The functions and properties used within the final document would be the ones returned from the module instead of whatever is.
+## LDoc support
+
+Tealdoc will Soon™️ support LDoc (and by extension LuaDoc) syntax (for the most part).
+
+Somethings like MoonScript and C extension support won't work due to the parser using Teal.
+
+### Not planned
+
+* `@module`/`@classmod`/`@submodule` - Module names are automatically collected and can't be changed (unless explicitly within rockspec (TODO))
+* `@script` - No point (to me)
+* `@author`/`@copyright`/`@license`/`@release` - Can be specified in `tealdoc.lua` (TODO)
+* `@function`/`@lfunction` - Functions are automatically found
+* `@section` - No point (to me)
+
+Not planned items would throw a warning with a suggested fix
+
+### Other planned changes
+
+* `@local` aliased to `@hidden`
+* `@type` aliased to `@table`
 
 ## Customizing
 
-Customizing the output of the generator is quite simple, some require no extra dependencies!
+Customizing the output of the generator is quite simple:
 
 ### General structure
 
@@ -27,18 +46,4 @@ All of these are located in `tealdoc/templates`. Everything within `tealdoc/html
 
 ### Types
 
-To customize how types look, edit the `humanize` function or the `genFn` function in `tealdoc/humanize.tl`
-
-## TODO
-
-* [ ] Cross-package linking
-* [ ] Current-package linking
-* [ ] Tag support
-* [ ] Better source inspection
-* [x] Field descriptions
-* [x] Enum descriptions
-* [x] Complete basic documentation generation
-* [ ] Fix some record generation issues
-* [ ] Cleanup (aka rewrite the code to be terrible)
-* [ ] Full documentation generation (Generate sub-records and sub-enums)
-* [ ] Side-navbar (config setting)
+To customize how types look, edit the `humanize` function or the `genFn` function in `tealdoc/humanize.tl`.
