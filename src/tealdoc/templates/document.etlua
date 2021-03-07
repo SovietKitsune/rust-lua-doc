@@ -106,6 +106,10 @@ end
                                     </div>
                                 </div>
 
+                                <% if func.func.isMetamethod then %>
+                                    <small>Metamethod</small>
+                                <% end %>
+
                                 <%- markdown(func.description) %>
                             <% end %>
                         <% end %>
@@ -130,6 +134,9 @@ end
                         <% end %>
                     <% else %>
                         <% if current.kind == 'function' then %>
+                            <% if current.func.isMetamethod then %>
+                                <small>Metamethod</small>
+                            <% end %>
                             <h3 class="text-xl pt-6">Signature</h3>
 
                             <pre>

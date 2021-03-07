@@ -6,6 +6,7 @@ local record Function
    params: {Type}
    returns: {Type}
    vararg: boolean
+   isMetamethod: boolean
 end
 
 --- A structure that represents a bare record or table
@@ -570,7 +571,6 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          local i = 1
 
          while i <= #tokensBetween do
-            if name == 'Config' then logger.debug(i) end
             if tokensBetween[i].kind == 'identifier' and (tokensBetween[i].tk == 'record' or tokensBetween[i].tk == 'enum') and 
                tokensBetween[i + 1] and tokensBetween[i + 1].kind == 'identifier' 
             then
@@ -582,37 +582,59 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
             else
                local fieldToken = tokensBetween[i]
 
-               if name == 'Config' then logger.debug(fieldToken) end
+               if fieldToken.tk == 'metamethod' then
+                  i = i + 1
 
-               local found = false
+                  out.struct.fields[tokensBetween[i].tk] = {
+                     kind = 'function',
+                     source = tp.file,
+                     name = tokensBetween[i].tk,
+                     yPos = fieldToken.y,
+                     func = { --; TODO - Extract these
+                              --; Teal doesn't expose metamethods within requires
+                        params = {},
+                        returns = {},
+                        vararg = {},
+                        isMetamethod = true
+                     } as Function
+                  }
+               else
 
-               out.struct.fields[fieldToken.tk].description = getDescription(report.files[tp.file], fieldToken.y)
+                  local found = false
 
-               local stack = 0
-               -- logger.debug(atLine)
+                  local outField = out.struct.fields[fieldToken.tk]
 
-               for k = i + 2, #tokensBetween do
-                  -- We need to watchout for composition types eg functions, tables
+                  outField.description = getDescription(report.files[tp.file], fieldToken.y)
 
-                  local token = tokensBetween[k]
+                  local stack = 0
+                  local ignoreNext = outField.kind == 'function'
+                  -- logger.debug(atLine)
 
-                  if token.kind == '{' or token.kind == '(' then
-                     stack = stack + 1
-                  elseif token.kind == '}' or token.kind == ')' then
-                     stack = stack - 1
+                  for k = i + 2, #tokensBetween do
+                     -- We need to watchout for composition types eg functions, tables
+
+                     local token = tokensBetween[k]
+
+                     if token.kind == '{' or token.kind == '(' then
+                        stack = stack + 1
+                     elseif token.kind == '}' or token.kind == ')' then
+                        stack = stack - 1
+                     end
+
+                     if token.kind == ':' and token.tk == ':' and stack == 0 and not ignoreNext then
+                        i = k - 1
+
+                        found = true
+
+                        break
+                     elseif ignoreNext and token.kind == ':' and token.tk == ':' then
+                        ignoreNext = false
+                     end
                   end
 
-                  if token.kind == ':' and token.tk == ':' and stack == 0 then
-                     i = k - 1
-
-                     found = true
-
+                  if not found then
                      break
                   end
-               end
-
-               if not found then
-                  break
                end
             end
          end

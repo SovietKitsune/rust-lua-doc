@@ -357,22 +357,22 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
+                                        output
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    The output directory, defaults to <code>docs/</code>
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
                                         source
                                     
                                     : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
                                 </h4>
                                 <div>
                                     Where to find all the project source files, defaults to current working directory
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        isLua
-                                    
-                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a>
-                                </h4>
-                                <div>
-                                    If the project is written in Lua, defaults to false
                                 </div>
                             
                                 <h4 class="text-lg pt-2">
@@ -397,12 +397,12 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        version
+                                        deprecated
                                     
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a> | <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
                                 </h4>
                                 <div>
-                                    The version of the project, if not provided this will be taken from a rockspec
+                                    If the project is deprecated and why it was deprecated
                                 </div>
                             
                                 <h4 class="text-lg pt-2">
@@ -419,6 +419,16 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
+                                        descriptionFile
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    The file to use for the description
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
                                         name
                                     
                                     : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
@@ -429,32 +439,22 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        deprecated
+                                        isLua
                                     
-                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a> | <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a>
                                 </h4>
                                 <div>
-                                    If the project is deprecated and why it was deprecated
+                                    If the project is written in Lua, defaults to false
                                 </div>
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        output
+                                        version
                                     
                                     : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
                                 </h4>
                                 <div>
-                                    The output directory, defaults to <code>docs/</code>
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        descriptionFile
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    The file to use for the description
+                                    The version of the project, if not provided this will be taken from a rockspec
                                 </div>
                             
                         
@@ -464,7 +464,7 @@ pre[class*="language-"].line-numbers > code {
         </main>
 
         <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-06 19:46:54
+    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-06 21:41:44
 </footer>
 
     </div>
