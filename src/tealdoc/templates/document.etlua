@@ -9,7 +9,7 @@ local function toRoot(parent, sub)
     if parent then
         local res = toRoot(parent.parent, true)
 
-        if res ~= '' then
+        if res ~= './' then
             return '../' .. res
         else
             return res
@@ -90,12 +90,14 @@ end
                         local hasProperties = false
 
                         for i, v in pairs(current.struct.fields) do
-                            if v.kind == 'function' then
-                                hasFunctions = true
-                                functions[i] = v
-                            else
-                                hasProperties = true
-                                properties[i] = v
+                            if not v.hidden then
+                                if v.kind == 'function' then
+                                    hasFunctions = true
+                                    functions[i] = v
+                                else
+                                    hasProperties = true
+                                    properties[i] = v
+                                end
                             end
                         end
                         %>

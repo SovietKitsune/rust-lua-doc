@@ -1,5 +1,7 @@
 local parser = require('tealdoc.parser')
 local logger = require('tealdoc.logger')
+local tag = require('tealdoc.tag')
+
 local lunamark = require('lunamark')
 local argparse = require('argparse')
 local etlua = require('etlua')
@@ -7,10 +9,6 @@ local lfs = require('lfs')
 
 --- The configuration passed to templates
 local record Project
-   enum FunctionStyle
-      'lua'
-      'moon'
-   end
    name: string
    version: string
    deprecated: boolean | string
@@ -18,12 +16,23 @@ local record Project
    module: parser.Type | nil
    modules: {string: parser.Type} | nil
    sources: {string: string}
-   functionStyle: FunctionStyle
+   functionStyle: string
    output: string
 end
 
 --- The user-provided configuration
 local record Config
+   --- @{hidden}
+   enum FunctionStyle
+      'lua'
+      'moon'
+   end
+   --- @{hidden}
+   enum TagStyle
+      'ldoc'
+      'tealdoc'
+      'none'
+   end
    --- The name of the project, if not provided this will be taken from a rockspec
    name: string
    --- The version of the project, if not provided this will be taken from a rockspec
@@ -51,11 +60,43 @@ local record Config
    --- ```moon
    --- foo = (bar: baz) -> baz
    --- ```
-   functionStyle: Project.FunctionStyle
+   functionStyle: FunctionStyle
    --- The output directory, defaults to `docs/`
    output: string
    --- Where to find all the project source files, defaults to current working directory
    source: string
+   --- The tag format that should be used, this usually doesn't matter for Teal besides for hiding and deprecations
+   ---
+   --- The default is `tealdoc`
+   ---
+   --- `tealdoc`:
+   ---
+   --- ```lua
+   --- --- This is a cool function
+   --- -- @{param y number}
+   --- -- @{return number}
+   --- local function x(y)
+   ---    return y
+   --- end
+   --- ```
+   ---
+   --- `ldoc`:
+   ---
+   --- ```lua
+   --- --- This is a cool function
+   --- -- @tparam number y
+   --- -- @treturn number
+   --- local function x(y)
+   ---    return y
+   --- end
+   --- ```
+   ---
+   --- `none`:
+   ---
+   --- Doesn't preload any tags
+   tagStyle: TagStyle
+   --- The directories where extra tags are located
+   tags: {string}
 end
 
 local record ConfigRockspec
@@ -106,6 +147,31 @@ local function search(pat: string, dirs: {string}): string
    end
 end
 
+local function recursiveDir(path: string, pat: string | nil, current: {string}): {string}
+   current = current or {}
+
+   for location in lfs.dir(path) do
+      if location ~= '.' and location ~= '..' then
+
+         if lfs.attributes(path .. '/' .. location).mode == 'directory' then
+            recursiveDir(path .. '/' .. location, pat, current)
+         elseif lfs.attributes(path .. '/' .. location).mode == 'file' and location:match(pat) then
+            table.insert(current, path .. '/' .. location)
+         end
+      end
+   end
+
+   return current
+end
+
+local function currentLocation(): string
+   local str = debug.getinfo(2, 'S').source:sub(2)
+
+   -- The CLI is **never** ran directly from the interpreter
+
+   return str:match('(.*/)')
+end
+
 local function read(path: string): string
    local f = assert(io.open(path, 'r'))
 
@@ -114,6 +180,43 @@ local function read(path: string): string
    f:close()
 
    return data
+end
+
+local function loadTag(file: string): any
+   local data = read(file)
+
+   local fn = assert(load(data, 'tag'))
+
+   return fn()
+end
+
+local function loadTags(config: Config): {tag.TagConfig}
+   local files = {}
+
+   local defaultTags = currentLocation() .. '/tags/'
+
+   if config.tagStyle == 'ldoc' then
+      logger.warn('LDoc support hasn\'t been implemented yet!')
+      recursiveDir(defaultTags .. 'ldoc', '%.lua$', files)
+   elseif config.tagStyle == 'tealdoc' then
+      recursiveDir(defaultTags .. 'tealdoc', '%.lua$', files)
+   elseif config.tagStyle ~= 'none' then
+      logger.error('Unrecognized tag style: ' .. config.tagStyle)
+   end
+
+   config.tags = config.tags or {}
+
+   for i = 1, #config.tags do
+      recursiveDir(config.tags[i], '%.lua$', files)
+   end
+
+   local tags = {}
+
+   for i = 1, #files do
+      table.insert(tags, loadTag(files[i]))
+   end
+
+   return tags as {tag.TagConfig}
 end
 
 local function write(path: string, data: string)
@@ -125,16 +228,18 @@ local function write(path: string, data: string)
 end
 
 local function loadSpec(spec: string): ConfigRockspec
-   -- Lua 5.2+ supports passing in an env
-   if tonumber(_VERSION:match('Lua ([%d%.]+)')) < 5.2 then
-      return {}
-   end
-
    local data = read(spec)
 
    local env = {}
 
    local fn = assert(load(data, 'rockspec', 't', env))
+
+   if tonumber(_VERSION:match('Lua ([%d%.]+)')) < 5.2 then
+      global setfenv: function(function, table)
+
+      -- Lua 5.1 compat
+      setfenv(fn, env)
+   end
 
    pcall(fn)
 
@@ -146,14 +251,6 @@ local function loadConfig(contents: string): Config
    local fn = assert(load(contents, 'config'))
 
    return fn() as Config
-end
-
-local function currentLocation(): string
-   local str = debug.getinfo(2, 'S').source:sub(2)
-
-   -- The CLI is **never** ran directly from the interpreter
-
-   return str:match('(.*/)')
 end
 
 -- Everything is described in the config
@@ -171,7 +268,7 @@ argParser:flag('-q --quiet', 'Suppress output')
 local function main()
    local parsed = argParser:parse()
 
-   logger.level = 
+   logger.level =
       (parsed.quiet and 1) or
       (os.getenv('DEBUG') and 5) or
       3
@@ -214,6 +311,7 @@ local function main()
    end
 
    config.output = config.output or 'docs'
+   config.tagStyle = config.tagStyle or 'tealdoc'
 
    project.output = config.output
 
@@ -286,7 +384,7 @@ local function main()
    end
 
    local markdown = lunamark.reader.markdown.new(writer, {
-      fenced_code_blocks = true
+      fenced_code_blocks = true --;ignore
    })
 
    local scriptDir = currentLocation()
@@ -334,7 +432,9 @@ local function main()
 
          for i, v in pairs(tp.struct.fields) do
             -- Generate children
-            genDocument(i, v)
+            if not v.hidden then
+               genDocument(i, v)
+            end
          end
       else
          -- Non-modules get a document
@@ -352,6 +452,12 @@ local function main()
       logger.info('Generated ' .. location)
    end
 
+   local tags = loadTags(config)
+
+   tag.traverse(project.modules or {
+      [project.name] = project.module as parser.Type
+   }, tags)
+
    write(config.output .. '/index.html', module({
       current = project,
       project = project,
@@ -363,10 +469,13 @@ local function main()
    logger.info('Generated ' .. config.output .. '/index.html')
 
    if project.module then
+      assert(not (project.module as parser.Type).hidden, 'Hiding the entire project sounds a bit stupid doesn\'t it?')
       genDocument(project.name, project.module as parser.Type)
    else
       for i, v in pairs((project.modules as {string: parser.Type})) do
-         genDocument(i, v)
+         if not v.hidden then
+            genDocument(i, v)
+         end
       end
    end
 

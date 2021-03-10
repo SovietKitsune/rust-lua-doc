@@ -1,12 +1,17 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Source inspection - Tealdoc">
+
+    <meta property="og:title" content="tealdoc - Tealdoc">
+    <meta property="og:description" content="API documentation for the `tealdoc` rock">
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+    <title>tealdoc - Tealdoc</title>
 
     <script>
     /* PrismJS 1.23.0
@@ -276,130 +281,100 @@ pre[class*="language-"].line-numbers > code {
 </style>
 
 </head>
+
 <body>
-    <!-- 
-    TODO
-    > * Show you the types of identifiers on hover.
-    > * Take you to the definition of a variable on click.
-    > * Both of these work cross-package.
-    Basically use the teal compiler to extract all of this at compile time,
+    
 
-    Cross-package is going to be more tricky
-    -->
-    <pre id="code" class="linkable-line-numbers">
-        <code class="language-lua">
---- Logger for debugging and logging
-local Logger = {
-   --- The current level of the logger
-   level = 3,
-   --- If there should be color in the output
-   color = true
-}
+<nav class="bg-blue-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-12">
+            <div class="flex items-center">
+                <div class="block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a
+                            href="./index.html"
+                            class="text-white text-lg font-medium"
+                        >
+                            tealdoc-dev-1
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <div class="block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-white text-lg font-medium">Module Index</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 
-local human = {
-   &#039;Error &#039;,
-   &#039;Warn  &#039;,
-   &#039;Info  &#039;,
-   &#039;Debug &#039;,
-   &#039;Trace &#039;
-}
 
-local colors = {
-   1,
-   3,
-   2,
-   6,
-   5
-}
+    <main>
+        <div class="max-w-7xl mx-auto py-6 px-8">
+            
 
-local function fg(color: number): string
-   if not Logger.color then return &#039;&#039; end
-   return &#039;\27[38;5;&#039; .. color .. &#039;m&#039;
-end
+            The core functions of math, addition, subtraction, multiplication, and division
 
-local function reset(): string
-   if not Logger.color then return &#039;&#039; end
+            
 
-   return &#039;\27[39m&#039;
-end
+            
+                <h3 class="text-xl pt-6">Functions</h3>
+                <hr>
 
---- Create a log message, the level must be a number between 1 and 5
-function Logger.log(level: number, message: string)
-   if level &gt; Logger.level then return end
+                <div class="grid grid-cols-3 gap-2">
+                    
+                        <div>
+                            <a href="./mul.html" class="text-blue-500">mul</a>
+                        </div>
+                        <div class="col-span-2">
+                            Multiply two numbers together
+                        </div>
+                    
+                        <div>
+                            <a href="./div.html" class="text-blue-500">div</a>
+                        </div>
+                        <div class="col-span-2">
+                            Divide two numbers apart
+                        </div>
+                    
+                        <div>
+                            <a href="./add.html" class="text-blue-500">add</a>
+                        </div>
+                        <div class="col-span-2">
+                            Add two numbers together
+                        </div>
+                    
+                        <div>
+                            <a href="./sub.html" class="text-blue-500">sub</a>
+                        </div>
+                        <div class="col-span-2">
+                            Subtract two numbers apart
+                        </div>
+                    
+                </div>
+            
+                <h3 class="text-xl pt-6">Variables</h3>
+                <hr>
 
-   io.write(fg(colors[level]) .. human[level] .. reset() .. message .. &#039;\n&#039;)
-end
+                <div class="grid grid-cols-3 gap-2">
+                    
+                        <div>
+                            <a href="./isFun.html" class="text-blue-500">isFun</a>
+                        </div>
+                        <div class="col-span-2">
+                            This is a fun variable
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </main>
 
---- Send an error level message
-function Logger.error(message: string) Logger.log(1, message) end
---- Send a warning level message
-function Logger.warn(message: string) Logger.log(2, message) end
---- Send an informational message
-function Logger.info(message: string) Logger.log(3, message) end
+    <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-09 20:11:29
+</footer>
 
---- Send a debug message
----
---- The debug message will be inspected and colorized to aid in debugging (both `inspect.lua` and `pl.lexer` must be installed)
-function Logger.debug(...: any)
-   local messages = {...}
-
-   local success, inspect = pcall(require, &#039;inspect&#039;)
-
-   if success then
-      for i = 1, select(&#039;#&#039;, ...) do
-         local message = select(i, ...)
-      
-         message = (inspect as function(any, table): string)(message, {
-            indent = &#039;   &#039;
-         })
-   
-         local hasLexer, lexer = pcall(require, &#039;pl.lexer&#039;)
-   
-         if hasLexer then
-            local buffer: {string} = {}
-   
-            for token, val in lexer.lua((message as string), {}, {}) do
-               if token == &#039;comment&#039; then
-                  table.insert(buffer, fg(0))
-               elseif token == &#039;keyword&#039; and val ~= &#039;true&#039; and val ~= &#039;false&#039; then
-                  table.insert(buffer, fg(5))
-               elseif token == &#039;keyword&#039; and (val == &#039;false&#039; or val == &#039;true&#039;) then
-                  table.insert(buffer, fg(3))
-               elseif token == &#039;string&#039; then
-                  table.insert(buffer, fg(2))
-               elseif token == &#039;number&#039; then
-                  table.insert(buffer, fg(3))
-               elseif token == &#039;iden&#039; and val == &#039;self&#039; then
-                  table.insert(buffer, fg(11))
-               end
-   
-               table.insert(buffer, val .. reset())
-            end
-   
-            message = table.concat(buffer)
-         end
-   
-         messages[i] = (message as string):gsub(&#039;\n&#039;, &#039;\n&#039; .. fg(colors[4]) .. human[4] .. reset())
-      end
-   end
-
-   Logger.log(4, table.concat(messages as {string}, &#039;\t&#039;))
-end
-
---- Get the traceback where all build-file paths are replaced with source-file paths
-function Logger.trace()
-   -- Not the cleanest but doesn&#039;t need to be
-   local msg = debug.traceback()
-      :gsub(&#039;\t&#039;, fg(colors[5]) .. human[5] .. reset())
-      :gsub(&#039;%./out/&#039;, &#039;./src/&#039;)
-      :gsub(&#039;%.lua:&#039;, &#039;.tl:&#039;)
-
-   Logger.log(5, msg)
-end
-
-return Logger
-
-        </code>
-    </pre>
 </body>
-</html>

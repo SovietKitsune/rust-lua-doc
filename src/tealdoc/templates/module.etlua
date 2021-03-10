@@ -48,21 +48,23 @@
                 if v.kind == 'nominal' then
                     v = v.ref
                 end
-                if v.kind == 'custom' and v.struct.isRecord then
-                    if not contents.Records then contents.Records = {} end
-                    contents.Records[i] = v
-                elseif v.kind == 'custom' then
-                    if not contents.Modules then contents.Modules = {} end
-                    contents.Modules[i] = v
-                elseif v.kind == 'enum' then
-                    if not contents.Enums then contents.Enums = {} end
-                    contents.Enums[i] = v
-                elseif v.kind == 'function' then
-                    if not contents.Functions then contents.Functions = {} end
-                    contents.Functions[i] = v
-                else
-                    if not contents.Variables then contents.Variables = {} end
-                    contents.Variables[i] = v
+                if not v.hidden then
+                    if v.kind == 'custom' and v.struct.isRecord then
+                        if not contents.Records then contents.Records = {} end
+                        contents.Records[i] = v
+                    elseif v.kind == 'custom' then
+                        if not contents.Modules then contents.Modules = {} end
+                        contents.Modules[i] = v
+                    elseif v.kind == 'enum' then
+                        if not contents.Enums then contents.Enums = {} end
+                        contents.Enums[i] = v
+                    elseif v.kind == 'function' then
+                        if not contents.Functions then contents.Functions = {} end
+                        contents.Functions[i] = v
+                    else
+                        if not contents.Variables then contents.Variables = {} end
+                        contents.Variables[i] = v
+                    end
                 end
             end
             %>

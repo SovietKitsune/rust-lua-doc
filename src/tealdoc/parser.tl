@@ -45,6 +45,8 @@ local record Type
       'enum'
       --- A generic found within function definitions
       'generic'
+      --- A type provided from outside the teal compiler
+      'named'
    end
 
    --- The kind of type this is
@@ -53,10 +55,14 @@ local record Type
    description: string
    --- The name of the type, usually inherited from their parent
    name: string
+   --- The custom name of a type
+   customName: string | nil
    --- The parent of the type, this doesn't exist for top-level types
    parent: Type | nil
    --- The file-system tree that needs to be followed
    tree: string
+   --- If the type is hidden or not
+   hidden: boolean
    --- The Y position of a type
    yPos: number | nil
    --- The stopping point of a type
@@ -77,6 +83,8 @@ local record Type
    values: {Type} | nil
    --- A reference to another type
    ref: Type | nil
+   --- Signify that a type has been deprecated
+   deprecated: boolean | string
 end
 
 local record State
@@ -117,7 +125,7 @@ local function newSearch(modules: {string: string}, virtual: boolean, state: Sta
          local filename: string
 
          -- Virtual
-         if virtual then 
+         if virtual then
             local name = os.tmpname() .. '.tl'
             do
                local tmp = io.open(name, 'w')
@@ -138,7 +146,7 @@ local function newSearch(modules: {string: string}, virtual: boolean, state: Sta
          end
 
          return filename, f
-      else 
+      else
          return nil, nil, {'We tried everything...'}
       end
    end
@@ -162,9 +170,9 @@ local function getReport(modules: {string: string}, virtual: boolean, isLua: boo
 
    local oldSearch = tl.search_module
 
-   local state: State = {
+   local state = {
       files = {}
-   }
+   } as State
 
    tl.search_module = newSearch(modules, virtual, state)
 
@@ -499,136 +507,63 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          out.struct.fields[i] = typ
       end
 
-      if not name then
-         -- This is a table
+      -- This part is (more) likely to fail
+      --; TODO - using the AST seems like a good idea
+      xpcall(function()
+         if not name then
+            -- This is a table
 
-         local within = getWithinTable(tokens as {Token}, tp.y, tp.x)
+            local within = getWithinTable(tokens as {Token}, tp.y, tp.x)
 
-         -- Here we cannot just jump to the next `=` since it could be within a function
+            -- Here we cannot just jump to the next `=` since it could be within a function
 
-         local i = 1
+            local i = 1
 
-         local blocks: {string: boolean} = {
-            ['enum'] = true,
-            ['record'] = true,
-            ['function'] = true
-         }
+            local blocks: {string: boolean} = {
+               ['enum'] = true,
+               ['record'] = true,
+               ['function'] = true
+            }
 
-         while i <= #within do
-            -- Blocks already have their descriptions filled out
-            if within[i].kind == 'identifier' and blocks[within[i + 2].tk] then
-               local stack = 1
+            while i <= #within do
+               -- Blocks already have their descriptions filled out
+               if within[i].kind == 'identifier' and blocks[within[i + 2].tk] then
+                  local stack = 1
 
-               for k = i + 3, #within do
-                  local token = within[k]
+                  for k = i + 3, #within do
+                     local token = within[k]
 
-                  if blocks[token.tk] then
-                     stack = stack + 1
-                  elseif token.kind == 'keyword' and token.tk == 'end' then
-                     stack = stack - 1
-                  end
-
-                  if stack == 0 then
-                     i = k + 2
-                     break
-                  end
-               end
-            elseif within[i + 2].kind == '{' then
-               local _, stop = getWithinTable(tokens as {Token}, within[i + 2].y, within[i + 2].x)
-
-               i = stop
-            else
-               -- A type
-               local fieldToken = within[i]
-
-               local found = false
-
-               out.struct.fields[fieldToken.tk].description = getDescription(report.files[tp.file], fieldToken.y)
-
-               for k = i + 3, #within do
-                  -- Find next equal
-                  -- We will not run into anything that could be a mistake here
-
-                  if within[k].kind == 'op' and within[k].tk == '=' then
-                     i = k - 1
-
-                     found = true
-                  end
-               end
-
-               if not found then
-                  break
-               end
-            end
-         end
-      else
-         local lastToken = getStop(tokens as {Token}, tp.y, tp.x)
-
-         out.stopY = lastToken.y
-
-         local tokensBetween = getTokensBetween(tokens as {Token}, lastSig.y, lastToken.y, lastSig.x, lastToken.x)
-
-         local i = 1
-
-         while i <= #tokensBetween do
-            if tokensBetween[i].kind == 'identifier' and (tokensBetween[i].tk == 'record' or tokensBetween[i].tk == 'enum') and 
-               tokensBetween[i + 1] and tokensBetween[i + 1].kind == 'identifier' 
-            then
-               local _, pos = getStop(tokensBetween, tokensBetween[i].y, tokensBetween[i].x)
-
-               -- They already get documented since they are records
-
-               i = pos + 1
-            else
-               local fieldToken = tokensBetween[i]
-
-               if fieldToken.tk == 'metamethod' then
-                  i = i + 1
-
-                  out.struct.fields[tokensBetween[i].tk] = {
-                     kind = 'function',
-                     source = tp.file,
-                     name = tokensBetween[i].tk,
-                     yPos = fieldToken.y,
-                     func = { --; TODO - Extract these
-                              --; Teal doesn't expose metamethods within requires
-                        params = {},
-                        returns = {},
-                        vararg = {},
-                        isMetamethod = true
-                     } as Function
-                  }
-               else
-
-                  local found = false
-
-                  local outField = out.struct.fields[fieldToken.tk]
-
-                  outField.description = getDescription(report.files[tp.file], fieldToken.y)
-
-                  local stack = 0
-                  local ignoreNext = outField.kind == 'function'
-                  -- logger.debug(atLine)
-
-                  for k = i + 2, #tokensBetween do
-                     -- We need to watchout for composition types eg functions, tables
-
-                     local token = tokensBetween[k]
-
-                     if token.kind == '{' or token.kind == '(' then
+                     if blocks[token.tk] then
                         stack = stack + 1
-                     elseif token.kind == '}' or token.kind == ')' then
+                     elseif token.kind == 'keyword' and token.tk == 'end' then
                         stack = stack - 1
                      end
 
-                     if token.kind == ':' and token.tk == ':' and stack == 0 and not ignoreNext then
+                     if stack == 0 then
+                        i = k + 2
+                        break
+                     end
+                  end
+               elseif within[i + 2].kind == '{' then
+                  local _, stop = getWithinTable(tokens as {Token}, within[i + 2].y, within[i + 2].x)
+
+                  i = stop
+               else
+                  -- A type
+                  local fieldToken = within[i]
+
+                  local found = false
+
+                  out.struct.fields[fieldToken.tk].description = getDescription(report.files[tp.file], fieldToken.y)
+
+                  for k = i + 2, #within do
+                     -- Find next equal
+                     -- We will not run into anything that could be a mistake here
+
+                     if within[k].kind == 'op' and within[k].tk == '=' then
                         i = k - 1
 
                         found = true
-
-                        break
-                     elseif ignoreNext and token.kind == ':' and token.tk == ':' then
-                        ignoreNext = false
                      end
                   end
 
@@ -637,8 +572,93 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
                   end
                end
             end
+         else
+            local lastToken = getStop(tokens as {Token}, tp.y, tp.x)
+
+            out.stopY = lastToken.y
+
+            local tokensBetween = getTokensBetween(tokens as {Token}, lastSig.y, lastToken.y, lastSig.x, lastToken.x)
+
+            local i = 1
+
+            while i <= #tokensBetween do
+               if tokensBetween[i].kind == 'identifier' and (tokensBetween[i].tk == 'record' or tokensBetween[i].tk == 'enum') and
+                  tokensBetween[i + 1] and tokensBetween[i + 1].kind == 'identifier'
+               then
+                  local _, pos = getStop(tokensBetween, tokensBetween[i].y, tokensBetween[i].x)
+
+                  -- They already get documented since they are records
+
+                  i = pos + 1
+               else
+                  local fieldToken = tokensBetween[i]
+
+                  if fieldToken.tk == 'metamethod' then
+                     i = i + 1
+
+                     out.struct.fields[tokensBetween[i].tk] = {
+                        kind = 'function',
+                        source = tp.file,
+                        name = tokensBetween[i].tk,
+                        yPos = fieldToken.y,
+                        func = { --; TODO - Extract these
+                                 --; Teal doesn't expose metamethods within requires
+                           params = {},
+                           returns = {},
+                           vararg = {},
+                           isMetamethod = true
+                        } as Function
+                     }
+                  else
+
+                     local found = false
+
+                     local outField = out.struct.fields[fieldToken.tk]
+
+                     outField.description = getDescription(report.files[tp.file], fieldToken.y)
+
+                     local stack = 0
+                     local ignoreNext = outField.kind == 'function'
+                     -- logger.debug(atLine)
+
+                     for k = i + 2, #tokensBetween do
+                        -- We need to watchout for composition types eg functions, tables
+
+                        local token = tokensBetween[k]
+
+                        if token.kind == '{' or token.kind == '(' then
+                           stack = stack + 1
+                        elseif token.kind == '}' or token.kind == ')' then
+                           stack = stack - 1
+                        end
+
+                        if token.kind == ':' and token.tk == ':' and stack == 0 and not ignoreNext then
+                           i = k - 1
+
+                           found = true
+
+                           break
+                        elseif ignoreNext and token.kind == ':' and token.tk == ':' then
+                           ignoreNext = false
+                        end
+                     end
+
+                     if not found then
+                        break
+                     end
+                  end
+               end
+            end
          end
-      end
+      end, function(err)
+         logger.error(string.format(
+            'Parsing error with field comments!\n' ..
+            '  Error: %s\n' ..
+            '  Report this to https://github.com/SovietKitsune/tealdoc/issues\n\n%s',
+            err,
+            debug.traceback()
+         ))
+      end)
    elseif tp.t == codes.MAP then
       out = {
          kind = 'table',

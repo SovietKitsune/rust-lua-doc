@@ -9,6 +9,7 @@ local record Config
 end
 
 --- Preform the most complex equation
+--- @{param a string}
 local function doStuff(a: number, b: number, config: Config): number
    return core.add(a, core.sub(b, core.mul(a, core.div(b, config.count))))
 end

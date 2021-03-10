@@ -7,7 +7,7 @@ mkdir out
 
 # Build
 
-cyan check src/tealdoc/*.tl
+tl run scripts/check.tl $(find ./src/tealdoc/ -type f -name "*.tl")
 cyan build
 
 # Copy

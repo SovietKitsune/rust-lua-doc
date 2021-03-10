@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- TODO; trace parents -->
-    <meta property="og:title" content="tealdoc - Project - Tealdoc">
-    <meta property="og:description" content="API documentation for the Project custom in rock `tealdoc`">
+    <meta property="og:title" content="tealdoc - div - Tealdoc">
+    <meta property="og:description" content="API documentation for the div function in rock `tealdoc`">
 
     <!-- When I say `all in one tool` I mean it -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
@@ -296,7 +296,7 @@ pre[class*="language-"].line-numbers > code {
                 <div class="block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a
-                            href=".././index.html"
+                            href="./index.html"
                             class="text-white text-lg font-medium"
                         >
                             tealdoc-dev-1
@@ -325,7 +325,7 @@ pre[class*="language-"].line-numbers > code {
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
                                     
-                                    Table Project
+                                    Function div
                                 </div>
                             </div>
                         </div>
@@ -333,7 +333,7 @@ pre[class*="language-"].line-numbers > code {
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
                                     
-                                        <a href=".././sources/src-tealdoc-cli.tl.html#code.9-23" class="text-gray-400">Source</a>
+                                        <a href="./sources/examples-math-core.tl.html#code.34-34" class="text-gray-400">Source</a>
                                     
                                 </div>
                             </div>
@@ -347,115 +347,23 @@ pre[class*="language-"].line-numbers > code {
             <div class="max-w-7xl mx-auto py-6 px-8">
                 <div class="container">
                     
-                        The configuration passed to templates
-
                         
+                            
+                            <h3 class="text-xl pt-6">Signature</h3>
 
-                        
+                            <pre>
+                                <code class="language-lua">
+function div(a: number, b: number): number
+                                </code>
+                            </pre>
 
-                        
-                            <h3 class="text-xl pt-6">Properties</h3>
+                            
+                                <h3 class="text-xl pt-6">Description</h3>
 
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        name
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        module
-                                    
-                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        deprecated
-                                    
-                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a> | <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        version
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        sources
-                                    
-                                    : {<a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>: <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>}
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        description
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        FunctionStyle
-                                    
-                                    : <a href="./FunctionStyle.html" class="text-blue-500">FunctionStyle</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        output
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        modules
-                                    
-                                    : {<a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>: <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>} | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        functionStyle
-                                    
-                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
+                                <p class="py-2">Divide two numbers apart</p>
+
+<pre><code class="language-lua">core.divide(1, 2) -- 0.5
+</code></pre>
                             
                         
                     
@@ -464,7 +372,7 @@ pre[class*="language-"].line-numbers > code {
         </main>
 
         <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-06 23:31:58
+    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-09 20:11:29
 </footer>
 
     </div>

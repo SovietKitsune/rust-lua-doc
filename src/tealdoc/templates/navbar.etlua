@@ -5,7 +5,7 @@ local function toRoot(parent, sub)
     if parent then
         local res = toRoot(parent.parent, true)
 
-        if res ~= '' then
+        if res ~= './' then
             return '../' .. res
         else
             return res

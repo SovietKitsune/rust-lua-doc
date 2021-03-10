@@ -1,17 +1,12 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta property="og:title" content="tealdoc - Tealdoc">
-    <meta property="og:description" content="API documentation for the `tealdoc` rock">
-
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
-    <title>tealdoc - Tealdoc</title>
+    <meta property="og:title" content="Source inspection - Tealdoc">
 
     <script>
     /* PrismJS 1.23.0
@@ -281,107 +276,37 @@ pre[class*="language-"].line-numbers > code {
 </style>
 
 </head>
-
 <body>
-    
+    <!-- 
+    TODO
+    > * Show you the types of identifiers on hover.
+    > * Take you to the definition of a variable on click.
+    > * Both of these work cross-package.
+    Basically use the teal compiler to extract all of this at compile time,
 
-<nav class="bg-blue-600">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-12">
-            <div class="flex items-center">
-                <div class="block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a
-                            href=".././index.html"
-                            class="text-white text-lg font-medium"
-                        >
-                            tealdoc-dev-1
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex items-center">
-                <div class="block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="index.html" class="text-white text-lg font-medium">Module Index</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+    Cross-package is going to be more tricky
+    -->
+    <pre id="code" class="linkable-line-numbers">
+        <code class="language-lua">
+local core = require(&#039;math.core&#039;)
 
+--- The configuration on how to to the worlds most complex equation
+local record Config
+   --- The amount to pass to the equation
+   count: number
+   --- Some other fun variable
+   fun: boolean
+end
 
-    <main>
-        <div class="max-w-7xl mx-auto py-6 px-8">
-            
+--- Preform the most complex equation
+--- @{param a string}
+local function doStuff(a: number, b: number, config: Config): number
+   return core.add(a, core.sub(b, core.mul(a, core.div(b, config.count))))
+end
 
-            Utilities for extracting all the types from either virtual files or real files
+return doStuff
 
-            
-
-            
-                <h3 class="text-xl pt-6">Records</h3>
-                <hr>
-
-                <div class="grid grid-cols-3 gap-2">
-                    
-                        <div>
-                            <a href="./Function.html" class="text-blue-500">Function</a>
-                        </div>
-                        <div class="col-span-2">
-                            A structure that represents a bare function
-                        </div>
-                    
-                        <div>
-                            <a href="./Struct.html" class="text-blue-500">Struct</a>
-                        </div>
-                        <div class="col-span-2">
-                            A structure that represents a bare record or table
-                        </div>
-                    
-                        <div>
-                            <a href="./Type.html" class="text-blue-500">Type</a>
-                        </div>
-                        <div class="col-span-2">
-                            A structure that represents every type
-                        </div>
-                    
-                </div>
-            
-                <h3 class="text-xl pt-6">Functions</h3>
-                <hr>
-
-                <div class="grid grid-cols-3 gap-2">
-                    
-                        <div>
-                            <a href="./extractModules.html" class="text-blue-500">extractModules</a>
-                        </div>
-                        <div class="col-span-2">
-                            Extract all the indexes of generated modules
-                        </div>
-                    
-                        <div>
-                            <a href="./createType.html" class="text-blue-500">createType</a>
-                        </div>
-                        <div class="col-span-2">
-                            Create a (parsable) type from an index and a report
-                        </div>
-                    
-                        <div>
-                            <a href="./getReport.html" class="text-blue-500">getReport</a>
-                        </div>
-                        <div class="col-span-2">
-                            
-                        </div>
-                    
-                </div>
-            
-        </div>
-    </main>
-
-    <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-06 23:31:58
-</footer>
-
+        </code>
+    </pre>
 </body>
+</html>
