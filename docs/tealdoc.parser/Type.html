@@ -337,7 +337,7 @@ pre[class*="language-"].line-numbers > code {
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
                                     
-                                        <a href="./sources/src-tealdoc-parser.tl.html#code.19-90" class="text-gray-400">Source</a>
+                                        <a href="../sources/src-tealdoc-parser.tl.html#code.19-90" class="text-gray-400">Source</a>
                                     
                                 </div>
                             </div>
@@ -363,22 +363,72 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
+                                        name
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    The name of the type, usually inherited from their parent
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        stopY
+                                    
+                                    : <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The stopping point of a type
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        Kinds
+                                    
+                                    : <a href="./Kinds.html" class="text-blue-500">Kinds</a>
+                                </h4>
+                                <div>
+                                    A list of all valid type names
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        yPos
+                                    
+                                    : <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The Y position of a type
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        hidden
+                                    
+                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a>
+                                </h4>
+                                <div>
+                                    If the type is hidden or not
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        source
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The source of where the type was found
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
                                         deprecated
                                     
                                     : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a> | <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
                                 </h4>
                                 <div>
                                     Signify that a type has been deprecated
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        key
-                                    
-                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    The key of the table
                                 </div>
                             
                                 <h4 class="text-lg pt-2">
@@ -403,22 +453,32 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        name
+                                        parent
                                     
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
                                 </h4>
                                 <div>
-                                    The name of the type, usually inherited from their parent
+                                    The parent of the type, this doesn&#39;t exist for top-level types
                                 </div>
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        customName
+                                        types
                                     
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                    : {<a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>} | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
                                 </h4>
                                 <div>
-                                    The custom name of a type
+                                    The types that form this type, eg <code>type1 | type2</code> or <code>{type1, type2}</code>
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        value
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The value of the table
                                 </div>
                             
                                 <h4 class="text-lg pt-2">
@@ -443,22 +503,22 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        stopY
-                                    
-                                    : <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    The stopping point of a type
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
                                         func
                                     
                                     : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
                                 </h4>
                                 <div>
                                     Exists on function types
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        key
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The key of the table
                                 </div>
                             
                                 <h4 class="text-lg pt-2">
@@ -473,52 +533,12 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        types
+                                        customName
                                     
-                                    : {<a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>} | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
                                 </h4>
                                 <div>
-                                    The types that form this type, eg <code>type1 | type2</code> or <code>{type1, type2}</code>
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        parent
-                                    
-                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    The parent of the type, this doesn&#39;t exist for top-level types
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        yPos
-                                    
-                                    : <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    The Y position of a type
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        Kinds
-                                    
-                                    : <a href="./Kinds.html" class="text-blue-500">Kinds</a>
-                                </h4>
-                                <div>
-                                    A list of all valid type names
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        hidden
-                                    
-                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a>
-                                </h4>
-                                <div>
-                                    If the type is hidden or not
+                                    The custom name of a type
                                 </div>
                             
                                 <h4 class="text-lg pt-2">
@@ -531,26 +551,6 @@ pre[class*="language-"].line-numbers > code {
                                     The description of the type, every type can have a description since of records
                                 </div>
                             
-                                <h4 class="text-lg pt-2">
-                                    
-                                        value
-                                    
-                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    The value of the table
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        source
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    The source of where the type was found
-                                </div>
-                            
                         
                     
                 </div>
@@ -558,7 +558,7 @@ pre[class*="language-"].line-numbers > code {
         </main>
 
         <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-09 22:51:12
+    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-09 22:55:35
 </footer>
 
     </div>

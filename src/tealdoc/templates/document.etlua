@@ -4,16 +4,15 @@ if current.kind == 'nominal' then
 end
 
 local function toRoot()
-    parent = current.parent
-
-    local current = ''
+    parent = current
+    local str = ''
 
     while parent do
-        current = current .. '../'
+        str = str .. '../'
         parent = parent.parent
     end
 
-    return current == '' and './' or current
+    return str == '' and './' or str
 end
 %>
 

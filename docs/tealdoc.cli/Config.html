@@ -337,7 +337,7 @@ pre[class*="language-"].line-numbers > code {
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
                                     
-                                        <a href="./sources/src-tealdoc-cli.tl.html#code.24-102" class="text-gray-400">Source</a>
+                                        <a href="../sources/src-tealdoc-cli.tl.html#code.24-102" class="text-gray-400">Source</a>
                                     
                                 </div>
                             </div>
@@ -363,104 +363,12 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        version
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    The version of the project, if not provided this will be taken from a rockspec
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        functionStyle
-                                    
-                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>
-                                </h4>
-                                <div>
-                                    <p class="py-2">The function style, defaults to <code>lua</code></p>
-
-<p class="py-2"><code>lua</code>:</p>
-
-<pre><code class="language-lua">function foo(bar: baz): baz
-</code></pre>
-
-<p class="py-2"><code>moon</code>:</p>
-
-<pre><code class="language-moon">foo = (bar: baz) -&gt; baz
-</code></pre>
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        isLua
-                                    
-                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a>
-                                </h4>
-                                <div>
-                                    If the project is written in Lua, defaults to false
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        output
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    The output directory, defaults to <code>docs/</code>
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        deprecated
-                                    
-                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a> | <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    If the project is deprecated and why it was deprecated
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        description
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    <p class="py-2">The description of the project, if not provided this will be taken from:</p>
-
-<code>descriptionFile -&gt; rockspec.description.detailed -&gt; rockspec.description.summary -&gt; readme.md</code>
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
                                         name
                                     
                                     : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
                                 </h4>
                                 <div>
                                     The name of the project, if not provided this will be taken from a rockspec
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        tags
-                                    
-                                    : {<a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>}
-                                </h4>
-                                <div>
-                                    The directories where extra tags are located
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        descriptionFile
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    The file to use for the description
                                 </div>
                             
                                 <h4 class="text-lg pt-2">
@@ -503,12 +411,104 @@ Doesn&#39;t preload any tags
                             
                                 <h4 class="text-lg pt-2">
                                     
+                                        description
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    <p class="py-2">The description of the project, if not provided this will be taken from:</p>
+
+<code>descriptionFile -&gt; rockspec.description.detailed -&gt; rockspec.description.summary -&gt; readme.md</code>
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        version
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    The version of the project, if not provided this will be taken from a rockspec
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        descriptionFile
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    The file to use for the description
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        tags
+                                    
+                                    : {<a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>}
+                                </h4>
+                                <div>
+                                    The directories where extra tags are located
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        deprecated
+                                    
+                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a> | <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    If the project is deprecated and why it was deprecated
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        functionStyle
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>
+                                </h4>
+                                <div>
+                                    <p class="py-2">The function style, defaults to <code>lua</code></p>
+
+<p class="py-2"><code>lua</code>:</p>
+
+<pre><code class="language-lua">function foo(bar: baz): baz
+</code></pre>
+
+<p class="py-2"><code>moon</code>:</p>
+
+<pre><code class="language-moon">foo = (bar: baz) -&gt; baz
+</code></pre>
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        output
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    The output directory, defaults to <code>docs/</code>
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
                                         source
                                     
                                     : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
                                 </h4>
                                 <div>
                                     Where to find all the project source files, defaults to current working directory
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        isLua
+                                    
+                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a>
+                                </h4>
+                                <div>
+                                    If the project is written in Lua, defaults to false
                                 </div>
                             
                         
@@ -518,7 +518,7 @@ Doesn&#39;t preload any tags
         </main>
 
         <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-09 22:51:12
+    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-09 22:55:35
 </footer>
 
     </div>
