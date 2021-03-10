@@ -71,10 +71,12 @@ local record Config
    ---
    --- `tealdoc`:
    ---
+   --- Note that the `-` after `@` is only there to escape the tag
+   ---
    --- ```lua
    --- --- This is a cool function
-   --- -- @{param y number}
-   --- -- @{return number}
+   --- -- @-{param y number}
+   --- -- @-{return number}
    --- local function x(y)
    ---    return y
    --- end
@@ -394,6 +396,15 @@ local function main()
       base = base or {}
 
       base.project = project
+      base.include = function(f: string, b: table): string
+         b = b or {}
+
+         for i, v in pairs(base) do
+            b[i] = v
+         end
+
+         return include(f, b)
+      end
 
       cache[filename] = cache[filename] or etlua.compile(read(scriptDir .. 'templates/' .. filename))
 

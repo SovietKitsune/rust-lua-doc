@@ -1,0 +1,47 @@
+<%
+local function trace(parent)
+    parent = current.parent
+
+    local str = {
+        current.name
+    }
+
+    while parent do
+        table.insert(str, parent.name)
+
+        parent = parent.parent
+    end
+
+    local reversed = {}
+
+    for i = #str, 1, -1 do
+        table.insert(reversed, str[i])
+    end
+
+    return table.concat(reversed, '.')
+end
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+    <% if src then %>
+        <meta property="og:title" content="Source inspection - Tealdoc">
+
+        <title>Source inspection - Tealdoc</title>
+    <% else %>
+        <meta property="og:title" content="<%= trace() %> - Tealdoc">
+        <meta property="og:description" content="API documentation for the <%= current.name or 'unknown' %> <%= current.kind or 'module' %> in rock `<%= project.name %>`">
+
+        <title><%= trace() %> - Tealdoc</title>
+    <% end %>
+
+    <%- include 'prism.etlua' %>
+</head>

@@ -1,5 +1,7 @@
 
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,13 +10,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- TODO; trace parents -->
-    <meta property="og:title" content="tealdoc - sub - Tealdoc">
-    <meta property="og:description" content="API documentation for the sub function in rock `tealdoc`">
-
-    <!-- When I say `all in one tool` I mean it -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Sure it adds quite a lot but eh -->
+
+    
+        <meta property="og:title" content="Type - Tealdoc">
+        <meta property="og:description" content="API documentation for the Type custom in rock `tealdoc`">
+
+        <title>Type - Tealdoc</title>
+    
 
     <script>
     /* PrismJS 1.23.0
@@ -285,6 +288,7 @@ pre[class*="language-"].line-numbers > code {
 
 </head>
 
+
 <body>
     <div>
         
@@ -296,7 +300,7 @@ pre[class*="language-"].line-numbers > code {
                 <div class="block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a
-                            href="./index.html"
+                            href="../index.html"
                             class="text-white text-lg font-medium"
                         >
                             tealdoc-dev-1
@@ -325,7 +329,7 @@ pre[class*="language-"].line-numbers > code {
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
                                     
-                                    Function sub
+                                    Table Type
                                 </div>
                             </div>
                         </div>
@@ -333,7 +337,7 @@ pre[class*="language-"].line-numbers > code {
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
                                     
-                                        <a href="./sources/examples-math-core.tl.html#code.18-18" class="text-gray-400">Source</a>
+                                        <a href="./sources/src-tealdoc-parser.tl.html#code.19-90" class="text-gray-400">Source</a>
                                     
                                 </div>
                             </div>
@@ -347,23 +351,205 @@ pre[class*="language-"].line-numbers > code {
             <div class="max-w-7xl mx-auto py-6 px-8">
                 <div class="container">
                     
+                        A structure that represents every type
+
                         
-                            
-                            <h3 class="text-xl pt-6">Signature</h3>
 
-                            <pre>
-                                <code class="language-lua">
-function sub(a: number, b: number): number
-                                </code>
-                            </pre>
+                        
+
+                        
+                            <h3 class="text-xl pt-6">Properties</h3>
 
                             
-                                <h3 class="text-xl pt-6">Description</h3>
-
-                                <p class="py-2">Subtract two numbers apart</p>
-
-<pre><code class="language-lua">core.subtract(1, 2) -- -1
-</code></pre>
+                                <h4 class="text-lg pt-2">
+                                    
+                                        deprecated
+                                    
+                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a> | <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    Signify that a type has been deprecated
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        key
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The key of the table
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        tree
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    The file-system tree that needs to be followed
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        values
+                                    
+                                    : {<a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>} | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The values of an enum, its separate from types due to enums being &quot;complex&quot; aka blocked
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        name
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    The name of the type, usually inherited from their parent
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        customName
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The custom name of a type
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        kind
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>
+                                </h4>
+                                <div>
+                                    The kind of type this is
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        ref
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    A reference to another type
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        stopY
+                                    
+                                    : <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The stopping point of a type
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        func
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    Exists on function types
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        struct
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>
+                                </h4>
+                                <div>
+                                    Either a record or a module
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        types
+                                    
+                                    : {<a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>} | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The types that form this type, eg <code>type1 | type2</code> or <code>{type1, type2}</code>
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        parent
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The parent of the type, this doesn&#39;t exist for top-level types
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        yPos
+                                    
+                                    : <a href="https://www.lua.org/pil/2.3.html" class="text-blue-500">number</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The Y position of a type
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        Kinds
+                                    
+                                    : <a href="./Kinds.html" class="text-blue-500">Kinds</a>
+                                </h4>
+                                <div>
+                                    A list of all valid type names
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        hidden
+                                    
+                                    : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a>
+                                </h4>
+                                <div>
+                                    If the type is hidden or not
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        description
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    The description of the type, every type can have a description since of records
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        value
+                                    
+                                    : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The value of the table
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        source
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
+                                </h4>
+                                <div>
+                                    The source of where the type was found
+                                </div>
                             
                         
                     
@@ -372,7 +558,7 @@ function sub(a: number, b: number): number
         </main>
 
         <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-09 20:11:29
+    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-09 22:51:12
 </footer>
 
     </div>

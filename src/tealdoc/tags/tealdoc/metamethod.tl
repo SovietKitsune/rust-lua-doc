@@ -1,6 +1,7 @@
 local rules = require('tealdoc.tag').rules
 local parser = require('tealdoc.parser')
 
+--- @{hidden}
 return {
    selector = '@{metamethod}',
    allowed = rules.kind('function'),

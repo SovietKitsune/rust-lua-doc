@@ -1,20 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta property="og:title" content="<%= project.name %> - Tealdoc">
-    <meta property="og:description" content="API documentation for the `<%= project.name %>` rock">
-
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
-    <title><%= project.name %> - Tealdoc</title>
-
-    <%- include 'prism.etlua' %>
-</head>
+<%- include('head.etlua', { current = current }) %>
 
 <body>
     <%- include('navbar.etlua', { current = current }) %>

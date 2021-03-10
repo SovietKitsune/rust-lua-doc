@@ -22,10 +22,14 @@ local function parse(typ:  parser.Type, tags: {TagConfig})
          local isAllowed = tag.allowed(typ)
 
          if not isAllowed then
-            logger.warn(tag.err or 'Failed to pass rules for ' .. tag.selector)
+            logger.warn(
+               (tag.err or 'Failed to pass rules for ' .. tag.selector) ..
+               '\nPassed in kind: ' .. typ.kind ..
+               '\nFile: ' .. typ.tp.file
+            )
+         else
+            tag.fn(typ, typ.description:match(tag.selector))
          end
-
-         tag.fn(typ, typ.description:match(tag.selector))
       end
    end
 

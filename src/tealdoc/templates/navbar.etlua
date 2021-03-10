@@ -1,18 +1,14 @@
 <%
-local function toRoot(parent, sub)
-    parent = parent or (not sub and current)
+local function toRoot()
+    parent = current
+    local str = ''
 
-    if parent then
-        local res = toRoot(parent.parent, true)
-
-        if res ~= './' then
-            return '../' .. res
-        else
-            return res
-        end
-    else
-        return './'
+    while parent do
+        str = str .. '../'
+        parent = parent.parent
     end
+
+    return str == '' and './' or str
 end
 %>
 

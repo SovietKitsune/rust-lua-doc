@@ -3,41 +3,21 @@ if current.kind == 'nominal' then
     current = current.ref
 end
 
-local function toRoot(parent, sub)
-    parent = parent or (not sub and current)
+local function toRoot()
+    parent = current.parent
 
-    if parent then
-        local res = toRoot(parent.parent, true)
+    local current = ''
 
-        if res ~= './' then
-            return '../' .. res
-        else
-            return res
-        end
-    else
-        return './'
+    while parent do
+        current = current .. '../'
+        parent = parent.parent
     end
+
+    return current == '' and './' or current
 end
 %>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- TODO; trace parents -->
-    <meta property="og:title" content="<%= project.name %> - <%= current.name %> - Tealdoc">
-    <meta property="og:description" content="API documentation for the <%= current.name or 'unknown' %> <%= current.kind %> in rock `<%= project.name %>`">
-
-    <!-- When I say `all in one tool` I mean it -->
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Sure it adds quite a lot but eh -->
-
-    <%- include 'prism.etlua' %>
-</head>
+<%- include('head.etlua', { current = current }) %>
 
 <body>
     <div>

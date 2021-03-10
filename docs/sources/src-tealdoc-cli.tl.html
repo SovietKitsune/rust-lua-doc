@@ -1,5 +1,7 @@
 
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,13 +10,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- TODO; trace parents -->
-    <meta property="og:title" content="tealdoc - mul - Tealdoc">
-    <meta property="og:description" content="API documentation for the mul function in rock `tealdoc`">
-
-    <!-- When I say `all in one tool` I mean it -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Sure it adds quite a lot but eh -->
+
+    
+        <meta property="og:title" content="Source inspection - Tealdoc">
+
+        <title>Source inspection - Tealdoc</title>
+    
 
     <script>
     /* PrismJS 1.23.0
@@ -285,97 +287,533 @@ pre[class*="language-"].line-numbers > code {
 
 </head>
 
+
 <body>
-    <div>
-        
+    <!-- 
+    TODO
+    > * Show you the types of identifiers on hover.
+    > * Take you to the definition of a variable on click.
+    > * Both of these work cross-package.
+    Basically use the teal compiler to extract all of this at compile time,
 
-<nav class="bg-blue-600">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-12">
-            <div class="flex items-center">
-                <div class="block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a
-                            href="./index.html"
-                            class="text-white text-lg font-medium"
-                        >
-                            tealdoc-dev-1
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex items-center">
-                <div class="block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="index.html" class="text-white text-lg font-medium">Module Index</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+    Cross-package is going to be more tricky
+    -->
+    <pre id="code" class="linkable-line-numbers">
+        <code class="language-lua">
+local parser = require(&#039;tealdoc.parser&#039;)
+local logger = require(&#039;tealdoc.logger&#039;)
+local tag = require(&#039;tealdoc.tag&#039;)
 
+local lunamark = require(&#039;lunamark&#039;)
+local argparse = require(&#039;argparse&#039;)
+local etlua = require(&#039;etlua&#039;)
+local lfs = require(&#039;lfs&#039;)
 
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-gray-900">
+--- The configuration passed to templates
+local record Project
+   name: string
+   version: string
+   deprecated: boolean | string
+   description: string
+   module: parser.Type | nil
+   modules: {string: parser.Type} | nil
+   sources: {string: string}
+   functionStyle: string
+   output: string
+end
 
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="block">
-                                <div class="flex items-baseline space-x-4">
-                                    
-                                    Function mul
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="block">
-                                <div class="flex items-baseline space-x-4">
-                                    
-                                        <a href="./sources/examples-math-core.tl.html#code.26-26" class="text-gray-400">Source</a>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </h1>
-            </div>
-        </header>
+--- The user-provided configuration
+local record Config
+   --- @{hidden}
+   enum FunctionStyle
+      &#039;lua&#039;
+      &#039;moon&#039;
+   end
+   --- @{hidden}
+   enum TagStyle
+      &#039;ldoc&#039;
+      &#039;tealdoc&#039;
+      &#039;none&#039;
+   end
+   --- The name of the project, if not provided this will be taken from a rockspec
+   name: string
+   --- The version of the project, if not provided this will be taken from a rockspec
+   version: string
+   --- If the project is deprecated and why it was deprecated
+   deprecated: boolean | string
+   --- The description of the project, if not provided this will be taken from:
+   ---
+   --- `descriptionFile -&gt; rockspec.description.detailed -&gt; rockspec.description.summary -&gt; readme.md`
+   description: string
+   --- The file to use for the description
+   descriptionFile: string
+   --- If the project is written in Lua, defaults to false
+   isLua: boolean
+   --- The function style, defaults to `lua`
+   ---
+   --- `lua`:
+   ---
+   --- ```lua
+   --- function foo(bar: baz): baz
+   --- ```
+   ---
+   --- `moon`:
+   ---
+   --- ```moon
+   --- foo = (bar: baz) -&gt; baz
+   --- ```
+   functionStyle: FunctionStyle
+   --- The output directory, defaults to `docs/`
+   output: string
+   --- Where to find all the project source files, defaults to current working directory
+   source: string
+   --- The tag format that should be used, this usually doesn&#039;t matter for Teal besides for hiding and deprecations
+   ---
+   --- The default is `tealdoc`
+   ---
+   --- `tealdoc`:
+   ---
+   --- Note that the `-` after `@` is only there to escape the tag
+   ---
+   --- ```lua
+   --- --- This is a cool function
+   --- -- @-{param y number}
+   --- -- @-{return number}
+   --- local function x(y)
+   ---    return y
+   --- end
+   --- ```
+   ---
+   --- `ldoc`:
+   ---
+   --- ```lua
+   --- --- This is a cool function
+   --- -- @tparam number y
+   --- -- @treturn number
+   --- local function x(y)
+   ---    return y
+   --- end
+   --- ```
+   ---
+   --- `none`:
+   ---
+   --- Doesn&#039;t preload any tags
+   tagStyle: TagStyle
+   --- The directories where extra tags are located
+   tags: {string}
+end
 
-        <main>
-            <div class="max-w-7xl mx-auto py-6 px-8">
-                <div class="container">
-                    
-                        
-                            
-                            <h3 class="text-xl pt-6">Signature</h3>
+local record ConfigRockspec
+   record Description
+      summary: string
+      detailed: string
+   end
+   package: string
+   version: string
+   description: Description
+end
 
-                            <pre>
-                                <code class="language-lua">
-function mul(a: number, b: number): number
-                                </code>
-                            </pre>
+local function dirTree(dir: string, current: {string: string}, depth: string): {string: string}
+   local tree = current or {}
 
-                            
-                                <h3 class="text-xl pt-6">Description</h3>
+   depth = (depth or &#039;&#039;) .. (dir:match(&#039;.*/(.*)$&#039;) or dir)
 
-                                <p class="py-2">Multiply two numbers together</p>
+   if depth ~= &#039;&#039; then
+      depth = depth .. &#039;.&#039;
+   end
 
-<pre><code class="language-lua">core.multiply(1, 2) -- 2
-</code></pre>
-                            
-                        
-                    
-                </div>
-            </div>
-        </main>
+   depth = depth:match(&#039;%.*(.*)&#039;)
 
-        <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-09 20:11:29
-</footer>
+   for path in lfs.dir(dir) do
+      if path ~= &#039;.&#039; and path ~= &#039;..&#039; then
+         local attributes = lfs.attributes(dir .. &#039;/&#039; .. path)
 
-    </div>
+         if attributes.mode == &#039;file&#039; and (path:match(&#039;%.lua$&#039;) or path:match(&#039;%.tl$&#039;)) then
+            tree[depth .. path:match(&#039;(.-)%.(.*)&#039;)] = dir .. &#039;/&#039; .. path
+         elseif attributes.mode == &#039;directory&#039; then
+            dirTree(dir .. &#039;/&#039; .. path, tree, depth)
+         end
+      end
+   end
+
+   return tree
+end
+
+local function search(pat: string, dirs: {string}): string
+   for i = 1, #dirs do
+      if lfs.attributes(dirs[i]) and lfs.attributes(dirs[i]).mode == &#039;directory&#039; then
+         for path in lfs.dir(dirs[i]) do
+            if path:match(pat) then
+               return path
+            end
+         end
+      end
+   end
+end
+
+local function recursiveDir(path: string, pat: string | nil, current: {string}): {string}
+   current = current or {}
+
+   for location in lfs.dir(path) do
+      if location ~= &#039;.&#039; and location ~= &#039;..&#039; then
+
+         if lfs.attributes(path .. &#039;/&#039; .. location).mode == &#039;directory&#039; then
+            recursiveDir(path .. &#039;/&#039; .. location, pat, current)
+         elseif lfs.attributes(path .. &#039;/&#039; .. location).mode == &#039;file&#039; and location:match(pat) then
+            table.insert(current, path .. &#039;/&#039; .. location)
+         end
+      end
+   end
+
+   return current
+end
+
+local function currentLocation(): string
+   local str = debug.getinfo(2, &#039;S&#039;).source:sub(2)
+
+   -- The CLI is **never** ran directly from the interpreter
+
+   return str:match(&#039;(.*/)&#039;)
+end
+
+local function read(path: string): string
+   local f = assert(io.open(path, &#039;r&#039;))
+
+   local data = f:read(&#039;*a&#039;)
+
+   f:close()
+
+   return data
+end
+
+local function loadTag(file: string): any
+   local data = read(file)
+
+   local fn = assert(load(data, &#039;tag&#039;))
+
+   return fn()
+end
+
+local function loadTags(config: Config): {tag.TagConfig}
+   local files = {}
+
+   local defaultTags = currentLocation() .. &#039;/tags/&#039;
+
+   if config.tagStyle == &#039;ldoc&#039; then
+      logger.warn(&#039;LDoc support hasn\&#039;t been implemented yet!&#039;)
+      recursiveDir(defaultTags .. &#039;ldoc&#039;, &#039;%.lua$&#039;, files)
+   elseif config.tagStyle == &#039;tealdoc&#039; then
+      recursiveDir(defaultTags .. &#039;tealdoc&#039;, &#039;%.lua$&#039;, files)
+   elseif config.tagStyle ~= &#039;none&#039; then
+      logger.error(&#039;Unrecognized tag style: &#039; .. config.tagStyle)
+   end
+
+   config.tags = config.tags or {}
+
+   for i = 1, #config.tags do
+      recursiveDir(config.tags[i], &#039;%.lua$&#039;, files)
+   end
+
+   local tags = {}
+
+   for i = 1, #files do
+      table.insert(tags, loadTag(files[i]))
+   end
+
+   return tags as {tag.TagConfig}
+end
+
+local function write(path: string, data: string)
+   local f = assert(io.open(path, &#039;w&#039;))
+
+   f:write(data)
+
+   f:close()
+end
+
+local function loadSpec(spec: string): ConfigRockspec
+   local data = read(spec)
+
+   local env = {}
+
+   local fn = assert(load(data, &#039;rockspec&#039;, &#039;t&#039;, env))
+
+   if tonumber(_VERSION:match(&#039;Lua ([%d%.]+)&#039;)) &lt; 5.2 then
+      global setfenv: function(function, table)
+
+      -- Lua 5.1 compat
+      setfenv(fn, env)
+   end
+
+   pcall(fn)
+
+   return env as ConfigRockspec
+end
+
+local function loadConfig(contents: string): Config
+   -- Dynamic requires in teal
+   local fn = assert(load(contents, &#039;config&#039;))
+
+   return fn() as Config
+end
+
+-- Everything is described in the config
+local argParser = argparse(&#039;tealdoc&#039;, &#039;A documentation generator for Teal and by extension Lua&#039;)
+
+argParser:option(&#039;-c --config&#039;, &#039;The configuration file location&#039;, &#039;tealdoc.lua&#039;, io.open)
+argParser:flag(&#039;-q --quiet&#039;, &#039;Suppress output&#039;)
+
+--- The entry-point of the CLI
+---
+--- Flags:
+---
+--- * `-c`/`--config` - The configuration file location
+--- * `-q`/`--quiet` - Suppress output
+local function main()
+   local parsed = argParser:parse()
+
+   logger.level =
+      (parsed.quiet and 1) or
+      (os.getenv(&#039;DEBUG&#039;) and 5) or
+      3
+
+   logger.color = not os.getenv(&#039;NO_COLOR&#039;)
+
+   local fileContents = (parsed.config as FILE):read(&#039;*a&#039;)
+
+   local config = loadConfig(fileContents)
+
+   local rockspec: ConfigRockspec
+   -- Fallback to rockspec
+   local spec = search(&#039;.*%.rockspec&#039;, {&#039;.&#039;, &#039;rockspecs&#039;})
+
+   if spec then
+      rockspec = loadSpec(spec)
+   end
+
+   if not config then
+      logger.error(&#039;Expected config to have a `[project]` section&#039;)
+
+      os.exit(-1)
+   end
+
+   local project = {} as Project
+
+   project.name = config.name or rockspec.package or error(&#039;Expected package to have a name&#039;)
+   project.version = config.version or rockspec.version or &#039;&#039;
+   project.description =
+      config.description or
+      (config.descriptionFile and read(config.descriptionFile)) or
+      (rockspec.description and rockspec.description.detailed or rockspec.description.summary) or
+      (lfs.attributes(&#039;readme.md&#039;) and read(&#039;readme.md&#039;)) or
+      &#039;&#039;
+   project.deprecated = config.deprecated
+   project.functionStyle = config.functionStyle or &#039;lua&#039;
+
+   if not config.source then
+      config.source = tostring(config.name)
+   end
+
+   config.output = config.output or &#039;docs&#039;
+   config.tagStyle = config.tagStyle or &#039;tealdoc&#039;
+
+   project.output = config.output
+
+   if not config.output then
+      lfs.mkdir(config.output)
+   end
+
+   assert(lfs.attributes(config.source))
+
+   local tree = dirTree(config.source)
+
+   local state = parser.getReport(tree, false, config.isLua)
+
+   project.sources = state.files
+
+   local mods = parser.extractModules(state, tree)
+
+   local types = {}
+   local count = 0
+   local first: string
+
+   for i, v in pairs(mods) do
+      types[i] = parser.createType(v, state)
+
+      count = count + 1
+
+      if not first then
+         first = i
+      end
+   end
+
+   if count == 1 then
+      project.module = types[first]
+   else
+      project.modules = types
+   end
+
+   local writer = lunamark.writer.html.new({})
+
+   -- Change some defaults since of tailwind messing with them
+
+   writer.link = function(label: string, uri: string, title: string): {string}
+      local titleAtt = &#039;&#039;
+
+      if type(title) == &#039;string&#039; and #title &gt; 0 then
+         titleAtt = &#039;title=&quot;&#039; .. title .. &#039;&quot;&#039;
+      end
+
+      return {&#039;&lt;a href=&quot;&#039;, uri, &#039;&quot; class=&quot;text-blue-500&quot; &#039;, titleAtt, &#039;&gt;&#039;, label, &#039;&lt;/a&gt;&#039;}
+   end
+
+   writer.header = function(str: string, level: number): {string}
+      local textMaps = {
+         &#039;3xl&#039;,
+         &#039;2xl&#039;,
+         &#039;xl&#039;,
+         &#039;lg&#039;,
+         &#039;base&#039;,
+         &#039;base&#039;
+      }
+
+      return {&#039;&lt;h&#039;, tostring(level), &#039; class=&quot;text-&#039;, textMaps[level], &#039;&quot;&gt;&#039;, str, &#039;&lt;/h&#039;, tostring(level), &#039;&gt;&#039;}
+   end
+
+   -- We don&#039;t want anything else
+   writer.template = &#039;$body&#039;
+
+   writer.paragraph = function(str: string): {string}
+      return {&#039;&lt;p class=&quot;py-2&quot;&gt;&#039;, str, &#039;&lt;/p&gt;&#039;}
+   end
+
+   local markdown = lunamark.reader.markdown.new(writer, {
+      fenced_code_blocks = true --;ignore
+   })
+
+   local scriptDir = currentLocation()
+   local cache: {string: function(any): string} = {}
+
+   local function include(filename: string, base: table): string
+      base = base or {}
+
+      base.project = project
+      base.include = function(f: string, b: table): string
+         b = b or {}
+
+         for i, v in pairs(base) do
+            b[i] = v
+         end
+
+         return include(f, b)
+      end
+
+      cache[filename] = cache[filename] or etlua.compile(read(scriptDir .. &#039;templates/&#039; .. filename))
+
+      return cache[filename](base)
+   end
+
+   -- Templates --
+   local humanize = require(&#039;tealdoc.humanize&#039;)(project as table)
+
+   local module = assert(etlua.compile(read(scriptDir .. &#039;templates/module.etlua&#039;)))
+   local document = assert(etlua.compile(read(scriptDir .. &#039;templates/document.etlua&#039;)))
+   local srcdoc = assert(etlua.compile(read(scriptDir .. &#039;templates/srcdoc.etlua&#039;)))
+
+   local function genDocument(name: string, tp: parser.Type)
+      local location: string
+
+      -- I feel like this will lead to recursion
+      tp.tree = tp.parent and (tp.parent as parser.Type).tree or &#039;&#039;
+
+      tp.name = name
+
+      if tp.kind == &#039;custom&#039; and not tp.struct.isRecord then
+         tp.tree = tp.tree .. &#039;/&#039; .. name
+
+         lfs.mkdir(config.output .. &#039;/&#039; .. tp.tree)
+
+         location = config.output .. tp.tree .. &#039;/index.html&#039;
+
+         write(location, module({
+            project = project,
+            current = tp,
+            include = include,
+            humanize = humanize,
+            markdown = markdown
+         }))
+
+         for i, v in pairs(tp.struct.fields) do
+            -- Generate children
+            if not v.hidden then
+               genDocument(i, v)
+            end
+         end
+      else
+         -- Non-modules get a document
+         location = config.output .. tp.tree .. &#039;/&#039; .. name .. &#039;.html&#039;
+
+         write(location, document({
+            project = project,
+            current = tp,
+            humanize = humanize,
+            markdown = markdown,
+            include = include
+         }))
+      end
+
+      logger.info(&#039;Generated &#039; .. location)
+   end
+
+   local tags = loadTags(config)
+
+   tag.traverse(project.modules or {
+      [project.name] = project.module as parser.Type
+   }, tags)
+
+   write(config.output .. &#039;/index.html&#039;, module({
+      current = project,
+      project = project,
+      include = include,
+      humanize = humanize,
+      markdown = markdown
+   }))
+
+   logger.info(&#039;Generated &#039; .. config.output .. &#039;/index.html&#039;)
+
+   if project.module then
+      assert(not (project.module as parser.Type).hidden, &#039;Hiding the entire project sounds a bit stupid doesn\&#039;t it?&#039;)
+      genDocument(project.name, project.module as parser.Type)
+   else
+      for i, v in pairs((project.modules as {string: parser.Type})) do
+         if not v.hidden then
+            genDocument(i, v)
+         end
+      end
+   end
+
+   -- Generate sources
+
+   lfs.mkdir(config.output .. &#039;/&#039; .. &#039;sources&#039;)
+
+   for i, v in pairs(project.sources) do
+      write(config.output .. &#039;/sources/&#039; .. i:gsub(&#039;/&#039;, &#039;-&#039;) .. &#039;.html&#039;, srcdoc({
+         code = v,
+         include = include
+      }))
+
+      logger.info(&#039;Generated &#039; .. config.output .. &#039;/sources/&#039; .. i:gsub(&#039;/&#039;, &#039;-&#039;) .. &#039;.html&#039;)
+   end
+end
+
+--- The main function of the documentation generator as well as the project config
+return {
+   Project = Project,
+   Config = Config,
+   main = main
+}
+
+        </code>
+    </pre>
 </body>
-
 </html>

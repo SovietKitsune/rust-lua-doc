@@ -39,7 +39,9 @@ function logger.log(level: number, message: string)
 
    message = message:gsub('\n', '\n' .. fg(colors[level]) .. human[level] .. reset())
 
-   io.write(fg(colors[level]) .. human[level] .. reset() .. message .. '\n')
+   local file = level >= 3 and io.stdout or io.stderr
+
+   file:write(fg(colors[level]) .. human[level] .. reset() .. message .. '\n')
 end
 
 --- Send an error level message

@@ -85,6 +85,8 @@ local record Type
    ref: Type | nil
    --- Signify that a type has been deprecated
    deprecated: boolean | string
+   --- @{hidden}
+   tp: tl.TypeInfo
 end
 
 local record State
@@ -97,6 +99,16 @@ local record Token
    x: number
    y: number
    i: number
+   tk: string
+   kind: string
+end
+
+-- Same with Node
+local record Node
+   {Node}
+
+   y: number
+   x: number
    tk: string
    kind: string
 end
@@ -344,33 +356,56 @@ local function getStop(tokens: {Token}, y: number, x: number, allowFunction: boo
    end
 end
 
-local function getWithinTable(tokens: {Token}, y: number, x: number): {Token}, number
-   local started = false
-   local within = {}
-
-   local stack = 1
-
-   for i = 1, #tokens do
-      local token = tokens[i]
-
-      if started then
-         if token.kind == '{' then
-            stack = stack + 1
-         elseif token.kind == '}' then
-            stack = stack - 1
-         end
-
-         if stack > 0 then
-            table.insert(within, token)
-         end
-      elseif token.x == x and token.y == y then
-         started = true
+local function parseKind(toParse: Node, lines: {string: number})
+   if toParse.kind == 'expression_list' then
+      for i = 1, #toParse do
+         parseKind(toParse[i], lines)
       end
+   elseif toParse.kind == 'table_literal' then
+      for i = 1, #toParse do
+         lines[toParse[i].tk] = toParse[i].y
+      end
+   else
+      -- `local_type` would be a record which we can already parse
+      -- Records are easier to parse since it isn't the entire Lua syntax
+      logger.error('Unexpected kind: ' .. toParse.kind)
+      os.exit(-1)
+   end
+end
 
-      if stack == 0 and started then
-         return within, i
+local function recursiveFind(node: Node, x: number, y: number, visited: {Node: boolean}, depth: number): node, string
+   visited = visited or {}
+   depth = depth or 0
+
+   if depth > 10000 then
+      return nil, 'max-depth'
+   end
+
+   if visited[node] then
+      return nil, 'visited'
+   end
+
+   visited[node] = true
+
+   local viewed = {}
+
+   for _, v in pairs(node as {string: Node}) do
+      if type(v) == 'table' and v.x and v.y then
+         table.insert(viewed, v)
+
+         if v.x == x and v.y == y then
+            return v
+         else
+            local succ = recursiveFind(v, x, y, visited, depth + 1)
+
+            if succ then
+               return succ
+            end
+         end
       end
    end
+
+   return nil, 'viewed-all'
 end
 
 --- Create a (parsable) type from an index and a report
@@ -510,69 +545,7 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       -- This part is (more) likely to fail
       --; TODO - using the AST seems like a good idea
       xpcall(function()
-         if not name then
-            -- This is a table
-
-            local within = getWithinTable(tokens as {Token}, tp.y, tp.x)
-
-            -- Here we cannot just jump to the next `=` since it could be within a function
-
-            local i = 1
-
-            local blocks: {string: boolean} = {
-               ['enum'] = true,
-               ['record'] = true,
-               ['function'] = true
-            }
-
-            while i <= #within do
-               -- Blocks already have their descriptions filled out
-               if within[i].kind == 'identifier' and blocks[within[i + 2].tk] then
-                  local stack = 1
-
-                  for k = i + 3, #within do
-                     local token = within[k]
-
-                     if blocks[token.tk] then
-                        stack = stack + 1
-                     elseif token.kind == 'keyword' and token.tk == 'end' then
-                        stack = stack - 1
-                     end
-
-                     if stack == 0 then
-                        i = k + 2
-                        break
-                     end
-                  end
-               elseif within[i + 2].kind == '{' then
-                  local _, stop = getWithinTable(tokens as {Token}, within[i + 2].y, within[i + 2].x)
-
-                  i = stop
-               else
-                  -- A type
-                  local fieldToken = within[i]
-
-                  local found = false
-
-                  out.struct.fields[fieldToken.tk].description = getDescription(report.files[tp.file], fieldToken.y)
-
-                  for k = i + 2, #within do
-                     -- Find next equal
-                     -- We will not run into anything that could be a mistake here
-
-                     if within[k].kind == 'op' and within[k].tk == '=' then
-                        i = k - 1
-
-                        found = true
-                     end
-                  end
-
-                  if not found then
-                     break
-                  end
-               end
-            end
-         else
+         if name then
             local lastToken = getStop(tokens as {Token}, tp.y, tp.x)
 
             out.stopY = lastToken.y
@@ -648,6 +621,23 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
                      end
                   end
                end
+            end
+         else
+            local _, node = tl.parse_program(tokens)
+
+            local collectedNode, reason = recursiveFind(node as Node, tp.x, tp.y)
+
+            if not collectedNode then
+               logger.error('Unable to find node: ' .. tostring(reason))
+               os.exit(-1)
+            end
+
+            local lines = {}
+
+            parseKind(collectedNode, lines)
+
+            for i, v in pairs(lines) do
+               out.struct.fields[i].description = getDescription(report.files[tp.file], v)
             end
          end
       end, function(err)
@@ -759,6 +749,7 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
 
    out.tree = ''
    out.description = out.description or ''
+   out.tp = tp
 
    return out
 end
