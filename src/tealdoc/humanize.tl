@@ -64,8 +64,6 @@ local function humanize(typ: parser.Type, style: boolean): string
         else
             return res
         end
-    elseif kind == 'nominal' then
-        return humanize(typ.ref, style)
     end
 end
 

@@ -39,8 +39,6 @@ local record Type
       --- A table which must contain a certain number of types in the correct order
       'tuple'
       'poly'
-      --- A reference to another type
-      'nominal'
       --- A list of strings of what the string could be
       'enum'
       --- A generic found within function definitions
@@ -368,8 +366,7 @@ local function parseKind(toParse: Node, lines: {string: number})
    else
       -- `local_type` would be a record which we can already parse
       -- Records are easier to parse since it isn't the entire Lua syntax
-      logger.error('Unexpected kind: ' .. toParse.kind)
-      os.exit(-1)
+      error('Unexpected kind: ' .. toParse.kind)
    end
 end
 
@@ -543,7 +540,6 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       end
 
       -- This part is (more) likely to fail
-      --; TODO - using the AST seems like a good idea
       xpcall(function()
          if name then
             local lastToken = getStop(tokens as {Token}, tp.y, tp.x)
@@ -628,8 +624,7 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
             local collectedNode, reason = recursiveFind(node as Node, tp.x, tp.y)
 
             if not collectedNode then
-               logger.error('Unable to find node: ' .. tostring(reason))
-               os.exit(-1)
+               error('Unable to find node: ' .. tostring(reason))
             end
 
             local lines = {}
@@ -648,6 +643,8 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
             err,
             debug.traceback()
          ))
+
+         os.exit(-1)
       end)
    elseif tp.t == codes.MAP then
       out = {
@@ -678,10 +675,8 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       -- We don't set the parent on this one since it would be mostly pointless
       local ref = createType(tp.ref, report, true)
 
-      out = {
-         kind = 'nominal',
-         ref = ref,
-      }
+      -- This caused too many issues
+      out = ref
    elseif tp.t == codes.ENUM then
       local tokens = tl.lex(report.files[tp.file])
 
@@ -747,7 +742,6 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       }
    end
 
-   out.tree = ''
    out.description = out.description or ''
    out.tp = tp
 

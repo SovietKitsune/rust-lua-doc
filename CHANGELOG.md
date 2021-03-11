@@ -1,5 +1,11 @@
 # Changelog
 
+## dev-5
+
+* Fix links (uses save path instead of parents)
+* Remove `nominal` kind as it caused too many issues
+* Some code cleanup
+
 ## dev-4
 
 * Fix issues causing left-hosting to fail

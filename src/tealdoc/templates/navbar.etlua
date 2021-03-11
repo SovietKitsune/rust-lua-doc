@@ -1,14 +1,16 @@
 <%
 local function toRoot()
-    parent = current
-    local str = ''
+    if not current.tree then return './' end
 
-    while parent do
-        str = str .. '../'
-        parent = parent.parent
+    local count = 0
+
+    for i = 1, #current.tree do
+        if current.tree:sub(i, i) == '/' then
+            count = count + 1
+        end
     end
 
-    return str == '' and './' or str
+    return './' .. string.rep('../', count)
 end
 %>
 

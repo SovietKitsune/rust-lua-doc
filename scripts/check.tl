@@ -3,6 +3,7 @@
 local tl = require('tl')
 
 local file: string
+local exit = 0
 
 local function splitLines(str: string): {string}
    local split = {}
@@ -27,6 +28,8 @@ local function splitLines(str: string): {string}
 end
 
 local function buildReport(code: string, str: string, line: number, col: number, stopCol: number): string
+   exit = -1
+
    local split = splitLines(code)
 
    local currentLine = split[line]
@@ -130,3 +133,5 @@ for i = 1, #arg do
       v(data)
    end
 end
+
+os.exit(exit)

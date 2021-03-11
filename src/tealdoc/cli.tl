@@ -289,12 +289,6 @@ local function main()
       rockspec = loadSpec(spec)
    end
 
-   if not config then
-      logger.error('Expected config to have a `[project]` section')
-
-      os.exit(-1)
-   end
-
    local project = {} as Project
 
    project.name = config.name or rockspec.package or error('Expected package to have a name')

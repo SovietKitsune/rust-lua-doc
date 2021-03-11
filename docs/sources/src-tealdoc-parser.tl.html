@@ -670,8 +670,7 @@ local function parseKind(toParse: Node, lines: {string: number})
    else
       -- `local_type` would be a record which we can already parse
       -- Records are easier to parse since it isn&#039;t the entire Lua syntax
-      logger.error(&#039;Unexpected kind: &#039; .. toParse.kind)
-      os.exit(-1)
+      error(&#039;Unexpected kind: &#039; .. toParse.kind)
    end
 end
 
@@ -845,7 +844,6 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       end
 
       -- This part is (more) likely to fail
-      --; TODO - using the AST seems like a good idea
       xpcall(function()
          if name then
             local lastToken = getStop(tokens as {Token}, tp.y, tp.x)
@@ -930,8 +928,7 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
             local collectedNode, reason = recursiveFind(node as Node, tp.x, tp.y)
 
             if not collectedNode then
-               logger.error(&#039;Unable to find node: &#039; .. tostring(reason))
-               os.exit(-1)
+               error(&#039;Unable to find node: &#039; .. tostring(reason))
             end
 
             local lines = {}
@@ -950,6 +947,8 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
             err,
             debug.traceback()
          ))
+
+         os.exit(-1)
       end)
    elseif tp.t == codes.MAP then
       out = {
@@ -980,10 +979,8 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       -- We don&#039;t set the parent on this one since it would be mostly pointless
       local ref = createType(tp.ref, report, true)
 
-      out = {
-         kind = &#039;nominal&#039;,
-         ref = ref,
-      }
+      -- This caused too many issues
+      out = ref
    elseif tp.t == codes.ENUM then
       local tokens = tl.lex(report.files[tp.file])
 
@@ -1049,7 +1046,6 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
       }
    end
 
-   out.tree = &#039;&#039;
    out.description = out.description or &#039;&#039;
    out.tp = tp
 
