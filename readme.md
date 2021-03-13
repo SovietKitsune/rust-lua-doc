@@ -2,6 +2,17 @@
 
 *Demo can be found at <https://sovietkitsune.github.io/tealdoc/>*
 
+The following codeblock is only for demo purposes.
+
+```teal
+-- Hover over `parser`
+-- Clicking on it should take you to `tealdoc.parser`'s source
+local parser = require 'tealdoc.parser'
+
+local x = 5
+local y = 2
+```
+
 ## Motivation
 
 I like Teal and don't like LDoc/py-lua-doc.
@@ -42,7 +53,6 @@ All of these are located in `tealdoc/templates`. Everything within `tealdoc/html
 * `main.etlua` - The index page which links to the top-level documents
 * `navbar.etlua` - The navbar used on most pages
 * `prism.etlua` - Prism.js configuration
-* `srcdoc.etlua` - The file used to generate linking to sources
 * `head.etlua` - The head used on 
 
 ### Types

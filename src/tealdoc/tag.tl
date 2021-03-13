@@ -16,8 +16,6 @@ local function parse(typ:  parser.Type, tags: {TagConfig})
    for i = 1, #tags do
       local tag = tags[i]
 
-      -- If you want it to be at the start just do
-      -- `\n@<stuff>\n?`
       if typ.description:match(tag.selector) then
          local isAllowed = tag.allowed(typ)
 
@@ -33,8 +31,6 @@ local function parse(typ:  parser.Type, tags: {TagConfig})
       end
    end
 
-   -- Wipe tags away
-
    for i = 1, #tags do
       typ.description = typ.description:gsub(tags[i].selector, '')
    end
@@ -42,10 +38,6 @@ end
 
 local function traverse(types: {string: parser.Type}, tags: {TagConfig})
    for _, tp in pairs(types) do
-      if tp.kind == 'nominal' then
-         tp = tp.ref
-      end
-
       parse(tp, tags)
 
       -- Has children we care about

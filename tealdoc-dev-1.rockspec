@@ -17,17 +17,21 @@ dependencies = {
 build = {
    type = "builtin",
    modules = {
-      ["tealdoc.parser"] = "out/tealdoc/parser.lua",
+      ["tealdoc.cli"] = "out/tealdoc/cli.lua",
+      ["tealdoc.highlight"] = "out/tealdoc/highlight.lua",
       ["tealdoc.humanize"] = "out/tealdoc/humanize.lua",
       ["tealdoc.logger"] = "out/tealdoc/logger.lua",
-      ["tealdoc.cli"] = "out/tealdoc/cli.lua"
+      ["tealdoc.parser"] = "out/tealdoc/parser.lua",
+      ["tealdoc.tag"] = "out/tealdoc/tag.lua",
    },
    install = {
       lua = {
-         ["tealdoc.parser"] = "src/tealdoc/parser.tl",
+         ["tealdoc.cli"] = "src/tealdoc/cli.tl",
+         ["tealdoc.highlight"] = "src/tealdoc/highlight.tl",
          ["tealdoc.humanize"] = "src/tealdoc/humanize.tl",
          ["tealdoc.logger"] = "src/tealdoc/logger.tl",
-         ["tealdoc.cli"] = "src/tealdoc/cli.tl"
+         ["tealdoc.parser"] = "src/tealdoc/parser.tl",
+         ["tealdoc.tag"] = "src/tealdoc/tag.tl",
       }
    }
 }

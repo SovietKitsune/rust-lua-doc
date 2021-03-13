@@ -1,5 +1,15 @@
 # Changelog
 
+## dev-6
+
+* Added improved source inspection
+  * Gives some type information as well as goto
+  * (Mostly) server-side highlighting (soon to be completely server-side)
+* Cleanup `tag.tl`
+* Removed `srcdoc.tl`
+* Added tipper.js as a dependency (but not for long)
+* ~~increased document times~~
+
 ## dev-5
 
 * Fix links (uses save path instead of parents)

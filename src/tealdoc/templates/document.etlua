@@ -43,7 +43,7 @@ end
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
                                     <% if current.source then %>
-                                        <a href="<%= toRoot() %>sources/<%= current.source:gsub('/', '-') %>.html#code.<%= current.yPos %>-<%= current.stopY or current.yPos %>" class="text-gray-400">Source</a>
+                                        <a href="<%= toRoot() %>sources/<%= current.source:gsub('/', '-') %>.html#line-<%= current.yPos %>" class="text-gray-400">Source</a>
                                     <% end %>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@ end
                                         <div class="block">
                                             <div class="flex items-baseline space-x-4">
                                                 <a href="#fn.<%= name %>" class="text-gray-400">#</a>
-                                                <a href="<%= toRoot() %>sources/<%= func.source:gsub('/', '-') %>.html#code.<%= func.yPos %>-<%= current.stopY or current.yPos %>" class="text-gray-400">Source</a>
+                                                <a href="<%= toRoot() %>sources/<%= func.source:gsub('/', '-') %>.html#line-<%= func.yPos %>" class="text-gray-400">Source</a>
                                             </div>
                                         </div>
                                     </div>

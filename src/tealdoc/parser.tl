@@ -79,8 +79,6 @@ local record Type
    types: {Type} | nil
    --- The values of an enum, its separate from types due to enums being "complex" aka blocked
    values: {Type} | nil
-   --- A reference to another type
-   ref: Type | nil
    --- Signify that a type has been deprecated
    deprecated: boolean | string
    --- @{hidden}
@@ -408,6 +406,7 @@ end
 --- Create a (parsable) type from an index and a report
 local function createType(index: number, report: State, noNominal: boolean): Type
    local tp = report.report.types[index]
+
    local codes = tl.typecodes
 
    local conversions: {number: Type.kind} = {
@@ -423,6 +422,13 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
    }
 
    local out: Type
+
+   if not tp then
+      -- if we don't have a tp, get out of here
+      return {
+         kind = 'unknown'
+      }
+   end
 
    if conversions[tp.t] then
       -- Basic type
@@ -484,7 +490,13 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          },
          value = createType(tp.elements, report, noNominal)
       }
-   elseif tp.t == codes.RECORD or tp.t == codes.ARRAYRECORD then
+   elseif tp.t == codes.RECORD and tp.file == nil then
+      -- Files are the only "class" in Lua
+      out = {
+         kind = 'named',
+         customName = 'file'
+      }
+   elseif (tp.t == codes.RECORD or tp.t == codes.ARRAYRECORD) and tp.file then
       local tokens = tl.lex(report.files[tp.file])
 
       local tokensAtSig, before = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
@@ -750,10 +762,12 @@ end
 
 --- Utilities for extracting all the types from either virtual files or real files
 return {
+   newSearch = newSearch,
    getReport = getReport,
    createType = createType,
    extractModules = extractModules,
    Type = Type,
    Function = Function,
-   Struct = Struct
+   Struct = Struct,
+   State = State
 }

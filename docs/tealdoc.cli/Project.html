@@ -286,6 +286,17 @@ pre[class*="language-"].line-numbers > code {
 }
 </style>
 
+
+    <style>
+        .code-comment { color: #a0a1a7; }
+.code-error { color: #e06c75; }
+.code-number { color: #d19a66; }
+.code-keyword { color: #a626a4; }
+.code-identifier { color: #383a42; }
+.code-text { color: #383a42; }
+.code-string { color: #50a14f; }
+.code-constant { color: #e6c07b; }
+    </style>
 </head>
 
 
@@ -337,7 +348,7 @@ pre[class*="language-"].line-numbers > code {
                             <div class="block">
                                 <div class="flex items-baseline space-x-4">
                                     
-                                        <a href="./../sources/src-tealdoc-cli.tl.html#code.11-21" class="text-gray-400">Source</a>
+                                        <a href="./../sources/src-tealdoc-cli.tl.html#line-12" class="text-gray-400">Source</a>
                                     
                                 </div>
                             </div>
@@ -363,7 +374,7 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        version
+                                        functionStyle
                                     
                                     : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
                                 </h4>
@@ -376,36 +387,6 @@ pre[class*="language-"].line-numbers > code {
                                         module
                                     
                                     : <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a> | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        name
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        modules
-                                    
-                                    : {<a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>: <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>} | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
-                                </h4>
-                                <div>
-                                    
-                                </div>
-                            
-                                <h4 class="text-lg pt-2">
-                                    
-                                        functionStyle
-                                    
-                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
                                 </h4>
                                 <div>
                                     
@@ -433,6 +414,16 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
+                                        sources
+                                    
+                                    : {<a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>: <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>}
+                                </h4>
+                                <div>
+                                    
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
                                         deprecated
                                     
                                     : <a href="https://www.lua.org/pil/2.2.html" class="text-blue-500">boolean</a> | <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
@@ -443,9 +434,29 @@ pre[class*="language-"].line-numbers > code {
                             
                                 <h4 class="text-lg pt-2">
                                     
-                                        sources
+                                        name
                                     
-                                    : {<a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>: <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>}
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        version
+                                    
+                                    : <a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>
+                                </h4>
+                                <div>
+                                    
+                                </div>
+                            
+                                <h4 class="text-lg pt-2">
+                                    
+                                        modules
+                                    
+                                    : {<a href="https://www.lua.org/pil/2.4.html" class="text-blue-500">string</a>: <a href="https://www.lua.org/contents.html#2" class="text-blue-500">unknown</a>} | <a href="https://www.lua.org/pil/2.1.html" class="text-blue-500">nil</a>
                                 </h4>
                                 <div>
                                     
@@ -458,8 +469,14 @@ pre[class*="language-"].line-numbers > code {
         </main>
 
         <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-10 19:58:44
+    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-12 21:29:42
 </footer>
+
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script>
+    tippy('[data-tippy-content]');
+</script>
 
     </div>
 </body>

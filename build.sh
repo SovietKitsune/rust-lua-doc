@@ -13,3 +13,4 @@ cyan build
 # Copy
 
 cp -r src/tealdoc/templates out/tealdoc/templates
+cp -r src/pl out/pl

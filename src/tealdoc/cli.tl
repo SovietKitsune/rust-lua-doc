@@ -1,3 +1,4 @@
+local highlight = require('tealdoc.highlight')
 local parser = require('tealdoc.parser')
 local logger = require('tealdoc.logger')
 local tag = require('tealdoc.tag')
@@ -345,7 +346,10 @@ local function main()
       project.modules = types
    end
 
+   local modSearch = parser.newSearch(tree, false, state)
    local writer = lunamark.writer.html.new({})
+
+   local currentSource: string
 
    -- Change some defaults since of tailwind messing with them
 
@@ -379,6 +383,44 @@ local function main()
       return {'<p class="py-2">', str, '</p>'}
    end
 
+   writer.fenced_code = function(code: string, language: string): {string} --;ignore
+      if language == 'teal' then
+         local tmp = os.tmpname()
+
+         -- *virtual*
+         local f = io.open(tmp, 'w')
+         f:write(code)
+         f:close()
+
+         local root: string
+
+         if not currentSource then
+            root = './'
+         else
+            local currentSlashes = 0
+
+            for i = 1, #currentSource do
+               if currentSource:sub(i, i) == '/' then
+                  currentSlashes = currentSlashes + 1
+               end
+            end
+
+            root = './' .. string.rep('../', currentSlashes)
+         end
+
+         logger.debug(currentSource)
+
+         local tokens = highlight.parse(tmp, modSearch)
+         local contents = highlight.fullDocument(tokens, tmp, true, root)
+
+         return {'<pre><code>', contents, '</code></pre>'}
+      elseif language ~= '' then
+         return {'<pre><code class="language-', language:match('[^ ]*'), '">', code, '</code></pre>'}
+      else
+         return {'<pre><code>', code, '</code></pre>'}
+      end
+   end
+
    local markdown = lunamark.reader.markdown.new(writer, {
       fenced_code_blocks = true --;ignore
    })
@@ -410,7 +452,6 @@ local function main()
 
    local module = assert(etlua.compile(read(scriptDir .. 'templates/module.etlua')))
    local document = assert(etlua.compile(read(scriptDir .. 'templates/document.etlua')))
-   local srcdoc = assert(etlua.compile(read(scriptDir .. 'templates/srcdoc.etlua')))
 
    local function genDocument(name: string, tp: parser.Type)
       local location: string
@@ -420,8 +461,12 @@ local function main()
 
       tp.name = name
 
+      currentSource = tp.tree
+
       if tp.kind == 'custom' and not tp.struct.isRecord then
          tp.tree = tp.tree .. '/' .. name
+
+         currentSource = tp.tree
 
          lfs.mkdir(config.output .. '/' .. tp.tree)
 
@@ -455,6 +500,7 @@ local function main()
       end
 
       logger.info('Generated ' .. location)
+      currentLocation = nil
    end
 
    local tags = loadTags(config)
@@ -488,11 +534,12 @@ local function main()
 
    lfs.mkdir(config.output .. '/' .. 'sources')
 
-   for i, v in pairs(project.sources) do
-      write(config.output .. '/sources/' .. i:gsub('/', '-') .. '.html', srcdoc({
-         code = v,
-         include = include
-      }))
+   for i in pairs(project.sources) do
+      local tokens = highlight.parse(i, modSearch)
+
+      local contents = highlight.fullDocument(tokens, i)
+
+      write(config.output .. '/sources/' .. i:gsub('/', '-') .. '.html', contents)
 
       logger.info('Generated ' .. config.output .. '/sources/' .. i:gsub('/', '-') .. '.html')
    end
