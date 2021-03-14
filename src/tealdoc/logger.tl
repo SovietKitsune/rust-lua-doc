@@ -34,7 +34,7 @@ local function reset(): string
 end
 
 --- Create a log message, the level must be a number between 1 and 5
-function logger.log(level: number, message: string)
+function logger.log(level: integer, message: string)
    if level > logger.level then return end
 
    message = message:gsub('\n', '\n' .. fg(colors[level]) .. human[level] .. reset())

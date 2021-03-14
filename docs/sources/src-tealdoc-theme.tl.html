@@ -1,0 +1,309 @@
+   <!DOCTYPE html>
+   <html lang="en">
+
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+         a { text-decoration: none; }
+                  .tooltip-parent .tooltip {
+            visibility: hidden;
+            text-align: center;
+
+            padding-left: 0.25rem;
+            padding-right: 0.25rem;
+
+            border-radius: 1px;
+            position: absolute;
+            z-index: 1;
+         }
+
+         .tooltip-parent:hover .tooltip {
+            visibility: visible;
+         }
+      
+/* light theme */
+            .light {
+               background-color: nil;
+               color: nil;
+            }
+
+            .light a {
+               color: nil;
+            }
+
+            .light nav {
+               background-color: nil;
+            }
+
+            .light nav a {
+               color: nil;
+            }
+
+            .light .tippy-box[data-theme~='auto'] {
+               background-color: #eeeeee;
+            }
+
+            .light .tooltip-parent .tooltip {
+               background-color: #aaaaaa;
+               color: #383a42;
+            }
+
+            .light .code-block {
+               background-color: #fafafa;
+               border-color: #aaaaaa;
+            }
+         
+.light .code-library { color: #82AAFF; }
+.light .code-identifier { color: #383a42; }
+.light .code-string { color: #50a14f; }
+.light .code-keyword2 { color: #FF5370; }
+.light .code-comment { color: #a0a1a7; }
+.light .code-number { color: #d19a66; }
+.light .code-constant { color: #e6c07b; }
+.light .code-keyword { color: #a626a4; }
+.light .code-text { color: #383a42; }
+/* moonlight theme */
+            .moonlight {
+               background-color: #1e2030;
+               color: #C8D3F5;
+            }
+
+            .moonlight a {
+               color: #7A88CF;
+            }
+
+            .moonlight nav {
+               background-color: #3e4260;
+            }
+
+            .moonlight nav a {
+               color: #C8D3F5;
+            }
+
+            .moonlight .tippy-box[data-theme~='auto'] {
+               background-color: #3e4260;
+            }
+
+            .moonlight .tooltip-parent .tooltip {
+               background-color: #191a2a;
+               color: #e4f3fa;
+            }
+
+            .moonlight .code-block {
+               background-color: #212539;
+               border-color: #191a2a;
+            }
+         
+.moonlight .code-library { color: #82AAFF; }
+.moonlight .code-identifier { color: #e4f3fa; }
+.moonlight .code-string { color: #7af8ca; }
+.moonlight .code-keyword2 { color: #FF5370; }
+.moonlight .code-comment { color: #7e8eda; }
+.moonlight .code-number { color: #ff9668; }
+.moonlight .code-constant { color: #ffdf9b; }
+.moonlight .code-keyword { color: #baacff; }
+.moonlight .code-text { color: #e4f3fa; }
+      </style>
+   </head>
+   <body class="moonlight">
+      <pre class="code-block"><code>
+<span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">record</span><span class="code-text"> </span><a data-tippy-content href="#line-1" class="code-text">Theme<span style="display: none;"><code><span class="code-keyword">type</span><span class="code-text"> </span><span class="code-keyword">record</span></code></span></a><span id="line-2"></span><span class="code-text">
+   </span><span class="code-keyword">record</span><span class="code-text"> </span><span class="code-text">Code</span><span id="line-3"></span><span class="code-text">
+      </span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-4"></span><span class="code-text">
+      </span><span class="code-text">background</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-5"></span><span class="code-text">
+      </span><span class="code-text">border</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-6"></span><span class="code-text">
+      </span><span class="code-text">syntax</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Syntax</span><span id="line-7"></span><span class="code-text">
+   </span><span class="code-keyword">end</span><span id="line-9"></span><span class="code-text">
+
+   </span><span class="code-keyword">record</span><span class="code-text"> </span><span class="code-text">Syntax</span><span id="line-10"></span><span class="code-text">
+      </span><span class="code-text">comment</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-11"></span><span class="code-text">
+      </span><span class="code-text">constant</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-12"></span><span class="code-text">
+      </span><span class="code-text">identifier</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-13"></span><span class="code-text">
+      </span><span class="code-text">keyword</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-14"></span><span class="code-text">
+      </span><span class="code-text">number</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-15"></span><span class="code-text">
+      </span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-16"></span><span class="code-text">
+      </span><span class="code-text">library</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-17"></span><span class="code-text">
+   </span><span class="code-keyword">end</span><span id="line-19"></span><span class="code-text">
+
+   </span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-20"></span><span class="code-text">
+   </span><span class="code-text">background</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-21"></span><span class="code-text">
+   </span><span class="code-text">tooltip</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-23"></span><span class="code-text">
+
+   </span><span class="code-text">link</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-24"></span><span class="code-text">
+   </span><span class="code-text">nav</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-25"></span><span class="code-text">
+   </span><span class="code-text">navLink</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-26"></span><span class="code-text">
+   </span><span class="code-text">code</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Code</span><span id="line-27"></span><span class="code-text">
+</span><span class="code-keyword">end</span><span id="line-29"></span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><a data-tippy-content href="#line-29" class="code-text">supportedTokens<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span><span class="code-text">}</span></code></span></a><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span><span class="code-text">}</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-30"></span><span class="code-text">
+   </span><span class="code-text">comment</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">true</span><span class="code-text">,</span><span id="line-31"></span><span class="code-text">
+   </span><span class="code-text">constant</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">true</span><span class="code-text">,</span><span id="line-32"></span><span class="code-text">
+   </span><span class="code-text">identifier</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">true</span><span class="code-text">,</span><span id="line-33"></span><span class="code-text">
+   </span><span class="code-text">keyword</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">true</span><span class="code-text">,</span><span id="line-34"></span><span class="code-text">
+   </span><span class="code-text">number</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">true</span><span class="code-text">,</span><span id="line-35"></span><span class="code-text">
+   </span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">true</span><span class="code-text">,</span><span id="line-36"></span><span class="code-text">
+   </span><span class="code-text">library</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">true</span><span id="line-37"></span><span class="code-text">
+</span><span class="code-text">}</span><span id="line-39"></span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><a data-tippy-content href="#line-39" class="code-text">themes<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Theme</span><span class="code-text">}</span></code></span></a><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><a data-tippy-content href="#line-1" class="code-text">Theme<span style="display: none;"><code><span class="code-keyword">type</span><span class="code-text"> </span><span class="code-keyword">record</span></code></span></a><span class="code-text">}</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">}</span><span id="line-41"></span><span class="code-text">
+
+</span><span id="line-42"></span><span class="code-comment">-- Basically one-light
+</span><a data-tippy-content href="#line-39" class="code-text">themes<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Theme</span><span class="code-text">}</span></code></span></a><span class="code-text">.</span><span class="code-text">light</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-43"></span><span class="code-text">
+   </span><span id="line-44"></span><span class="code-comment">-- Everything else is automatically selected by the template
+</span><span class="code-text">   </span><span class="code-text">tooltip</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#eeeeee'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-45"></span><span class="code-comment">-- The tooltip background color
+</span><span class="code-text">   </span><span class="code-text">code</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-46"></span><span class="code-text">
+      </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#383a42'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-47"></span><span class="code-comment">-- The color of non-special tokens (usually the same as identifiers)
+</span><span class="code-text">      </span><span class="code-text">background</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#fafafa'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-48"></span><span class="code-comment">-- The background of code blocks
+</span><span class="code-text">      </span><span class="code-text">border</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#aaaaaa'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-49"></span><span class="code-comment">-- The border color around code blocks
+</span><span class="code-text">      </span><span class="code-text">syntax</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-50"></span><span class="code-text">
+         </span><span class="code-text">comment</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#a0a1a7'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-51"></span><span class="code-comment">-- -- abc, --[[abc]], etc
+</span><span class="code-text">         </span><span class="code-text">constant</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#e6c07b'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-52"></span><span class="code-comment">-- _G, _ENV
+</span><span class="code-text">         </span><span class="code-text">identifier</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#383a42'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-53"></span><span class="code-comment">-- hi, bye, etc
+</span><span class="code-text">         </span><span class="code-text">keyword</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#a626a4'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-54"></span><span class="code-comment">-- local, function, etc
+</span><span class="code-text">         </span><span class="code-text">keyword2</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#FF5370'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-55"></span><span class="code-comment">-- self
+</span><span class="code-text">         </span><span class="code-text">number</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#d19a66'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-56"></span><span class="code-comment">-- 1, 0x3, etc
+</span><span class="code-text">         </span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#50a14f'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-57"></span><span class="code-comment">-- 'hi', "hi", [[hi]], etc
+</span><span class="code-text">         </span><span class="code-text">library</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#82AAFF'</span><span class="code-text"> </span><span id="line-58"></span><span class="code-comment">-- table, print, etc
+</span><span class="code-text">      </span><span class="code-text">}</span><span id="line-59"></span><span class="code-text">
+   </span><span class="code-text">}</span><span id="line-60"></span><span class="code-text">
+</span><span class="code-text">}</span><span id="line-62"></span><span class="code-text">
+
+</span><span id="line-63"></span><span class="code-comment">-- https://github.com/atomiks/moonlight-vscode-theme
+</span><a data-tippy-content href="#line-39" class="code-text">themes<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Theme</span><span class="code-text">}</span></code></span></a><span class="code-text">.</span><span class="code-text">moonlight</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-64"></span><span class="code-text">
+   </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#C8D3F5'</span><span class="code-text">,</span><span id="line-65"></span><span class="code-text">
+   </span><span class="code-text">background</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#1e2030'</span><span class="code-text">,</span><span id="line-66"></span><span class="code-text">
+   </span><span class="code-text">link</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#7A88CF'</span><span class="code-text">,</span><span id="line-67"></span><span class="code-text">
+   </span><span class="code-text">nav</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#3e4260'</span><span class="code-text">,</span><span id="line-68"></span><span class="code-text">
+   </span><span class="code-text">navLink</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#C8D3F5'</span><span class="code-text">,</span><span id="line-69"></span><span class="code-text">
+   </span><span class="code-text">tooltip</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#3e4260'</span><span class="code-text">,</span><span id="line-70"></span><span class="code-text">
+   </span><span class="code-text">code</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-71"></span><span class="code-text">
+      </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#e4f3fa'</span><span class="code-text">,</span><span id="line-72"></span><span class="code-text">
+      </span><span class="code-text">background</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#212539'</span><span class="code-text">,</span><span id="line-73"></span><span class="code-text">
+      </span><span class="code-text">border</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#191a2a'</span><span class="code-text">,</span><span id="line-74"></span><span class="code-text">
+      </span><span class="code-text">syntax</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-75"></span><span class="code-text">
+         </span><span class="code-text">comment</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#7e8eda'</span><span class="code-text">,</span><span id="line-76"></span><span class="code-text">
+         </span><span class="code-text">constant</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#ffdf9b'</span><span class="code-text">,</span><span id="line-77"></span><span class="code-text">
+         </span><span class="code-text">identifier</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#e4f3fa'</span><span class="code-text">,</span><span id="line-78"></span><span class="code-text">
+         </span><span class="code-text">keyword</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#baacff'</span><span class="code-text">,</span><span id="line-79"></span><span class="code-text">
+         </span><span class="code-text">keyword2</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#FF5370'</span><span class="code-text">,</span><span id="line-80"></span><span class="code-text">
+         </span><span class="code-text">number</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#ff9668'</span><span class="code-text">,</span><span id="line-81"></span><span class="code-text">
+         </span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#7af8ca'</span><span class="code-text">,</span><span id="line-82"></span><span class="code-text">
+         </span><span class="code-text">library</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'#82AAFF'</span><span id="line-83"></span><span class="code-text">
+      </span><span class="code-text">}</span><span id="line-84"></span><span class="code-text">
+   </span><span class="code-text">}</span><span id="line-85"></span><span class="code-text">
+</span><span class="code-text">}</span><span id="line-87"></span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><a data-tippy-content href="#line-87" class="code-text">createCSS<span style="display: none;"><code><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span></code></span></a><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-88"></span><span class="code-text">
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><a data-tippy-content href="#line-88" class="code-text">sheet<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">}</span></code></span></a><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-89"></span><span class="code-text">
+      </span><span id="line-105"></span><span class="code-string">[[
+         .tooltip-parent .tooltip {
+            visibility: hidden;
+            text-align: center;
+
+            padding-left: 0.25rem;
+            padding-right: 0.25rem;
+
+            border-radius: 1px;
+            position: absolute;
+            z-index: 1;
+         }
+
+         .tooltip-parent:hover .tooltip {
+            visibility: visible;
+         }
+      ]]</span><span id="line-106"></span><span class="code-text">
+   </span><span class="code-text">}</span><span id="line-108"></span><span class="code-text">
+
+   </span><span class="code-keyword">for</span><span class="code-text"> </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span class="code-text"> </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text"> </span><span class="code-keyword">in</span><span class="code-text"> </span><span class="code-text">pairs</span><span class="code-text">(</span><a data-tippy-content href="#line-39" class="code-text">themes<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Theme</span><span class="code-text">}</span></code></span></a><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">do</span><span id="line-109"></span><span class="code-text">
+      </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><a data-tippy-content href="#line-88" class="code-text">sheet<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">}</span></code></span></a><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">.</span><span class="code-text">format</span><span class="code-text">(</span><span class="code-string">'/* %s theme */'</span><span class="code-text">,</span><span class="code-text"> </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">)</span><span class="code-text">)</span><span id="line-110"></span><span class="code-text">
+      </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span id="line-111"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-88" class="code-text">sheet<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">}</span></code></span></a><span class="code-text">,</span><span id="line-112"></span><span class="code-text">
+         </span><span class="code-text">string</span><span class="code-text">.</span><span class="code-text">format</span><span class="code-text">(</span><span id="line-143"></span><span class="code-string">[[
+            .%s {
+               background-color: %s;
+               color: %s;
+            }
+
+            .%s a {
+               color: %s;
+            }
+
+            .%s nav {
+               background-color: %s;
+            }
+
+            .%s nav a {
+               color: %s;
+            }
+
+            .%s .tippy-box[data-theme~='auto'] {
+               background-color: %s;
+            }
+
+            .%s .tooltip-parent .tooltip {
+               background-color: %s;
+               color: %s;
+            }
+
+            .%s .code-block {
+               background-color: %s;
+               border-color: %s;
+            }
+         ]]</span><span class="code-text">,</span><span id="line-144"></span><span class="code-text">
+         </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span id="line-145"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">background</span><span class="code-text">,</span><span id="line-146"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">text</span><span class="code-text">,</span><span id="line-147"></span><span class="code-text">
+         </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span id="line-148"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">link</span><span class="code-text">,</span><span id="line-149"></span><span class="code-text">
+         </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span id="line-150"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">nav</span><span class="code-text">,</span><span id="line-151"></span><span class="code-text">
+         </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span id="line-152"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">navLink</span><span class="code-text">,</span><span id="line-153"></span><span class="code-text">
+         </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span id="line-154"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">tooltip</span><span class="code-text">,</span><span id="line-155"></span><span class="code-text">
+         </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span id="line-156"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">code</span><span class="code-text">.</span><span class="code-text">border</span><span class="code-text">,</span><span id="line-157"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">code</span><span class="code-text">.</span><span class="code-text">text</span><span class="code-text">,</span><span id="line-158"></span><span class="code-text">
+         </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span id="line-159"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">code</span><span class="code-text">.</span><span class="code-text">background</span><span class="code-text">,</span><span id="line-160"></span><span class="code-text">
+         </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">code</span><span class="code-text">.</span><span class="code-text">border</span><span id="line-161"></span><span class="code-text">
+      </span><span class="code-text">)</span><span class="code-text">)</span><span id="line-163"></span><span class="code-text">
+
+      </span><span class="code-keyword">for</span><span class="code-text"> </span><span data-tippy-content class="code-text">kind<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span class="code-text"> </span><span data-tippy-content class="code-text">style<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text"> </span><span class="code-keyword">in</span><span class="code-text"> </span><span class="code-text">pairs</span><span class="code-text">(</span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">code</span><span class="code-text">.</span><span class="code-text">syntax</span><span class="code-text"> </span><span class="code-keyword">as</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">}</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">do</span><span id="line-164"></span><span class="code-text">
+         </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><a data-tippy-content href="#line-88" class="code-text">sheet<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">}</span></code></span></a><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">.</span><span class="code-text">format</span><span class="code-text">(</span><span class="code-string">'.%s .code-%s { color: %s; }'</span><span class="code-text">,</span><span class="code-text"> </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span class="code-text"> </span><span data-tippy-content class="code-text">kind<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span class="code-text"> </span><span data-tippy-content class="code-text">style<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">)</span><span class="code-text">)</span><span id="line-165"></span><span class="code-text">
+      </span><span class="code-keyword">end</span><span id="line-167"></span><span class="code-text">
+
+      </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><a data-tippy-content href="#line-88" class="code-text">sheet<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">}</span></code></span></a><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">.</span><span class="code-text">format</span><span class="code-text">(</span><span class="code-string">'.%s .code-text { color: %s; }'</span><span class="code-text">,</span><span class="code-text"> </span><span data-tippy-content class="code-text">theme<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">,</span><span class="code-text"> </span><a data-tippy-content href="#line-39" class="code-text">styles<span style="display: none;"><code><span class="code-text">Theme</span></code></span></a><span class="code-text">.</span><span class="code-text">code</span><span class="code-text">.</span><span class="code-text">text</span><span class="code-text">)</span><span class="code-text">)</span><span id="line-168"></span><span class="code-text">
+   </span><span class="code-keyword">end</span><span id="line-170"></span><span class="code-text">
+
+   </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">concat</span><span class="code-text">(</span><a data-tippy-content href="#line-88" class="code-text">sheet<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">}</span></code></span></a><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'\n'</span><span class="code-text">)</span><span id="line-171"></span><span class="code-text">
+</span><span class="code-keyword">end</span><span id="line-173"></span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><a data-tippy-content href="#line-173" class="code-text">isNonText<span style="display: none;"><code><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span></code></span></a><span class="code-text">(</span><span data-tippy-content class="code-text">kind<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span><span id="line-174"></span><span class="code-text">
+   </span><span class="code-keyword">return</span><span class="code-text"> </span><a data-tippy-content href="#line-29" class="code-text">supportedTokens<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span><span class="code-text">}</span></code></span></a><span class="code-text">[</span><span data-tippy-content class="code-text">kind<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">]</span><span id="line-175"></span><span class="code-text">
+</span><span class="code-keyword">end</span><span id="line-177"></span><span class="code-text">
+
+</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-178"></span><span class="code-text">
+   </span><a data-tippy-content href="#line-39" class="code-text">themes<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Theme</span><span class="code-text">}</span></code></span></a><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><a data-tippy-content href="#line-39" class="code-text">themes<span style="display: none;"><code><span class="code-text">{</span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Theme</span><span class="code-text">}</span></code></span></a><span class="code-text">,</span><span id="line-179"></span><span class="code-text">
+   </span><a data-tippy-content href="#line-87" class="code-text">createCSS<span style="display: none;"><code><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span></code></span></a><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><a data-tippy-content href="#line-87" class="code-text">createCSS<span style="display: none;"><code><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span></code></span></a><span class="code-text">,</span><span id="line-180"></span><span class="code-text">
+   </span><span class="code-text">css</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><a data-tippy-content href="#line-87" class="code-text">createCSS<span style="display: none;"><code><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span></code></span></a><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-181"></span><span class="code-comment">-- Generate CSS at load, if a new theme is added, it can manually be regenerated
+</span><span class="code-text">   </span><a data-tippy-content href="#line-173" class="code-text">isNonText<span style="display: none;"><code><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span></code></span></a><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><a data-tippy-content href="#line-173" class="code-text">isNonText<span style="display: none;"><code><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span></code></span></a><span id="line-182"></span><span class="code-text">
+</span><span class="code-text">}</span><span id="line-183"></span><span class="code-text">
+</span>
+      </code></pre>
+      <script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script>
+   tippy('[data-tippy-content]', {
+      allowHTML: true,
+      theme: 'auto',
+      content(reference) {
+         return reference.querySelector('span').innerHTML
+      }
+   });
+</script>
+
+   </body>
+   

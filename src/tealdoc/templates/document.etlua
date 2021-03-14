@@ -20,9 +20,9 @@ end
     <div>
         <%- include('navbar.etlua', { current = current }) %>
 
-        <header class="bg-white shadow">
+        <header class="shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-gray-900">
+                <h1 class="text-3xl font-bold">
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
@@ -134,11 +134,9 @@ end
                             <% end %>
                             <h3 class="text-xl pt-6">Signature</h3>
 
-                            <pre>
-                                <code class="language-<%= project.functionStyle %>">
-<%= humanize(current) or '' %>
-                                </code>
-                            </pre>
+                            <div class="pt-2">
+                                <%- highlight(humanize(current)) %>
+                            </div>
 
                             <% if current.description ~= '' then %>
                                 <h3 class="text-xl pt-6">Description</h3>

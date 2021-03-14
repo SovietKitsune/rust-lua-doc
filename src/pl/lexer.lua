@@ -333,7 +333,8 @@ function lexer.get_keywords ()
             ["if"] = true, ["in"] = true,  ["local"] = true, ["nil"] = true,
             ["not"] = true, ["or"] = true, ["repeat"] = true,
             ["return"] = true, ["then"] = true, ["true"] = true,
-            ["until"] = true,  ["while"] = true
+            ["until"] = true,  ["while"] = true, ["record"] = true,
+            ["is"] = true, ["as"] = true, ["type"] = true
         }
     end
     return lua_keyword

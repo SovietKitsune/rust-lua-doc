@@ -23,7 +23,7 @@ end
 %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="<%= project.theme %>">
 
 <head>
     <meta charset="UTF-8">
@@ -43,9 +43,7 @@ end
         <title><%= trace() %> - Tealdoc</title>
     <% end %>
 
-    <%- include 'prism.etlua' %>
-
     <style>
-        <%- require('tealdoc.highlight').css %>
+        <%- require('tealdoc.theme').css %>
     </style>
 </head>

@@ -1,5 +1,16 @@
 # Changelog
 
+## dev-7
+
+* Introduce dark mode!
+* Update readme
+* Add new keywords to `pl.lexer`
+* Remove the use of prism
+* Fix for Teal's new integer type
+* Cleanup `highlight.tl`
+  * Moved themes to `theme.tl`
+  * Moved tippy configuration to `tippy.tl`
+
 ## dev-6
 
 * Added improved source inspection
@@ -7,7 +18,6 @@
   * (Mostly) server-side highlighting (soon to be completely server-side)
 * Cleanup `tag.tl`
 * Removed `srcdoc.tl`
-* Added tipper.js as a dependency (but not for long)
 * ~~increased document times~~
 
 ## dev-5

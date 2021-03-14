@@ -8,6 +8,7 @@ mkdir out
 # Build
 
 tl run scripts/check.tl $(find ./src/tealdoc/ -type f -name "*.tl")
+tl check $(find ./src/tealdoc/ -type f -name "*.tl")
 cyan build
 
 # Copy

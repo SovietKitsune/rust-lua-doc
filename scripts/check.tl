@@ -27,7 +27,7 @@ local function splitLines(str: string): {string}
    return split
 end
 
-local function buildReport(code: string, str: string, line: number, col: number, stopCol: number): string
+local function buildReport(code: string, str: string, line: integer, col: integer, stopCol: integer): string
    exit = -1
 
    local split = splitLines(code)
@@ -58,12 +58,12 @@ function stages.whitespace(code: string)
       local line = lines[i]
 
       if line:match('^%s+$') then
-         local start, stop = line:match('^()%s+()$')
-         out(buildReport(code, 'Line contains only whitespace', i, tonumber(start), tonumber(stop)))
+         local start, stop = line:match('^()%s+()$') as (integer, integer)
+         out(buildReport(code, 'Line contains only whitespace', i, start, stop))
       elseif line:match('.*%s$') then
-         local start, stop = line:match('.-()%s+()$')
+         local start, stop = line:match('.-()%s+()$') as (integer, integer)
 
-         out(buildReport(code, 'Line contains trailing whitespace', i, tonumber(start), tonumber(stop)))
+         out(buildReport(code, 'Line contains trailing whitespace', i, start, stop))
       end
    end
 end

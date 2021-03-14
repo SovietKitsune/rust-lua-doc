@@ -1,6 +1,6 @@
 # Tealdoc
 
-*Demo can be found at <https://sovietkitsune.github.io/tealdoc/>*
+*Demo can be found at <https://sovietkitsune.github.io/tealdoc>*
 
 The following codeblock is only for demo purposes.
 
@@ -10,8 +10,12 @@ The following codeblock is only for demo purposes.
 local parser = require 'tealdoc.parser'
 
 local x = 5
-local y = 2
+local y = 2.1
 ```
+
+## Minimum Teal version
+
+The minimum Teal version currently is `0.12.0+dev-43bd53c95ddeeecf18b296e9707ace2e80ac1de5`
 
 ## Motivation
 
@@ -50,10 +54,9 @@ All of these are located in `tealdoc/templates`. Everything within `tealdoc/html
 
 * `document.etlua` - A document contains information about a single type
 * `footer.etlua` - The footer used on most pages
-* `main.etlua` - The index page which links to the top-level documents
+* `head.etlua` - The head used on all pages
+* `module.etlua` - The index page which links to the top-level documents
 * `navbar.etlua` - The navbar used on most pages
-* `prism.etlua` - Prism.js configuration
-* `head.etlua` - The head used on 
 
 ### Types
 

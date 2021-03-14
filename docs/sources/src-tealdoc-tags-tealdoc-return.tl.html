@@ -5,33 +5,121 @@
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
       <style>
-         body { background-color: #fafafa; }
          a { text-decoration: none; }
-         .code-comment { color: #a0a1a7; }
-.code-error { color: #e06c75; }
-.code-number { color: #d19a66; }
-.code-keyword { color: #a626a4; }
-.code-identifier { color: #383a42; }
-.code-text { color: #383a42; }
-.code-string { color: #50a14f; }
-.code-constant { color: #e6c07b; }
+                  .tooltip-parent .tooltip {
+            visibility: hidden;
+            text-align: center;
+
+            padding-left: 0.25rem;
+            padding-right: 0.25rem;
+
+            border-radius: 1px;
+            position: absolute;
+            z-index: 1;
+         }
+
+         .tooltip-parent:hover .tooltip {
+            visibility: visible;
+         }
+      
+/* light theme */
+            .light {
+               background-color: nil;
+               color: nil;
+            }
+
+            .light a {
+               color: nil;
+            }
+
+            .light nav {
+               background-color: nil;
+            }
+
+            .light nav a {
+               color: nil;
+            }
+
+            .light .tippy-box[data-theme~='auto'] {
+               background-color: #eeeeee;
+            }
+
+            .light .tooltip-parent .tooltip {
+               background-color: #aaaaaa;
+               color: #383a42;
+            }
+
+            .light .code-block {
+               background-color: #fafafa;
+               border-color: #aaaaaa;
+            }
+         
+.light .code-library { color: #82AAFF; }
+.light .code-identifier { color: #383a42; }
+.light .code-string { color: #50a14f; }
+.light .code-keyword2 { color: #FF5370; }
+.light .code-comment { color: #a0a1a7; }
+.light .code-number { color: #d19a66; }
+.light .code-constant { color: #e6c07b; }
+.light .code-keyword { color: #a626a4; }
+.light .code-text { color: #383a42; }
+/* moonlight theme */
+            .moonlight {
+               background-color: #1e2030;
+               color: #C8D3F5;
+            }
+
+            .moonlight a {
+               color: #7A88CF;
+            }
+
+            .moonlight nav {
+               background-color: #3e4260;
+            }
+
+            .moonlight nav a {
+               color: #C8D3F5;
+            }
+
+            .moonlight .tippy-box[data-theme~='auto'] {
+               background-color: #3e4260;
+            }
+
+            .moonlight .tooltip-parent .tooltip {
+               background-color: #191a2a;
+               color: #e4f3fa;
+            }
+
+            .moonlight .code-block {
+               background-color: #212539;
+               border-color: #191a2a;
+            }
+         
+.moonlight .code-library { color: #82AAFF; }
+.moonlight .code-identifier { color: #e4f3fa; }
+.moonlight .code-string { color: #7af8ca; }
+.moonlight .code-keyword2 { color: #FF5370; }
+.moonlight .code-comment { color: #7e8eda; }
+.moonlight .code-number { color: #ff9668; }
+.moonlight .code-constant { color: #ffdf9b; }
+.moonlight .code-keyword { color: #baacff; }
+.moonlight .code-text { color: #e4f3fa; }
       </style>
    </head>
-   <body>
-      <pre><code>
-<span class="code-keyword">local</span><span class="code-text"> </span><a data-tippy-content="record" href="./sources/src-tealdoc-tag.tl.html" class="code-text">rules</a><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.tag'</span><span class="code-text">)</span><span class="code-text">.</span><a data-tippy-content="record" href="./sources/src-tealdoc-tag.tl.html" class="code-text">rules</a><span id="line-2"></span><span class="code-text">
-</span><span class="code-keyword">local</span><span class="code-text"> </span><a data-tippy-content="record" href="./sources/src-tealdoc-parser.tl.html" class="code-text">parser</a><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.parser'</span><span class="code-text">)</span><span id="line-4"></span><span class="code-text">
+   <body class="moonlight">
+      <pre class="code-block"><code>
+<span class="code-keyword">local</span><span class="code-text"> </span><a data-tippy-content href="../sources/src-tealdoc-tag.tl.html" class="code-text">rules<span style="display: none;"><code><span class="code-keyword">record</span></code></span></a><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.tag'</span><span class="code-text">)</span><span class="code-text">.</span><a data-tippy-content href="../sources/src-tealdoc-tag.tl.html" class="code-text">rules<span style="display: none;"><code><span class="code-keyword">record</span></code></span></a><span id="line-2"></span><span class="code-text">
+</span><span class="code-keyword">local</span><span class="code-text"> </span><a data-tippy-content href="../sources/src-tealdoc-parser.tl.html" class="code-text">parser<span style="display: none;"><code><span class="code-keyword">record</span></code></span></a><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.parser'</span><span class="code-text">)</span><span id="line-4"></span><span class="code-text">
 
 </span><span id="line-5"></span><span class="code-comment">--- @{hidden}
 </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-6"></span><span class="code-text">
    </span><span class="code-text">selector</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'@{return (%a[%w_]*)}'</span><span class="code-text">,</span><span id="line-7"></span><span class="code-text">
-   </span><span class="code-text">allowed</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><a data-tippy-content="record" href="./sources/src-tealdoc-tag.tl.html" class="code-text">rules</a><span class="code-text">.</span><span class="code-text">kind</span><span class="code-text">(</span><span class="code-string">'function'</span><span class="code-text">)</span><span class="code-text">,</span><span id="line-8"></span><span class="code-text">
-   </span><span class="code-text">fn</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><a data-tippy-content="parser.Type" href="#line-8" class="code-text">typ</a><span class="code-text">:</span><span class="code-text"> </span><a data-tippy-content="record" href="./sources/src-tealdoc-parser.tl.html" class="code-text">parser</a><span class="code-text">.</span><span class="code-text">Type</span><span class="code-text">,</span><span class="code-text"> </span><span data-tippy-content="string" class="code-text">retType</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span id="line-9"></span><span class="code-text">
-      </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">(</span><a data-tippy-content="parser.Type" href="#line-8" class="code-text">typ</a><span class="code-text">.</span><span class="code-text">func</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><a data-tippy-content="record" href="./sources/src-tealdoc-parser.tl.html" class="code-text">parser</a><span class="code-text">.</span><span class="code-text">Function</span><span class="code-text">)</span><span class="code-text">.</span><span class="code-text">returns</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-10"></span><span class="code-text">
+   </span><span class="code-text">allowed</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><a data-tippy-content href="../sources/src-tealdoc-tag.tl.html" class="code-text">rules<span style="display: none;"><code><span class="code-keyword">record</span></code></span></a><span class="code-text">.</span><span class="code-text">kind</span><span class="code-text">(</span><span class="code-string">'function'</span><span class="code-text">)</span><span class="code-text">,</span><span id="line-8"></span><span class="code-text">
+   </span><span class="code-text">fn</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><a data-tippy-content href="#line-8" class="code-text">typ<span style="display: none;"><code><span class="code-text">parser</span><span class="code-text">.</span><span class="code-text">Type</span></code></span></a><span class="code-text">:</span><span class="code-text"> </span><a data-tippy-content href="../sources/src-tealdoc-parser.tl.html" class="code-text">parser<span style="display: none;"><code><span class="code-keyword">record</span></code></span></a><span class="code-text">.</span><span class="code-text">Type</span><span class="code-text">,</span><span class="code-text"> </span><span data-tippy-content class="code-text">retType<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span id="line-9"></span><span class="code-text">
+      </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">(</span><a data-tippy-content href="#line-8" class="code-text">typ<span style="display: none;"><code><span class="code-text">parser</span><span class="code-text">.</span><span class="code-text">Type</span></code></span></a><span class="code-text">.</span><span class="code-text">func</span><span class="code-text"> </span><span class="code-keyword">as</span><span class="code-text"> </span><a data-tippy-content href="../sources/src-tealdoc-parser.tl.html" class="code-text">parser<span style="display: none;"><code><span class="code-keyword">record</span></code></span></a><span class="code-text">.</span><span class="code-text">Function</span><span class="code-text">)</span><span class="code-text">.</span><span class="code-text">returns</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-10"></span><span class="code-text">
          </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'named'</span><span class="code-text">,</span><span id="line-11"></span><span class="code-text">
-         </span><span class="code-text">customName</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span data-tippy-content="string" class="code-text">retType</span><span id="line-12"></span><span class="code-text">
+         </span><span class="code-text">customName</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span data-tippy-content class="code-text">retType<span style="display: none;"><code><span class="code-text">string</span></code></span></span><span id="line-12"></span><span class="code-text">
       </span><span class="code-text">}</span><span class="code-text">)</span><span id="line-13"></span><span class="code-text">
    </span><span class="code-keyword">end</span><span class="code-text">,</span><span id="line-14"></span><span class="code-text">
    </span><span class="code-text">err</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'Returns can only exist on functions!'</span><span id="line-15"></span><span class="code-text">
@@ -39,9 +127,16 @@
 </span>
       </code></pre>
       <script src="https://unpkg.com/@popperjs/core@2"></script>
-      <script src="https://unpkg.com/tippy.js@6"></script>
-      <script>
-         tippy('[data-tippy-content]');
-      </script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script>
+   tippy('[data-tippy-content]', {
+      allowHTML: true,
+      theme: 'auto',
+      content(reference) {
+         return reference.querySelector('span').innerHTML
+      }
+   });
+</script>
+
    </body>
    

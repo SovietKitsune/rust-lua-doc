@@ -22,6 +22,7 @@ local record Type
       'nil'
       'boolean'
       'number'
+      'integer'
       'string'
       'userdata'
       'thread'
@@ -62,9 +63,9 @@ local record Type
    --- If the type is hidden or not
    hidden: boolean
    --- The Y position of a type
-   yPos: number | nil
+   yPos: integer | nil
    --- The stopping point of a type
-   stopY: number | nil
+   stopY: integer | nil
    --- The source of where the type was found
    source: string | nil
    --- Exists on function types
@@ -92,9 +93,9 @@ end
 
 -- Token isn't exposed
 local record Token
-   x: number
-   y: number
-   i: number
+   x: integer
+   y: integer
+   i: integer
    tk: string
    kind: string
 end
@@ -103,8 +104,8 @@ end
 local record Node
    {Node}
 
-   y: number
-   x: number
+   y: integer
+   x: integer
    tk: string
    kind: string
 end
@@ -204,8 +205,8 @@ local function getReport(modules: {string: string}, virtual: boolean, isLua: boo
 end
 
 --- Extract all the indexes of generated modules
-local function extractModules(state: State, mods: {string: string}): {string: number}
-   local collected: {string: number} = {}
+local function extractModules(state: State, mods: {string: string}): {string: integer}
+   local collected: {string: integer} = {}
 
    local pos = state.report.globals.toLoad
 
@@ -218,7 +219,7 @@ local function extractModules(state: State, mods: {string: string}): {string: nu
    return collected
 end
 
-local function getDescription(contents: string, y: number): string
+local function getDescription(contents: string, y: integer): string
    local split = {}
 
    do
@@ -266,7 +267,7 @@ local function getDescription(contents: string, y: number): string
    return table.concat(reversed, '\n')
 end
 
-local function getTokensAtLine(tokens: {Token}, y: number, x: number): {Token}, {Token}
+local function getTokensAtLine(tokens: {Token}, y: integer, x: integer): {Token}, {Token}
    --; TODO, use a binary search
    local started = false
    local tokensAtSig = {}
@@ -288,7 +289,7 @@ local function getTokensAtLine(tokens: {Token}, y: number, x: number): {Token}, 
    return tokensAtSig, before
 end
 
-local function getTokensBetween(tokens: {Token}, y1: number, y2: number, x1: number, x2: number): {Token}
+local function getTokensBetween(tokens: {Token}, y1: integer, y2: integer, x1: integer, x2: integer): {Token}
    --; TODO, use a binary search
    local started = false
    local tokensBetween = {}
@@ -312,7 +313,7 @@ local function getTokensBetween(tokens: {Token}, y1: number, y2: number, x1: num
    return tokensBetween
 end
 
-local function getStop(tokens: {Token}, y: number, x: number, allowFunction: boolean): Token, number
+local function getStop(tokens: {Token}, y: integer, x: integer, allowFunction: boolean): Token, integer
    local canStart = false
    local started = false
 
@@ -352,7 +353,7 @@ local function getStop(tokens: {Token}, y: number, x: number, allowFunction: boo
    end
 end
 
-local function parseKind(toParse: Node, lines: {string: number})
+local function parseKind(toParse: Node, lines: {string: integer})
    if toParse.kind == 'expression_list' then
       for i = 1, #toParse do
          parseKind(toParse[i], lines)
@@ -368,7 +369,7 @@ local function parseKind(toParse: Node, lines: {string: number})
    end
 end
 
-local function recursiveFind(node: Node, x: number, y: number, visited: {Node: boolean}, depth: number): node, string
+local function recursiveFind(node: Node, x: integer, y: integer, visited: {Node: boolean}, depth: integer): node, string
    visited = visited or {}
    depth = depth or 0
 
@@ -404,15 +405,16 @@ local function recursiveFind(node: Node, x: number, y: number, visited: {Node: b
 end
 
 --- Create a (parsable) type from an index and a report
-local function createType(index: number, report: State, noNominal: boolean): Type
+local function createType(index: integer, report: State, noNominal: boolean): Type
    local tp = report.report.types[index]
 
    local codes = tl.typecodes
 
-   local conversions: {number: Type.kind} = {
+   local conversions: {integer: Type.kind} = {
       [codes.NIL] = 'nil',
       [codes.BOOLEAN] = 'boolean',
       [codes.NUMBER] = 'number',
+      [codes.INTEGER] = 'integer',
       [codes.STRING] = 'string',
       [codes.USERDATA] = 'userdata',
       [codes.THREAD] = 'thread',
@@ -522,9 +524,9 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
          if before[#before].kind == 'identifier' and before[#before - 1] and before[#before - 1].tk == 'record' then
             name = before[#before].tk
             -- Correct the X position to include `record`
-            tp.x = before[#before - 1].x
+            tp.x = before[#before - 1].x as integer
             -- Same with the Y
-            tp.y = before[#before - 1].y
+            tp.y = before[#before - 1].y as integer
 
             lastSig = tokensAtSig[1]
          end
@@ -591,10 +593,11 @@ local function createType(index: number, report: State, noNominal: boolean): Typ
                         } as Function
                      }
                   else
-
                      local found = false
 
                      local outField = out.struct.fields[fieldToken.tk]
+
+                     assert(outField, 'The parser seems to have parsed the wrong fields. Collected field name: ' .. fieldToken.tk)
 
                      outField.description = getDescription(report.files[tp.file], fieldToken.y)
 

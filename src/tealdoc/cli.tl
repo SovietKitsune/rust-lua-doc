@@ -19,6 +19,7 @@ local record Project
    sources: {string: string}
    functionStyle: string
    output: string
+   theme: string
 end
 
 --- The user-provided configuration
@@ -33,6 +34,11 @@ local record Config
       'ldoc'
       'tealdoc'
       'none'
+   end
+   --- @{hidden}
+   enum Theme
+      'moonlight'
+      'light'
    end
    --- The name of the project, if not provided this will be taken from a rockspec
    name: string
@@ -100,6 +106,18 @@ local record Config
    tagStyle: TagStyle
    --- The directories where extra tags are located
    tags: {string}
+   --- The theme to use, the theme can be changed on the client side as all styles are loaded
+   ---
+   ---The theme defaults to `light`.
+   ---
+   --- `light`:
+   ---
+   --- This is like one-light but with some changed elements
+   ---
+   --- `moonlight`
+   ---
+   --- This is the "dark" theme inspired by <https://github.com/atomiks/moonlight-vscode-theme>
+   theme: Theme
 end
 
 local record ConfigRockspec
@@ -311,6 +329,7 @@ local function main()
    config.tagStyle = config.tagStyle or 'tealdoc'
 
    project.output = config.output
+   project.theme = config.theme or 'moonlight'
 
    if not config.output then
       lfs.mkdir(config.output)
@@ -363,7 +382,7 @@ local function main()
       return {'<a href="', uri, '" class="text-blue-500" ', titleAtt, '>', label, '</a>'}
    end
 
-   writer.header = function(str: string, level: number): {string}
+   writer.header = function(str: string, level: integer): {string}
       local textMaps = {
          '3xl',
          '2xl',
@@ -408,16 +427,15 @@ local function main()
             root = './' .. string.rep('../', currentSlashes)
          end
 
-         logger.debug(currentSource)
-
          local tokens = highlight.parse(tmp, modSearch)
-         local contents = highlight.fullDocument(tokens, tmp, true, root)
 
-         return {'<pre><code>', contents, '</code></pre>'}
-      elseif language ~= '' then
-         return {'<pre><code class="language-', language:match('[^ ]*'), '">', code, '</code></pre>'}
+         local contents = highlight.fullDocument(tokens, tmp, project.theme, true, root)
+
+         return {'<pre class="code-block"><code>', contents, '</code></pre>'}
+      elseif language == 'lua' then
+         return {highlight.fastHighlight(code)}
       else
-         return {'<pre><code>', code, '</code></pre>'}
+         return {'<pre class="code-block"><code>', code, '</code></pre>'}
       end
    end
 
@@ -477,7 +495,8 @@ local function main()
             current = tp,
             include = include,
             humanize = humanize,
-            markdown = markdown
+            markdown = markdown,
+            highlight = highlight.fastHighlight
          }))
 
          for i, v in pairs(tp.struct.fields) do
@@ -495,7 +514,8 @@ local function main()
             current = tp,
             humanize = humanize,
             markdown = markdown,
-            include = include
+            include = include,
+            highlight = highlight.fastHighlight
          }))
       end
 
@@ -537,7 +557,7 @@ local function main()
    for i in pairs(project.sources) do
       local tokens = highlight.parse(i, modSearch)
 
-      local contents = highlight.fullDocument(tokens, i)
+      local contents = highlight.fullDocument(tokens, i, project.theme)
 
       write(config.output .. '/sources/' .. i:gsub('/', '-') .. '.html', contents)
 

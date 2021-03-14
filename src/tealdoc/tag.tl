@@ -61,7 +61,7 @@ function rules.any(...: ruleReturn): ruleReturn
    local anyRule = {...}
 
    return function(typ: parser.Type): boolean
-      for i = 1, anyRule do
+      for i = 1, #anyRule do
          if anyRule[i](typ) then
             return true
          end
