@@ -60,7 +60,7 @@ else
     sections = {}
 end
 
-local parent = genSections(current.parent and current.parent.struct.fields or project.modules)
+local parent = genSections(current.parent and current.parent.struct.fields or project.modules or {})
 %>
 <nav class="h-full table-cell fixed w-52 bg-gray-100">
     <% --[[; TODO a logo would be good here ]] %>

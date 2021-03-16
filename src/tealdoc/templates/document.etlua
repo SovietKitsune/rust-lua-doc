@@ -99,13 +99,14 @@ end
 
                         <% for i, v in pairs(properties) do %>
                             <h4 class="text-lg pt-2">
-                                <% if v.kind == 'custom' then %>
-                                    <% build((current.name or data.name) .. '-' .. i, v) %>
-                                    <a href="./<%= current.name or data.name %>-<%= i %>.html" class="text-blue-500"><%= i %></a>
-                                <% else %>
-                                    <%= i %>
-                                <% end %>
-                                : <%- humanize(v, true) %>
+                                <%= i %> : <%- humanize(v, true) %>
+                                <%
+                                --[[; TODO
+                                    generate documents for undocumented properties
+
+                                    The teal module is a bit module as it gets flagged as a record so its properties don't get generated 
+                                ]]
+                                %>
                             </h4>
                             <div>
                                 <%- markdown(v.description) %>

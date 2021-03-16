@@ -414,7 +414,6 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
       [codes.NIL] = 'nil',
       [codes.BOOLEAN] = 'boolean',
       [codes.NUMBER] = 'number',
-      [codes.INTEGER] = 'integer',
       [codes.STRING] = 'string',
       [codes.USERDATA] = 'userdata',
       [codes.THREAD] = 'thread',
@@ -422,6 +421,10 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
       [codes.ANY] = 'any',
       [codes.UNKNOWN] = 'unknown'
    }
+
+   if codes.INTEGER then
+      conversions[codes.INTEGER] = 'integer'
+   end
 
    local out: Type
 
@@ -654,12 +657,11 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
          logger.error(string.format(
             'Parsing error with field comments!\n' ..
             '  Error: %s\n' ..
-            '  Report this to https://github.com/SovietKitsune/tealdoc/issues\n\n%s',
+            '  Report this to https://github.com/SovietKitsune/tealdoc/issues\n' ..
+            '  Recovering... (Field descriptions might not exist)\n\n%s',
             err,
             debug.traceback()
          ))
-
-         os.exit(-1)
       end)
    elseif tp.t == codes.MAP then
       out = {

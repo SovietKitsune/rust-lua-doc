@@ -1,7 +1,5 @@
 # Tealdoc
 
-*Demo can be found at <https://sovietkitsune.github.io/tealdoc>*
-
 The following codeblock is only for demo purposes.
 
 ```teal
@@ -16,6 +14,12 @@ local y = 2.1
 ## Minimum Teal version
 
 The minimum Teal version currently is `0.12.0+dev-43bd53c95ddeeecf18b296e9707ace2e80ac1de5`
+
+## Demo
+
+* examples/math - <https://sovietkitsune.github.io/tealdoc/math>
+* self-hosted - <https://sovietkitsune.github.io/tealdoc/tealdoc>
+* tl - <https://sovietkitsune.github.io/tealdoc/tl>
 
 ## Motivation
 

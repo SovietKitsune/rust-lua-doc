@@ -118,6 +118,10 @@ local record Config
    ---
    --- This is the "dark" theme inspired by <https://github.com/atomiks/moonlight-vscode-theme>
    theme: Theme
+   --- **Only for singular module projects**
+   ---
+   --- If the type should be flagged as a module forcefully
+   forceRootModule: boolean
 end
 
 local record ConfigRockspec
@@ -471,7 +475,7 @@ local function main()
    local module = assert(etlua.compile(read(scriptDir .. 'templates/module.etlua')))
    local document = assert(etlua.compile(read(scriptDir .. 'templates/document.etlua')))
 
-   local function genDocument(name: string, tp: parser.Type)
+   local function genDocument(name: string, tp: parser.Type, save: string)
       local location: string
 
       -- I feel like this will lead to recursion
@@ -482,7 +486,7 @@ local function main()
       currentSource = tp.tree
 
       if tp.kind == 'custom' and not tp.struct.isRecord then
-         tp.tree = tp.tree .. '/' .. name
+         tp.tree = tp.tree .. '/' .. (save and save or name)
 
          currentSource = tp.tree
 
@@ -507,7 +511,7 @@ local function main()
          end
       else
          -- Non-modules get a document
-         location = config.output .. tp.tree .. '/' .. name .. '.html'
+         location = config.output .. tp.tree .. '/' .. (save and save or name) .. '.html'
 
          write(location, document({
             project = project,
@@ -529,20 +533,48 @@ local function main()
       [project.name] = project.module as parser.Type
    }, tags)
 
-   write(config.output .. '/index.html', module({
-      current = project,
-      project = project,
-      include = include,
-      humanize = humanize,
-      markdown = markdown
-   }))
-
-   logger.info('Generated ' .. config.output .. '/index.html')
-
    if project.module then
-      assert(not (project.module as parser.Type).hidden, 'Hiding the entire project sounds a bit stupid doesn\'t it?')
-      genDocument(project.name, project.module as parser.Type)
+      logger.info('Single module project detected!')
+
+      write(config.output .. '/index.html', module({
+         current = project.module,
+         project = project,
+         include = include,
+         humanize = humanize,
+         markdown = markdown
+      }))
+
+      logger.info('Generated ' .. config.output .. '/index.html')
+
+      local mod = (project.module as parser.Type)
+
+      assert(not mod.hidden, 'Hiding the entire project sounds a bit stupid doesn\'t it?')
+
+      if config.forceRootModule then
+         mod.struct.isRecord = false
+      end
+
+      if mod.struct.isRecord then
+         genDocument(project.name, project.module as parser.Type, 'index')
+      else
+         for i, v in pairs(mod.struct.fields) do
+            -- Generate children
+            if not v.hidden then
+               genDocument(i, v)
+            end
+         end
+      end
    else
+      write(config.output .. '/index.html', module({
+         current = project,
+         project = project,
+         include = include,
+         humanize = humanize,
+         markdown = markdown
+      }))
+
+      logger.info('Generated ' .. config.output .. '/index.html')
+
       for i, v in pairs((project.modules as {string: parser.Type})) do
          if not v.hidden then
             genDocument(i, v)

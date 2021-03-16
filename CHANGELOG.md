@@ -1,5 +1,11 @@
 # Changelog
 
+## dev-9
+
+* Fixed issues with single-module/file projects/rocks
+* Generate math example and generate tl compiler docs
+* Added `forceRootModule` option for single-module/file projects/rocks
+
 ## dev-8
 
 * Changed layout
