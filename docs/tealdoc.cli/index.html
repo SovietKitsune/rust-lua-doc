@@ -1,7 +1,8 @@
 
 
+
 <!DOCTYPE html>
-<html lang="en" class="moonlight">
+<html lang="en" class="nordic">
 
 <head>
     <meta charset="UTF-8">
@@ -34,10 +35,69 @@
             visibility: visible;
          }
       
+/* moonlight theme */
+            .moonlight {
+               background-color: #1e2030;
+               color: #C8D3F5;
+            }
+
+            .moonlight .border-black {
+               border-color: #C8D3F5;
+            }
+
+            .moonlight .top-border {
+               background-color: #363a54;
+               border-color: #00000000;
+            }
+
+            .moonlight a {
+               color: #7A88CF;
+            }
+
+            .moonlight nav {
+               background-color: #3e4260;
+            }
+
+            .moonlight nav a {
+               color: #C8D3F5;
+            }
+
+            .moonlight .tippy-box[data-theme~='auto'] {
+               background-color: #3e4260;
+            }
+
+            .moonlight .tooltip-parent .tooltip {
+               background-color: #191a2a;
+               color: #e4f3fa;
+            }
+
+            .moonlight .code-block {
+               background-color: #1e2030;
+               border-color: #191a2a;
+            }
+         
+.moonlight .code-library { color: #82AAFF; }
+.moonlight .code-keyword { color: #baacff; }
+.moonlight .code-constant { color: #ffdf9b; }
+.moonlight .code-comment { color: #7e8eda; }
+.moonlight .code-number { color: #ff9668; }
+.moonlight .code-keyword2 { color: #FF5370; }
+.moonlight .code-string { color: #7af8ca; }
+.moonlight .code-identifier { color: #e4f3fa; }
+.moonlight .code-text { color: #e4f3fa; }
 /* light theme */
             .light {
                background-color: nil;
                color: nil;
+            }
+
+            .light .border-black {
+               border-color: nil;
+            }
+
+            .light .top-border {
+               background-color: nil;
+               border-color: nil;
             }
 
             .light a {
@@ -67,141 +127,275 @@
             }
          
 .light .code-library { color: #82AAFF; }
-.light .code-identifier { color: #383a42; }
-.light .code-string { color: #50a14f; }
-.light .code-keyword2 { color: #FF5370; }
+.light .code-keyword { color: #a626a4; }
+.light .code-constant { color: #e6c07b; }
 .light .code-comment { color: #a0a1a7; }
 .light .code-number { color: #d19a66; }
-.light .code-constant { color: #e6c07b; }
-.light .code-keyword { color: #a626a4; }
+.light .code-keyword2 { color: #FF5370; }
+.light .code-string { color: #50a14f; }
+.light .code-identifier { color: #383a42; }
 .light .code-text { color: #383a42; }
-/* moonlight theme */
-            .moonlight {
-               background-color: #1e2030;
-               color: #C8D3F5;
+/* nordic theme */
+            .nordic {
+               background-color: #2e3440;
+               color: #eceff4;
             }
 
-            .moonlight a {
-               color: #7A88CF;
+            .nordic .border-black {
+               border-color: #eceff4;
             }
 
-            .moonlight nav {
-               background-color: #3e4260;
+            .nordic .top-border {
+               background-color: #20252d;
+               border-color: #00000000;
             }
 
-            .moonlight nav a {
-               color: #C8D3F5;
+            .nordic a {
+               color: #81a1c1;
             }
 
-            .moonlight .tippy-box[data-theme~='auto'] {
-               background-color: #3e4260;
+            .nordic nav {
+               background-color: #242933;
             }
 
-            .moonlight .tooltip-parent .tooltip {
-               background-color: #191a2a;
-               color: #e4f3fa;
+            .nordic nav a {
+               color: #eceff4;
             }
 
-            .moonlight .code-block {
-               background-color: #212539;
-               border-color: #191a2a;
+            .nordic .tippy-box[data-theme~='auto'] {
+               background-color: #2f3542;
+            }
+
+            .nordic .tooltip-parent .tooltip {
+               background-color: #20252d;
+               color: #eceff4;
+            }
+
+            .nordic .code-block {
+               background-color: #2a2f3a;
+               border-color: #20252d;
             }
          
-.moonlight .code-library { color: #82AAFF; }
-.moonlight .code-identifier { color: #e4f3fa; }
-.moonlight .code-string { color: #7af8ca; }
-.moonlight .code-keyword2 { color: #FF5370; }
-.moonlight .code-comment { color: #7e8eda; }
-.moonlight .code-number { color: #ff9668; }
-.moonlight .code-constant { color: #ffdf9b; }
-.moonlight .code-keyword { color: #baacff; }
-.moonlight .code-text { color: #e4f3fa; }
+.nordic .code-library { color: #81a1c1; }
+.nordic .code-keyword { color: #5e81ac; }
+.nordic .code-constant { color: #8fbcbb; }
+.nordic .code-comment { color: #4c566a; }
+.nordic .code-number { color: #ebcb8b; }
+.nordic .code-keyword2 { color: #5e81ac; }
+.nordic .code-string { color: #a3be8c; }
+.nordic .code-identifier { color: #eceff4; }
+.nordic .code-text { color: #eceff4; }
     </style>
+
+    <noscript>
+        <style>
+            .scripted {
+                display: none;
+            }
+        </style>
+    </noscript>
 </head>
 
 
 <body>
+    <div class="table w-full">
+        
+<nav class="h-full table-cell fixed w-52 bg-gray-100">
     
-
-<nav class="bg-blue-600">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-12">
-            <div class="flex items-center">
-                <div class="block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a
-                            href="./../index.html"
-                            class="text-white text-lg font-medium"
-                        >
-                            tealdoc-dev-1
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex items-center">
-                <div class="block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="index.html" class="text-white text-lg font-medium">Module Index</a>
-                    </div>
-                </div>
-            </div>
+    <section class="mx-4 pt-4">
+        <div class="text-center">
+            <a href="./../">Index</a>
         </div>
-    </div>
+
+        <h1 class="text-lg text-center border border-black top-border">Module tealdoc.cli</h1>
+
+        <br class="pb-1">
+
+        
+            
+                
+                
+            
+                
+                
+                    <a class="text-base px-2" href="#Records">Records</a>
+                    <br class="my-1">
+                
+            
+                
+                
+            
+                
+                
+                    <a class="text-base px-2" href="#Functions">Functions</a>
+                    <br class="my-1">
+                
+            
+                
+                
+            
+
+            
+
+            
+
+            
+                
+
+                
+                    
+                        <h3 class="text-lg text-center border-t border-b border-black">tealdoc</h1>
+                        <br class="md-1">
+                        
+                    
+                    
+                    <h2 class="text-xl">Modules</h2>
+                    <hr>
+
+                    
+                        <a href="../tealdoc.highlight/index.html" class="text-base px-2 false">tealdoc.highlight</a>
+                        <br class="my-1">
+                    
+                        <a href="../tealdoc.logger/index.html" class="text-base px-2 false">tealdoc.logger</a>
+                        <br class="my-1">
+                    
+                        <a href="../tealdoc.theme/index.html" class="text-base px-2 false">tealdoc.theme</a>
+                        <br class="my-1">
+                    
+                        <a href="../tealdoc.cli/index.html" class="text-base px-2 text-blue-500">tealdoc.cli</a>
+                        <br class="my-1">
+                    
+                        <a href="../tealdoc.tag/index.html" class="text-base px-2 false">tealdoc.tag</a>
+                        <br class="my-1">
+                    
+                        <a href="../tealdoc.parser/index.html" class="text-base px-2 false">tealdoc.parser</a>
+                        <br class="my-1">
+                    
+                        <a href="../tealdoc.misc/index.html" class="text-base px-2 false">tealdoc.misc</a>
+                        <br class="my-1">
+                    
+                
+            
+                
+
+                
+            
+                
+
+                
+            
+                
+
+                
+                    
+                    
+                    <h2 class="text-xl">Functions</h2>
+                    <hr>
+
+                    
+                        <a href="../tealdoc.humanize.html" class="text-base px-2 false">tealdoc.humanize</a>
+                        <br class="my-1">
+                    
+                
+            
+                
+
+                
+                    
+                    
+                    <h2 class="text-xl">Variables</h2>
+                    <hr>
+
+                    
+                        <a href="../tealdoc.tippy.html" class="text-base px-2 false">tealdoc.tippy</a>
+                        <br class="my-1">
+                    
+                
+            
+        
+    </section>
 </nav>
 
-
-    <main>
-        <div class="max-w-7xl mx-auto py-6 px-8">
-            
-
-            The main function of the documentation generator as well as the project config
-
-            
-
-            
-                <h3 class="text-xl pt-6">Records</h3>
-                <hr>
-
-                <div class="grid grid-cols-3 gap-2">
+        <main class="table-cell">
+            <div class="max-w-6xl mx-auto py-6 px-8">
+                <header class="grid grid-cols-2">
+                    <span class="text-2xl">Module tealdoc.cli</span>
                     
-                        <div>
-                            <a href="./Config.html" class="text-blue-500">Config</a>
-                        </div>
-                        <div class="col-span-2">
-                            
-                        </div>
+                        <a class="text-2xl text-right" href="./../sources/src-tealdoc-cli.tl.html#line-569">[src]</a>
                     
-                        <div>
-                            <a href="./Project.html" class="text-blue-500">Project</a>
-                        </div>
-                        <div class="col-span-2">
-                            
-                        </div>
-                    
-                </div>
-            
-                <h3 class="text-xl pt-6">Functions</h3>
-                <hr>
+                </header>
 
-                <div class="grid grid-cols-3 gap-2">
-                    
-                        <div>
-                            <a href="./main.html" class="text-blue-500">main</a>
-                        </div>
-                        <div class="col-span-2">
-                            
-                        </div>
-                    
-                </div>
-            
-        </div>
-    </main>
+                <hr class="pb-5">
 
-    <footer class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    Generated by <a href="https://github.com/SovietKitsune/tealdoc">TealDoc</a> on 2021-03-13 22:44:14
-</footer>
+                
 
-<script src="https://unpkg.com/@popperjs/core@2"></script>
+                The main function of the documentation generator as well as the project config
+
+                
+
+                
+                    
+
+                    
+                
+                    
+
+                    
+                        <h3 class="text-xl pt-6" id="Records">Records</h3>
+                        <hr class="py-2">
+
+                        
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <a href="./Config.html" class="text-blue-500">Config</a>
+                                </div>
+                                <div class="col-span-2">
+                                    
+                                </div>
+                            </div>
+                        
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <a href="./Project.html" class="text-blue-500">Project</a>
+                                </div>
+                                <div class="col-span-2">
+                                    
+                                </div>
+                            </div>
+                        
+                    
+                
+                    
+
+                    
+                
+                    
+
+                    
+                        <h3 class="text-xl pt-6" id="Functions">Functions</h3>
+                        <hr class="py-2">
+
+                        
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <a href="./main.html" class="text-blue-500">main</a>
+                                </div>
+                                <div class="col-span-2">
+                                    
+                                </div>
+                            </div>
+                        
+                    
+                
+                    
+
+                    
+                
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>
 <script>
    tippy('[data-tippy-content]', {
@@ -212,6 +406,5 @@
       }
    });
 </script>
-
 
 </body>

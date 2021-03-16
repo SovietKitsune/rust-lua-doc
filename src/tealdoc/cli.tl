@@ -392,7 +392,7 @@ local function main()
          'base'
       }
 
-      return {'<h', tostring(level), ' class="text-', textMaps[level], '">', str, '</h', tostring(level), '>'}
+      return {'<h', tostring(level), ' class="text-', textMaps[level], ' pt-2">', str, '</h', tostring(level), '>'}
    end
 
    -- We don't want anything else
@@ -460,7 +460,7 @@ local function main()
          return include(f, b)
       end
 
-      cache[filename] = cache[filename] or etlua.compile(read(scriptDir .. 'templates/' .. filename))
+      cache[filename] = cache[filename] or assert(etlua.compile(read(scriptDir .. 'templates/' .. filename)))
 
       return cache[filename](base)
    end

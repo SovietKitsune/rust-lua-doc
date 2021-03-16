@@ -1,26 +1,13 @@
+   <!DOCTYPE html>
+   <html lang="en">
 
-
-
-
-<!DOCTYPE html>
-<html lang="en" class="nordic">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
-    
-        <meta property="og:title" content="tealdoc.tag.rules.parentMustBe - Tealdoc">
-        <meta property="og:description" content="API documentation for the parentMustBe function in rock `tealdoc`">
-
-        <title>tealdoc.tag.rules.parentMustBe - Tealdoc</title>
-    
-
-    <style>
-                 .tooltip-parent .tooltip {
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+         a { text-decoration: none; }
+                  .tooltip-parent .tooltip {
             visibility: hidden;
             text-align: center;
 
@@ -186,132 +173,34 @@
 .nordic .code-string { color: #a3be8c; }
 .nordic .code-identifier { color: #eceff4; }
 .nordic .code-text { color: #eceff4; }
-    </style>
+      </style>
+   </head>
+   <body class="nordic">
+      <pre class="code-block"><code>
+<span id="line-2"></span><span class="code-comment">--- Things used in templates that are not large enough for their own file
+</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-3"></span><span class="code-text">
+   </span><span id="line-4"></span><span class="code-comment">--- The order in which module contents are sorted
+</span><span class="code-text">   </span><span class="code-text">order</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-5"></span><span class="code-text">
+      </span><span class="code-string">'Modules'</span><span class="code-text">,</span><span id="line-6"></span><span class="code-text">
+      </span><span class="code-string">'Records'</span><span class="code-text">,</span><span id="line-7"></span><span class="code-text">
+      </span><span class="code-string">'Enums'</span><span class="code-text">,</span><span id="line-8"></span><span class="code-text">
+      </span><span class="code-string">'Functions'</span><span class="code-text">,</span><span id="line-9"></span><span class="code-text">
+      </span><span class="code-string">'Variables'</span><span id="line-10"></span><span class="code-text">
+   </span><span class="code-text">}</span><span id="line-11"></span><span class="code-text">
+</span><span class="code-text">}</span><span id="line-12"></span><span class="code-text">
+</span>
+      </code></pre>
+      <script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script>
+   tippy('[data-tippy-content]', {
+      allowHTML: true,
+      theme: 'auto',
+      content(reference) {
+         return reference.querySelector('span').innerHTML
+      }
+   });
+</script>
 
-    <noscript>
-        <style>
-            .scripted {
-                display: none;
-            }
-        </style>
-    </noscript>
-</head>
-
-
-<body>
-    <div class="table w-full">
-        
-<nav class="h-full table-cell fixed w-52 bg-gray-100">
-    
-    <section class="mx-4 pt-4">
-        <div class="text-center">
-            <a href="./../../">Index</a>
-        </div>
-
-        <h1 class="text-lg text-center border border-black top-border">Function parentMustBe</h1>
-
-        <br class="pb-1">
-
-        
-            
-                
-                
-            
-                
-                
-            
-                
-                
-            
-                
-                
-            
-                
-                
-            
-
-            
-
-            
-
-            
-                
-
-                
-            
-                
-
-                
-            
-                
-
-                
-            
-                
-
-                
-                    
-                        <h3 class="text-lg text-center border-t border-b border-black">rules</h1>
-                        <br class="md-1">
-                        
-                    
-                    
-                    <h2 class="text-xl">Functions</h2>
-                    <hr>
-
-                    
-                        <a href="./kind.html" class="text-base px-2 false">kind</a>
-                        <br class="my-1">
-                    
-                        <a href="./any.html" class="text-base px-2 false">any</a>
-                        <br class="my-1">
-                    
-                        <a href="./anyKind.html" class="text-base px-2 false">anyKind</a>
-                        <br class="my-1">
-                    
-                        <a href="./parentMustBe.html" class="text-base px-2 text-blue-500">parentMustBe</a>
-                        <br class="my-1">
-                    
-                
-            
-                
-
-                
-            
-        
-    </section>
-</nav>
-
-
-        <main>
-            <div class="max-w-6xl mx-auto py-6 px-8 container">
-                <header class="grid grid-cols-2">
-                    <span class="text-2xl">Function parentMustBe</span>
-                    
-                        <a class="text-2xl text-right" href="./../../sources/src-tealdoc-tag.tl.html#line-78">[src]</a>
-                    
-                </header>
-
-                <hr class="pb-5">
-
-                
-                    
-                        
-                        <h3 class="text-xl pt-6">Signature</h3>
-
-                        <div class="pt-2">
-                            <pre class="code-block"><code><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">parentMustBe</span><span class="code-text">(</span><span class="code-text">parent</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">parser</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">unknown</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span></code></pre>
-                        </div>
-
-                        
-                    
-                
-            </div>
-        </main>
-
-        
-
-    </div>
-</body>
-
-</html>
+   </body>
+   

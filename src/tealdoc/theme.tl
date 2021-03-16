@@ -19,6 +19,9 @@ local record Theme
    text: string
    background: string
    tooltip: string
+   outline: string
+   outlineMain: string
+   outlineBackground: string
 
    link: string
    nav: string
@@ -67,9 +70,12 @@ themes.moonlight = {
    nav = '#3e4260',
    navLink = '#C8D3F5',
    tooltip = '#3e4260',
+   outline = '#C8D3F5',
+   outlineMain = '#00000000',
+   outlineBackground = '#363a54',
    code = {
       text = '#e4f3fa',
-      background = '#212539',
+      background = '#1e2030',
       border = '#191a2a',
       syntax = {
          comment = '#7e8eda',
@@ -80,6 +86,34 @@ themes.moonlight = {
          number = '#ff9668',
          string = '#7af8ca',
          library = '#82AAFF'
+      }
+   }
+}
+
+-- https://www.nordtheme.com/
+themes.nordic = {
+   text = '#eceff4',
+   background = '#2e3440',
+   link = '#81a1c1',
+   nav = '#242933',
+   navLink = '#eceff4',
+   tooltip = '#2f3542',
+   outline = '#eceff4',
+   outlineMain = '#00000000',
+   outlineBackground = '#20252d',
+   code = {
+      text = '#eceff4',
+      background = '#2a2f3a',
+      border = '#20252d',
+      syntax = {
+         comment = '#4c566a',
+         constant = '#8fbcbb',
+         identifier = '#eceff4',
+         keyword = '#5e81ac',
+         keyword2 = '#5e81ac',
+         number = '#ebcb8b',
+         string = '#a3be8c',
+         library = '#81a1c1'
       }
    }
 }
@@ -115,6 +149,15 @@ local function createCSS(): string
                color: %s;
             }
 
+            .%s .border-black {
+               border-color: %s;
+            }
+
+            .%s .top-border {
+               background-color: %s;
+               border-color: %s;
+            }
+
             .%s a {
                color: %s;
             }
@@ -144,6 +187,11 @@ local function createCSS(): string
          theme,
          styles.background,
          styles.text,
+         theme,
+         styles.outline,
+         theme,
+         styles.outlineBackground,
+         styles.outlineMain,
          theme,
          styles.link,
          theme,

@@ -1,5 +1,11 @@
 # Changelog
 
+## dev-8
+
+* Changed layout
+  * Instead of a navbar, there is a sidebar/sidenav
+* New nordic theme
+
 ## dev-7
 
 * Introduce dark mode!

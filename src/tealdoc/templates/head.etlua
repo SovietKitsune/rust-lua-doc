@@ -46,4 +46,12 @@ end
     <style>
         <%- require('tealdoc.theme').css %>
     </style>
+
+    <noscript>
+        <style>
+            .scripted {
+                display: none;
+            }
+        </style>
+    </noscript>
 </head>

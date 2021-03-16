@@ -1,0 +1,127 @@
+<%
+local misc = require 'tealdoc.misc'
+
+local function genSections(mods)
+    local tbl = {}
+
+    for i, v in pairs(mods) do
+        if not v.hidden then
+            if v.kind == 'custom' and v.struct.isRecord then
+                if not tbl.Records then tbl.Records = {} end
+                tbl.Records[i] = v
+            elseif v.kind == 'custom' then
+                if not tbl.Modules then tbl.Modules = {} end
+                tbl.Modules[i] = v
+            elseif v.kind == 'enum' then
+                if not tbl.Enums then tbl.Enums = {} end
+                tbl.Enums[i] = v
+            elseif v.kind == 'function' then
+                if not tbl.Functions then tbl.Functions = {} end
+                tbl.Functions[i] = v
+            else
+                if not tbl.Variables then tbl.Variables = {} end
+                tbl.Variables[i] = v
+            end
+        end
+    end
+
+    return tbl
+end
+
+local function transform(tp)
+    if tp.kind == 'custom' and tp.struct.isRecord then
+        return 'Record'
+    elseif tp.kind == 'custom' then
+        return 'Module'
+    else
+        return tp.kind:sub(0, 1):upper() .. tp.kind:sub(2)
+    end
+end
+
+local function toRoot()
+    if not current.tree then return './' end
+
+    local count = 0
+
+    for i = 1, #current.tree do
+        if current.tree:sub(i, i) == '/' then
+            count = count + 1
+        end
+    end
+
+    return './' .. string.rep('../', count)
+end
+
+local sections
+
+if current.kind == 'custom' or current.kind == nil then
+    sections = genSections(current.modules ~= nil and current.modules or current.struct.fields)
+else
+    sections = {}
+end
+
+local parent = genSections(current.parent and current.parent.struct.fields or project.modules)
+%>
+<nav class="h-full table-cell fixed w-52 bg-gray-100">
+    <% --[[; TODO a logo would be good here ]] %>
+    <section class="mx-4 pt-4">
+        <div class="text-center">
+            <a href="<%= toRoot() %>">Index</a>
+        </div>
+
+        <h1 class="text-lg text-center border border-black top-border"><%- current == project and 'Rock ' .. project.name or transform(current) .. ' ' .. current.name %></h1>
+
+        <br class="pb-1">
+
+        <% if current == project then %>
+            <h3 class="text-lg text-center">Version <%- project.version %></h3>
+
+            <hr class="bg-gray-400 mb-2">
+
+            <div class="text-center border border-black rounded-md text-md mb-3 py-1">
+                <a href="all.html" class="px-0.5">See all <%- project.name %>'s items</a>
+            </div>
+
+            <% for i = 1, #misc.order do %>
+                <% local name = misc.order[i] %>
+
+                <% if sections[name] then %>
+                    <a class="text-base px-2" href="#<%= name %>"><%= name %></a>
+                    <br class="my-1">
+                <% end %>
+            <% end %>
+        <% else %>
+            <% for i = 1, #misc.order do %>
+                <% local name = misc.order[i] %>
+                <% if sections[name] then %>
+                    <a class="text-base px-2" href="#<%= name %>"><%= name %></a>
+                    <br class="my-1">
+                <% end %>
+            <% end %>
+
+            <% --[[ List parent modules properties ]] %>
+
+            <% local done = false %>
+
+            <% for i = 1, #misc.order do %>
+                <% local name = misc.order[i] %>
+
+                <% if parent[name] then %>
+                    <% if not done then %>
+                        <h3 class="text-lg text-center border-t border-b border-black"><%- current.parent and current.parent.name or project.name %></h1>
+                        <br class="md-1">
+                        <% done = true %>
+                    <% end %>
+                    
+                    <h2 class="text-xl"><%= name %></h2>
+                    <hr>
+
+                    <% for i, v in pairs(parent[name]) do %>
+                        <a href=".<%= current.parent and '' or current.kind == 'custom' and '.' or '' %>/<%= i %><%= name == 'Modules' and '/index' or '' %>.html" class="text-base px-2 <%= i == current.name and 'text-blue-500' %>"><%= i %></a>
+                        <br class="my-1">
+                    <% end %>
+                <% end %>
+            <% end %>
+        <% end %>
+    </section>
+</nav>
