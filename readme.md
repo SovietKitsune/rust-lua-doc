@@ -28,7 +28,6 @@ Tealdoc converts comments within either Teal or Lua code into a verity of output
 ## Demo
 
 * tealdoc (self-hosted) - <https://sovietkitsune.github.io/tealdoc/tealdoc>
-* tl - <https://sovietkitsune.github.io/tealdoc/tl>
 
 ## Motivation
 

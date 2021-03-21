@@ -1,5 +1,11 @@
 # Changelog
 
+## dev-11
+
+* Fix some responsive issues
+* Change some theming
+* Realize that maybe I should use semver
+
 ## dev-10
 
 * New pages that display markdown (maybe stolen from LDoc)

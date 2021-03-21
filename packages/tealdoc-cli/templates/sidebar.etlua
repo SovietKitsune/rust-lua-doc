@@ -147,7 +147,7 @@ end
 
 <script src="<%= toRoot(current) %>assets/sidebar.js"></script>
 
-<nav class="table-cell w-72 bg-gray-400 text-gray-200 lg:visible md:invisible">
+<nav class="w-72 bg-gray-400 text-gray-200 lg:table-cell hidden" id="sidebar">
     <%- include 'search' %>
 
     <section class="mx-4 pt-4">
@@ -201,3 +201,7 @@ end
         </ul>
     </section>
 </nav>
+
+<button class="scripted lg:hidden pl-4 table-cell focus:outline-none" onclick="openSidebar()">
+    <span class="fas fa-bars"></span>
+</button>

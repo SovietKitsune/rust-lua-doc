@@ -47,7 +47,7 @@
 
 <script src="./../assets/sidebar.js"></script>
 
-<nav class="table-cell w-72 bg-gray-400 text-gray-200 lg:visible md:invisible">
+<nav class="w-72 bg-gray-400 text-gray-200 lg:table-cell hidden" id="sidebar">
     
 
 <script src="./../assets/search.js"></script>
@@ -69,16 +69,16 @@
         <div id="dropdown" class="ml-3 relative hidden">
             <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white text-gray-700 dropdown">
                 
-                    <button type="button" onclick="changeTheme('nordic')" class="block px-4 py-2 text-sm">
-                        nordic
+                    <button type="button" onclick="changeTheme('moonlight')" class="block px-4 py-2 text-sm">
+                        moonlight
                     </button>
                 
                     <button type="button" onclick="changeTheme('light')" class="block px-4 py-2 text-sm">
                         light
                     </button>
                 
-                    <button type="button" onclick="changeTheme('moonlight')" class="block px-4 py-2 text-sm">
-                        moonlight
+                    <button type="button" onclick="changeTheme('nordic')" class="block px-4 py-2 text-sm">
+                        nordic
                     </button>
                 
             </div>
@@ -129,6 +129,24 @@
         <ul>
             
                 <noscript>
+                    <h2 class="text-lg">Pages</h2>
+                </noscript>
+                <li id="Pages-section" class="hidden hidden-scripted">
+                    <ul>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../pages/readme.md.html">
+                                        Tealdoc
+                                    </a>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+                <noscript>
                     <h2 class="text-lg">Modules</h2>
                 </noscript>
                 <li id="Modules-section" class="hidden hidden-scripted">
@@ -146,6 +164,15 @@
                                 
                                     <a class="transition-colors duration-200 hover:text-white" href="./index.html">
                                         index (virtual)
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href=".toRoot.html">
+                                        toRoot
                                     </a>
                                 
                             </li>
@@ -171,15 +198,6 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href=".toRoot.html">
-                                        toRoot
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
                                     <div class="text-white text-sm font-bold">TEALDOC-CLI</div>
                                 
                             </li>
@@ -187,8 +205,8 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.humanize.html">
-                                        tealdoc-cli.humanize
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.fs/index.html">
+                                        tealdoc-cli.fs
                                     </a>
                                 
                             </li>
@@ -196,8 +214,26 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.theme/index.html">
-                                        tealdoc-cli.theme
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.version.html">
+                                        tealdoc-cli.version
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.markdown.html">
+                                        tealdoc-cli.markdown
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.highlight.html">
+                                        tealdoc-cli.highlight
                                     </a>
                                 
                             </li>
@@ -223,17 +259,8 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.highlight.html">
-                                        tealdoc-cli.highlight
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.markdown.html">
-                                        tealdoc-cli.markdown
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.util/index.html">
+                                        tealdoc-cli.util
                                     </a>
                                 
                             </li>
@@ -250,8 +277,8 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.version.html">
-                                        tealdoc-cli.version
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.theme/index.html">
+                                        tealdoc-cli.theme
                                     </a>
                                 
                             </li>
@@ -259,17 +286,8 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.fs/index.html">
-                                        tealdoc-cli.fs
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.util/index.html">
-                                        tealdoc-cli.util
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.humanize.html">
+                                        tealdoc-cli.humanize
                                     </a>
                                 
                             </li>
@@ -278,15 +296,6 @@
                             <li class="pl-4">
                                 
                                     <div class="text-white text-sm font-bold">TEALDOC</div>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.version.html">
-                                        tealdoc.version
-                                    </a>
                                 
                             </li>
                         
@@ -302,35 +311,26 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.logger/index.html">
-                                        tealdoc.logger
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
                                     <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.parser/index.html">
                                         tealdoc.parser
                                     </a>
                                 
                             </li>
                         
-                    </ul>
-                </li>
-            
-                <noscript>
-                    <h2 class="text-lg">Pages</h2>
-                </noscript>
-                <li id="Pages-section" class="hidden hidden-scripted">
-                    <ul>
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.version.html">
+                                        tealdoc.version
+                                    </a>
+                                
+                            </li>
                         
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../pages/readme.md.html">
-                                        Tealdoc
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.logger/index.html">
+                                        tealdoc.logger
                                     </a>
                                 
                             </li>
@@ -342,9 +342,13 @@
     </section>
 </nav>
 
+<button class="scripted lg:hidden pl-4 table-cell focus:outline-none" onclick="openSidebar()">
+    <span class="fas fa-bars"></span>
+</button>
+
 
         <main>
-            <div class="max-w-6xl mx-auto py-6 px-8 container">
+            <div class="mx-auto py-6 px-8 container">
                 <header class="grid grid-cols-2">
                     <span class="text-2xl">Function toRoot</span>
                     

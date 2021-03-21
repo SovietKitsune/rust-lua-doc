@@ -28,5 +28,12 @@ function update() {
     details.classList.remove('hidden')
 }
 
+function openSidebar() {
+    let sidebar = document.getElementById('sidebar')
+
+    sidebar.classList.toggle('hidden')
+    sidebar.classList.toggle('table-cell')
+}
+
 window.addEventListener('load', update)
 window.addEventListener('hashchange', update)

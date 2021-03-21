@@ -154,6 +154,10 @@ local function createCSS(): string
                color: %s;
             }
 
+            .%s span {
+               color: %s;
+            }
+
             .%s .search {
                background-color: %s;
             }
@@ -200,6 +204,8 @@ local function createCSS(): string
          ]],
          theme,
          styles.background,
+         styles.text,
+         theme,
          styles.text,
          theme,
          styles.search,
