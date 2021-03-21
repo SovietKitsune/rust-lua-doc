@@ -1,0 +1,137 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="nordic h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    
+        <meta property="og:title" content="Source inspection - Tealdoc">
+
+        <title>Source inspection - Tealdoc</title>
+
+        <link rel="stylesheet" href="../assets/themes.css">
+        <script src="../assets/theme.js"></script>
+    
+
+    
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+    
+
+    <noscript>
+        <style>
+            .scripted {
+                display: none;
+            }
+
+            .hidden-scripted {
+                display: block;
+            }
+        </style>
+    </noscript>
+</head>
+
+
+<body class="h-full w-full">
+    <pre class="code-block"><code><span class="code-comment">-- Generates a document
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">fs</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.fs'</span><span class="code-text">)</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">logger</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.logger'</span><span class="code-text">)</span><span class="code-text">
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">etlua</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'etlua'</span><span class="code-text">)</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
+   </span><span class="code-text">_cache</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">}</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">}</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-text">_current</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">nil</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-text">_prefix</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">''</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-text">baseState</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">}</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">any</span><span class="code-text">}</span><span class="code-text">
+</span><span class="code-text">}</span><span class="code-text">
+
+</span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">load</span><span class="code-text">(</span><span class="code-text">file</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">noPrefix</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
+   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-keyword">not</span><span class="code-text"> </span><span class="code-text">noPrefix</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+      </span><span class="code-text">file</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">_prefix</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'/'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">file</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'.etlua'</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+
+   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">_cache</span><span class="code-text">[</span><span class="code-text">file</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">file</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">data</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">fs</span><span class="code-text">.</span><span class="code-text">read</span><span class="code-text">(</span><span class="code-text">file</span><span class="code-text">)</span><span class="code-text">
+
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">fn</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">err</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">(</span><span class="code-text">etlua</span><span class="code-text">.</span><span class="code-text">compile</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">any</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">(</span><span class="code-text">data</span><span class="code-text">)</span><span class="code-text">
+
+   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-keyword">not</span><span class="code-text"> </span><span class="code-text">fn</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+      </span><span class="code-text">logger</span><span class="code-text">.</span><span class="code-text">error</span><span class="code-text">(</span><span class="code-string">'Failed to parse '</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">file</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">': '</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">err</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">
+      </span><span class="code-text">os</span><span class="code-text">.</span><span class="code-text">exit</span><span class="code-text">(</span><span class="code-text">-</span><span class="code-number">1</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+
+   </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">_cache</span><span class="code-text">[</span><span class="code-text">file</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">fn</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">any</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">any</span><span class="code-text">
+
+   </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">file</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">gen</span><span class="code-text">(</span><span class="code-text">file</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">data</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">table</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
+   </span><span class="code-text">file</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">load</span><span class="code-text">(</span><span class="code-text">file</span><span class="code-text">)</span><span class="code-text">
+
+   </span><span class="code-keyword">for</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">v</span><span class="code-text"> </span><span class="code-keyword">in</span><span class="code-text"> </span><span class="code-text">pairs</span><span class="code-text">(</span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">baseState</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">do</span><span class="code-text">
+      </span><span class="code-text">data</span><span class="code-text">[</span><span class="code-text">i</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">v</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+
+   </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">_current</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">file</span><span class="code-text">
+
+   </span><span class="code-text">data</span><span class="code-text">.</span><span class="code-text">include</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">f</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">d</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">table</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
+      </span><span class="code-text">d</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">d</span><span class="code-text"> </span><span class="code-keyword">or</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">}</span><span class="code-text">
+
+      </span><span class="code-keyword">for</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">v</span><span class="code-text"> </span><span class="code-keyword">in</span><span class="code-text"> </span><span class="code-text">pairs</span><span class="code-text">(</span><span class="code-text">data</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">do</span><span class="code-text">
+         </span><span class="code-text">d</span><span class="code-text">[</span><span class="code-text">i</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">v</span><span class="code-text">
+      </span><span class="code-keyword">end</span><span class="code-text">
+
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">gen</span><span class="code-text">(</span><span class="code-text">f</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">d</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">succ</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">err</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">true</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">''</span><span class="code-text">
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">res</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
+   
+   </span><span class="code-text">xpcall</span><span class="code-text">(</span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">
+      </span><span class="code-text">res</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">_cache</span><span class="code-text">[</span><span class="code-text">file</span><span class="code-text">]</span><span class="code-text">(</span><span class="code-text">data</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">er</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">
+      </span><span class="code-text">err</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">er</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'\n'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">debug</span><span class="code-text">.</span><span class="code-text">traceback</span><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">
+      </span><span class="code-text">succ</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">)</span><span class="code-text">
+
+   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-keyword">not</span><span class="code-text"> </span><span class="code-text">succ</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+      </span><span class="code-text">logger</span><span class="code-text">.</span><span class="code-text">error</span><span class="code-text">(</span><span class="code-string">'Failed to load '</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">file</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">':\n'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">err</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">
+      </span><span class="code-text">os</span><span class="code-text">.</span><span class="code-text">exit</span><span class="code-text">(</span><span class="code-text">-</span><span class="code-number">1</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+
+   </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">res</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">loadBase</span><span class="code-text">(</span><span class="code-text">project</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">table</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">templates</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">baseState</span><span class="code-text">.</span><span class="code-text">highlight</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.highlight'</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">baseState</span><span class="code-text">.</span><span class="code-text">markdown</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.markdown'</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">baseState</span><span class="code-text">.</span><span class="code-text">humanize</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.humanize'</span><span class="code-text">)</span><span class="code-text">(</span><span class="code-text">project</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">baseState</span><span class="code-text">.</span><span class="code-text">misc</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.misc'</span><span class="code-text">)</span><span class="code-text">
+
+   </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">baseState</span><span class="code-text">.</span><span class="code-text">project</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">project</span><span class="code-text">
+
+   </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">_prefix</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">templates</span><span class="code-text">
+
+   </span><span class="code-text">logger</span><span class="code-text">.</span><span class="code-text">debug</span><span class="code-text">(</span><span class="code-string">'Compiling templates'</span><span class="code-text">)</span><span class="code-text">
+
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">files</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">fs</span><span class="code-text">.</span><span class="code-text">searchAll</span><span class="code-text">(</span><span class="code-text">templates</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'%.etlua$'</span><span class="code-text">)</span><span class="code-text">
+
+   </span><span class="code-keyword">for</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">1</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">#</span><span class="code-text">files</span><span class="code-text"> </span><span class="code-keyword">do</span><span class="code-text">
+      </span><span class="code-text">generator</span><span class="code-text">.</span><span class="code-text">load</span><span class="code-text">(</span><span class="code-text">files</span><span class="code-text">[</span><span class="code-text">i</span><span class="code-text">]</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-keyword">true</span><span class="code-text">)</span><span class="code-text">
+      </span><span class="code-text">logger</span><span class="code-text">.</span><span class="code-text">debug</span><span class="code-text">(</span><span class="code-string">'Compiled '</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">files</span><span class="code-text">[</span><span class="code-text">i</span><span class="code-text">]</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">generator</span><span class="code-text">
+</span></code></pre>
+</body>

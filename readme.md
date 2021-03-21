@@ -1,24 +1,33 @@
 # Tealdoc
 
-The following codeblock is only for demo purposes.
+Tealdoc converts comments within either Teal or Lua code into a verity of outputs.
 
-```teal
--- Hover over `parser`
--- Clicking on it should take you to `tealdoc.parser`'s source
-local parser = require 'tealdoc.parser'
+## Tealdocs status on [#233](https://github.com/teal-language/tl/issues/233)
 
-local x = 5
-local y = 2.1
-```
+* [x] - Syntax for doc comments
+  * Tealdoc syntax and (soon) LDoc syntax
+* [x] - Syntax to start codeblocks
+  * Uses markdown fenced codeblocks
+* [x] - Generate documentation for all public types
+  * [ ] - Throw warnings on leaking private types
+* [ ] - Doc-tests/Example tests
+  * They would be similar to rustdoc tests
+* [ ] - Link to used libraries
+  * [ ] - Internal linking
+    * The only current form of internal linking is within source inspection
+  * [ ] - External linking
+    * Reading from the rockspec wouldn't be needed
+        * Falling-back the search function to the default search would suffice for searching
+    * The approach would be like rustdoc and storing modules like `docs/<mod-name>` instead of just `docs/`
 
 ## Minimum Teal version
 
-The minimum Teal version currently is `0.12.0+dev-43bd53c95ddeeecf18b296e9707ace2e80ac1de5`
+* Compiling: `0.13.0`
+* Running: `0.12.0`
 
 ## Demo
 
-* examples/math - <https://sovietkitsune.github.io/tealdoc/math>
-* self-hosted - <https://sovietkitsune.github.io/tealdoc/tealdoc>
+* tealdoc (self-hosted) - <https://sovietkitsune.github.io/tealdoc/tealdoc>
 * tl - <https://sovietkitsune.github.io/tealdoc/tl>
 
 ## Motivation
@@ -45,23 +54,3 @@ Not planned items would throw a warning with a suggested fix
 
 * `@local` aliased to `@hidden`
 * `@type` aliased to `@table`
-
-## Customizing
-
-Customizing the output of the generator is quite simple:
-
-### General structure
-
-This would be the HTML that is used within the generator. Since its written with etlua, no extra dependencies are needed.
-
-All of these are located in `tealdoc/templates`. Everything within `tealdoc/html/templates` is rebuilt every time.
-
-* `document.etlua` - A document contains information about a single type
-* `footer.etlua` - The footer used on most pages
-* `head.etlua` - The head used on all pages
-* `module.etlua` - The index page which links to the top-level documents
-* `navbar.etlua` - The navbar used on most pages
-
-### Types
-
-To customize how types look, edit the `humanize` function or the `genFn` function in `tealdoc/humanize.tl`.

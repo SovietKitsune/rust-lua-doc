@@ -1,5 +1,19 @@
 # Changelog
 
+## dev-10
+
+* New pages that display markdown (maybe stolen from LDoc)
+* Revised sidebar (less dizzy)
+  * New search bar
+  * New theme chooser
+* Cleanup tealdoc cli
+  * Separate the core logic and the command-line logic
+  * New init command to generate a base `tealdoc.lua` file
+* Small commits are stupid
+* Temporally disable "typed" highlights (until Teal's lexer preserves comments [#233](https://github.com/teal-language/tl/issues/233#issuecomment-709385425))
+* More efficient assets
+  * Assets are now stored in `output/assets` instead of copied between each file
+
 ## dev-9
 
 * Fixed issues with single-module/file projects/rocks

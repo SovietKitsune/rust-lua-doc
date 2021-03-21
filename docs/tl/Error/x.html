@@ -3,7 +3,7 @@
 
 
 <!DOCTYPE html>
-<html lang="en" class="nordic">
+<html lang="en" class="light h-full">
 
 <head>
     <meta charset="UTF-8">
@@ -11,287 +11,500 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     
         <meta property="og:title" content="tl.Error.x - Tealdoc">
-        <meta property="og:description" content="API documentation for the x unknown in rock `tealdoc`">
+        <meta property="og:description" content="API documentation for the x integer in rock `Tealdoc`">
 
         <title>tl.Error.x - Tealdoc</title>
+
+        <link rel="stylesheet" href="./../assets/themes.css">
+        <script src="./../assets/theme.js"></script>
     
 
-    <style>
-                 .tooltip-parent .tooltip {
-            visibility: hidden;
-            text-align: center;
-
-            padding-left: 0.25rem;
-            padding-right: 0.25rem;
-
-            border-radius: 1px;
-            position: absolute;
-            z-index: 1;
-         }
-
-         .tooltip-parent:hover .tooltip {
-            visibility: visible;
-         }
-      
-/* moonlight theme */
-            .moonlight {
-               background-color: #1e2030;
-               color: #C8D3F5;
-            }
-
-            .moonlight .border-black {
-               border-color: #C8D3F5;
-            }
-
-            .moonlight .top-border {
-               background-color: #363a54;
-               border-color: #00000000;
-            }
-
-            .moonlight a {
-               color: #7A88CF;
-            }
-
-            .moonlight nav {
-               background-color: #3e4260;
-            }
-
-            .moonlight nav a {
-               color: #C8D3F5;
-            }
-
-            .moonlight .tippy-box[data-theme~='auto'] {
-               background-color: #3e4260;
-            }
-
-            .moonlight .tooltip-parent .tooltip {
-               background-color: #191a2a;
-               color: #e4f3fa;
-            }
-
-            .moonlight .code-block {
-               background-color: #1e2030;
-               border-color: #191a2a;
-            }
-         
-.moonlight .code-keyword2 { color: #FF5370; }
-.moonlight .code-constant { color: #ffdf9b; }
-.moonlight .code-identifier { color: #e4f3fa; }
-.moonlight .code-string { color: #7af8ca; }
-.moonlight .code-number { color: #ff9668; }
-.moonlight .code-comment { color: #7e8eda; }
-.moonlight .code-keyword { color: #baacff; }
-.moonlight .code-library { color: #82AAFF; }
-.moonlight .code-text { color: #e4f3fa; }
-/* light theme */
-            .light {
-               background-color: nil;
-               color: nil;
-            }
-
-            .light .border-black {
-               border-color: nil;
-            }
-
-            .light .top-border {
-               background-color: nil;
-               border-color: nil;
-            }
-
-            .light a {
-               color: nil;
-            }
-
-            .light nav {
-               background-color: nil;
-            }
-
-            .light nav a {
-               color: nil;
-            }
-
-            .light .tippy-box[data-theme~='auto'] {
-               background-color: #eeeeee;
-            }
-
-            .light .tooltip-parent .tooltip {
-               background-color: #aaaaaa;
-               color: #383a42;
-            }
-
-            .light .code-block {
-               background-color: #fafafa;
-               border-color: #aaaaaa;
-            }
-         
-.light .code-keyword2 { color: #FF5370; }
-.light .code-constant { color: #e6c07b; }
-.light .code-identifier { color: #383a42; }
-.light .code-string { color: #50a14f; }
-.light .code-number { color: #d19a66; }
-.light .code-comment { color: #a0a1a7; }
-.light .code-keyword { color: #a626a4; }
-.light .code-library { color: #82AAFF; }
-.light .code-text { color: #383a42; }
-/* nordic theme */
-            .nordic {
-               background-color: #2e3440;
-               color: #eceff4;
-            }
-
-            .nordic .border-black {
-               border-color: #eceff4;
-            }
-
-            .nordic .top-border {
-               background-color: #20252d;
-               border-color: #00000000;
-            }
-
-            .nordic a {
-               color: #81a1c1;
-            }
-
-            .nordic nav {
-               background-color: #242933;
-            }
-
-            .nordic nav a {
-               color: #eceff4;
-            }
-
-            .nordic .tippy-box[data-theme~='auto'] {
-               background-color: #2f3542;
-            }
-
-            .nordic .tooltip-parent .tooltip {
-               background-color: #20252d;
-               color: #eceff4;
-            }
-
-            .nordic .code-block {
-               background-color: #2a2f3a;
-               border-color: #20252d;
-            }
-         
-.nordic .code-keyword2 { color: #5e81ac; }
-.nordic .code-constant { color: #8fbcbb; }
-.nordic .code-identifier { color: #eceff4; }
-.nordic .code-string { color: #a3be8c; }
-.nordic .code-number { color: #ebcb8b; }
-.nordic .code-comment { color: #4c566a; }
-.nordic .code-keyword { color: #5e81ac; }
-.nordic .code-library { color: #81a1c1; }
-.nordic .code-text { color: #eceff4; }
-    </style>
+    
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+    
 
     <noscript>
         <style>
             .scripted {
                 display: none;
             }
+
+            .hidden-scripted {
+                display: block;
+            }
         </style>
     </noscript>
 </head>
 
 
-<body>
-    <div class="table w-full">
+<body class="h-full">
+    <div class="table w-full h-full">
         
-<nav class="h-full table-cell fixed w-52 bg-gray-100">
+
+<script src="./../assets/sidebar.js"></script>
+
+<nav class="table-cell w-72 bg-gray-400 text-gray-200 lg:visible md:invisible">
     
-    <section class="mx-4 pt-4">
-        <div class="text-center">
-            <a href="./../">Index</a>
+
+<script src="./../assets/search.js"></script>
+
+
+    <section class="mx-2 scripted">
+        <form class="search py-2 rounded-md" id="search-form">
+            <button type="submit" class="pl-1 search-area">
+                <span class="fas fa-search search-area"></span>
+            </button>
+            <label>
+                <input class="search search-area focus:outline-none" type="text" placeholder="Search..." autocomplete="off" id="search-box">
+            </label>
+            <button type="button" class="pr-1 dropdown-btn" onclick="dropdown()">
+                <span class="fas fa-paint-brush dropdown-btn"></span>
+            </button>
+        </form>
+
+        <div id="dropdown" class="ml-3 relative hidden">
+            <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white text-gray-700 dropdown">
+                
+                    <button type="button" onclick="changeTheme('light')" class="block px-4 py-2 text-sm">
+                        light
+                    </button>
+                
+                    <button type="button" onclick="changeTheme('moonlight')" class="block px-4 py-2 text-sm">
+                        moonlight
+                    </button>
+                
+                    <button type="button" onclick="changeTheme('nordic')" class="block px-4 py-2 text-sm">
+                        nordic
+                    </button>
+                
+            </div>
         </div>
 
-        <h1 class="text-lg text-center border border-black top-border">Unknown x</h1>
+        <div class="relative hidden" id="results-parent">
+            <ul class="origin-center absolute mt-2 rounded-md py-1 bg-white dropdown" id="results">
+                
+            </ul>
+        </div>
+    </section>
 
-        <br class="pb-1">
 
-        
-            
-                
-                
-            
-                
-                
-            
-                
-                
-            
-                
-                
-            
-                
-                
-            
 
-            
+    <section class="mx-4 pt-4">
+        <div class="grid grid-cols-2">
+            <div class="text-right">
+                <h1 class="text-2xl font-bold text-white">Tealdoc</h1>
+                <h3 class="text-lg">Development</h3>
+            </div>
+        </div>
+    </section>
 
-            
-
-            
-                
-
-                
+    <section class="mx-6 pt-2">
+        <ul class="scripted">
             
                 
-
+                
+                    <li class="pl-4">
+                        <a id="Pages-link" class="transition-colors duration-200 hover:text-white" href="#Pages">Pages</a>
+                    </li>
                 
             
                 
-
                 
-                    
-                        <h3 class="text-lg text-center border-t border-b border-black">Error</h1>
-                        <br class="md-1">
+                    <li class="pl-4">
+                        <a id="Modules-link" class="transition-colors duration-200 hover:text-white" href="#Modules">Modules</a>
+                    </li>
+                
+            
+                
+                
+            
+        </ul>
+
+        <br class="pt-3 scripted">
+
+        <ul>
+            
+                <noscript>
+                    <h2 class="text-lg">Modules</h2>
+                </noscript>
+                <li id="Modules-section" class="hidden hidden-scripted">
+                    <ul>
                         
-                    
-                    
-                    <h2 class="text-xl">Enums</h2>
-                    <hr>
-
-                    
-                        <a href="./tag.html" class="text-base px-2 false">tag</a>
-                        <br class="my-1">
-                    
-                
+                            
+                            <li class="pl-4">
+                                
+                                    <div class="text-white text-sm font-bold">TL.ERROR</div>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./index.html">
+                                        index (virtual)
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href=".x.html">
+                                        x
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href=".y.html">
+                                        y
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href=".tag.html">
+                                        tag
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href=".filename.html">
+                                        filename
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href=".msg.html">
+                                        msg
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href=".i.html">
+                                        i
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../loader.html">
+                                        loader
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../Error/index.html">
+                                        Error
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../Env/index.html">
+                                        Env
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../package_loader_env.html">
+                                        package_loader_env
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../Symbol.html">
+                                        Symbol
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../TargetMode.html">
+                                        TargetMode
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../gen.html">
+                                        gen
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../TypeReport.html">
+                                        TypeReport
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../symbols_in_scope.html">
+                                        symbols_in_scope
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../parse_program.html">
+                                        parse_program
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../Result.html">
+                                        Result
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../LoadFunction.html">
+                                        LoadFunction
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../type_check.html">
+                                        type_check
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../load.html">
+                                        load
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../CompatMode.html">
+                                        CompatMode
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../init_env.html">
+                                        init_env
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../pretty_print_ast.html">
+                                        pretty_print_ast
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../LoadMode.html">
+                                        LoadMode
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../lex.html">
+                                        lex
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../typecodes.html">
+                                        typecodes
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../WarningKind.html">
+                                        WarningKind
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../process.html">
+                                        process
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../process_string.html">
+                                        process_string
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../warning_kinds.html">
+                                        warning_kinds
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../version.html">
+                                        version
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../search_module.html">
+                                        search_module
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../get_token_at.html">
+                                        get_token_at
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../TypeCheckOptions.html">
+                                        TypeCheckOptions
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../TypeInfo.html">
+                                        TypeInfo
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../TypeReportEnv.html">
+                                        TypeReportEnv
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../get_types.html">
+                                        get_types
+                                    </a>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
             
-                
-
-                
+                <noscript>
+                    <h2 class="text-lg">Pages</h2>
+                </noscript>
+                <li id="Pages-section" class="hidden hidden-scripted">
+                    <ul>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../pages/readme.md.html">
+                                        Tealdoc
+                                    </a>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
             
-                
-
-                
-                    
-                    
-                    <h2 class="text-xl">Variables</h2>
-                    <hr>
-
-                    
-                        <a href="./filename.html" class="text-base px-2 false">filename</a>
-                        <br class="my-1">
-                    
-                        <a href="./x.html" class="text-base px-2 text-blue-500">x</a>
-                        <br class="my-1">
-                    
-                        <a href="./y.html" class="text-base px-2 false">y</a>
-                        <br class="my-1">
-                    
-                        <a href="./i.html" class="text-base px-2 false">i</a>
-                        <br class="my-1">
-                    
-                        <a href="./msg.html" class="text-base px-2 false">msg</a>
-                        <br class="my-1">
-                    
-                
-            
-        
+        </ul>
     </section>
 </nav>
 
@@ -299,7 +512,7 @@
         <main>
             <div class="max-w-6xl mx-auto py-6 px-8 container">
                 <header class="grid grid-cols-2">
-                    <span class="text-2xl">Unknown x</span>
+                    <span class="text-2xl">Integer x</span>
                     
                 </header>
 
@@ -314,9 +527,6 @@
                 
             </div>
         </main>
-
-        
-
     </div>
 </body>
 

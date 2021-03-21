@@ -1,0 +1,89 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="nordic h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    
+        <meta property="og:title" content="Source inspection - Tealdoc">
+
+        <title>Source inspection - Tealdoc</title>
+
+        <link rel="stylesheet" href="../assets/themes.css">
+        <script src="../assets/theme.js"></script>
+    
+
+    
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+    
+
+    <noscript>
+        <style>
+            .scripted {
+                display: none;
+            }
+
+            .hidden-scripted {
+                display: block;
+            }
+        </style>
+    </noscript>
+</head>
+
+
+<body class="h-full w-full">
+    <pre class="code-block"><code><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">highlight</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.highlight'</span><span class="code-text">)</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">lunamark</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'lunamark'</span><span class="code-text">)</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">writer</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">lunamark</span><span class="code-text">.</span><span class="code-text">writer</span><span class="code-text">.</span><span class="code-text">html</span><span class="code-text">.</span><span class="code-text">new</span><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">
+
+</span><span class="code-comment">-- Change some defaults since of tailwind messing with them
+</span><span class="code-text">
+</span><span class="code-text">writer</span><span class="code-text">.</span><span class="code-text">template</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'$body'</span><span class="code-text">
+
+</span><span class="code-text">writer</span><span class="code-text">.</span><span class="code-text">link</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">label</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">uri</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">title</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">}</span><span class="code-text">
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">titleAtt</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">''</span><span class="code-text">
+
+   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">type</span><span class="code-text">(</span><span class="code-text">title</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'string'</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">#</span><span class="code-text">title</span><span class="code-text"> </span><span class="code-text">&gt;</span><span class="code-text"> </span><span class="code-number">0</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+      </span><span class="code-text">titleAtt</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'title="'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">title</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'"'</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+
+   </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-string">'&lt;a href="'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">uri</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'" class="text-blue-500" '</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">titleAtt</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&gt;'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">label</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&lt;/a&gt;'</span><span class="code-text">}</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-text">writer</span><span class="code-text">.</span><span class="code-text">header</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">str</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">level</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">integer</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">}</span><span class="code-text">
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">textMaps</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
+      </span><span class="code-string">'3xl'</span><span class="code-text">,</span><span class="code-text">
+      </span><span class="code-string">'2xl'</span><span class="code-text">,</span><span class="code-text">
+      </span><span class="code-string">'xl'</span><span class="code-text">,</span><span class="code-text">
+      </span><span class="code-string">'lg'</span><span class="code-text">,</span><span class="code-text">
+      </span><span class="code-string">'base'</span><span class="code-text">,</span><span class="code-text">
+      </span><span class="code-string">'base'</span><span class="code-text">
+   </span><span class="code-text">}</span><span class="code-text">
+
+   </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-string">'&lt;h'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">tostring</span><span class="code-text">(</span><span class="code-text">level</span><span class="code-text">)</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">' class="text-'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">textMaps</span><span class="code-text">[</span><span class="code-text">level</span><span class="code-text">]</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">' pt-2"&gt;'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">str</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&lt;/h'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">tostring</span><span class="code-text">(</span><span class="code-text">level</span><span class="code-text">)</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&gt;'</span><span class="code-text">}</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-text">writer</span><span class="code-text">.</span><span class="code-text">fenced_code</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">code</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">language</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">}</span><span class="code-text"> </span><span class="code-comment">--;ignore
+</span><span class="code-text">   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">language</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'lua'</span><span class="code-text"> </span><span class="code-keyword">or</span><span class="code-text"> </span><span class="code-text">language</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'tl'</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">highlight</span><span class="code-text">(</span><span class="code-text">code</span><span class="code-text">)</span><span class="code-text">}</span><span class="code-text">
+   </span><span class="code-keyword">else</span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-string">'&lt;pre class="code-block"&gt;&lt;code&gt;'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">code</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&lt;/code&gt;&lt;/pre&gt;'</span><span class="code-text">}</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">markdown</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">lunamark</span><span class="code-text">.</span><span class="code-text">reader</span><span class="code-text">.</span><span class="code-text">markdown</span><span class="code-text">.</span><span class="code-text">new</span><span class="code-text">(</span><span class="code-text">writer</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
+   </span><span class="code-text">fenced_code_blocks</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">true</span><span class="code-text"> </span><span class="code-comment">--;ignore
+</span><span class="code-text">}</span><span class="code-text">)</span><span class="code-text">
+
+</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">markdown</span><span class="code-text">
+</span></code></pre>
+</body>

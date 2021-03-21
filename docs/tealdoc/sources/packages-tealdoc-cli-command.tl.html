@@ -1,0 +1,86 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="nordic h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    
+        <meta property="og:title" content="Source inspection - Tealdoc">
+
+        <title>Source inspection - Tealdoc</title>
+
+        <link rel="stylesheet" href="../assets/themes.css">
+        <script src="../assets/theme.js"></script>
+    
+
+    
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+    
+
+    <noscript>
+        <style>
+            .scripted {
+                display: none;
+            }
+
+            .hidden-scripted {
+                display: block;
+            }
+        </style>
+    </noscript>
+</head>
+
+
+<body class="h-full w-full">
+    <pre class="code-block"><code><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">argparse</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'argparse'</span><span class="code-text">)</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">record</span><span class="code-text"> </span><span class="code-text">Command</span><span class="code-text">
+   </span><span class="code-text">name</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
+   </span><span class="code-text">description</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
+   </span><span class="code-text">main</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">any</span><span class="code-text">}</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-text">init</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">argparse</span><span class="code-text">.</span><span class="code-text">Command</span><span class="code-text">)</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">commands</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">}</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">register</span><span class="code-text">(</span><span class="code-text">cmd</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Command</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-text">assert</span><span class="code-text">(</span><span class="code-keyword">not</span><span class="code-text"> </span><span class="code-text">commands</span><span class="code-text">[</span><span class="code-text">cmd</span><span class="code-text">.</span><span class="code-text">name</span><span class="code-text">]</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'Attempt to overwrite existing command `'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">cmd</span><span class="code-text">.</span><span class="code-text">name</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'`'</span><span class="code-text">)</span><span class="code-text">
+
+   </span><span class="code-text">commands</span><span class="code-text">[</span><span class="code-text">cmd</span><span class="code-text">.</span><span class="code-text">name</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">cmd</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">load</span><span class="code-text">(</span><span class="code-text">parser</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">argparse</span><span class="code-text">.</span><span class="code-text">Parser</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-keyword">for</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">v</span><span class="code-text"> </span><span class="code-keyword">in</span><span class="code-text"> </span><span class="code-text">pairs</span><span class="code-text">(</span><span class="code-text">commands</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">do</span><span class="code-text">
+      </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">cmd</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">parser</span><span class="code-text">:</span><span class="code-text">command</span><span class="code-text">(</span><span class="code-text">i</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">v</span><span class="code-text">.</span><span class="code-text">description</span><span class="code-text">)</span><span class="code-text">
+
+      </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">v</span><span class="code-text">.</span><span class="code-text">init</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+         </span><span class="code-text">v</span><span class="code-text">.</span><span class="code-text">init</span><span class="code-text">(</span><span class="code-text">cmd</span><span class="code-text">)</span><span class="code-text">
+      </span><span class="code-keyword">end</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">run</span><span class="code-text">(</span><span class="code-text">name</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">args</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">any</span><span class="code-text">}</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-text">commands</span><span class="code-text">[</span><span class="code-text">name</span><span class="code-text">]</span><span class="code-text">.</span><span class="code-text">main</span><span class="code-text">(</span><span class="code-text">args</span><span class="code-text">)</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+
+</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
+   </span><span class="code-comment">--- Register a new command using the `Command` object
+</span><span class="code-text">   </span><span class="code-text">register</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">register</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-comment">--- Load all created commands into the `argparse.Parser` instance
+</span><span class="code-text">   </span><span class="code-text">load</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">load</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-comment">--- Run a command
+</span><span class="code-text">   </span><span class="code-text">run</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">run</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-comment">--- All registered commands
+</span><span class="code-text">   </span><span class="code-text">commands</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">commands</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-comment">--- The structure of all commands
+</span><span class="code-text">   </span><span class="code-text">Command</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">Command</span><span class="code-text">
+</span><span class="code-text">}</span><span class="code-text">
+</span></code></pre>
+</body>

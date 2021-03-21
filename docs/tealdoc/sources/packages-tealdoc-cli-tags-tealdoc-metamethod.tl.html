@@ -1,0 +1,55 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="nordic h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    
+        <meta property="og:title" content="Source inspection - Tealdoc">
+
+        <title>Source inspection - Tealdoc</title>
+
+        <link rel="stylesheet" href="../assets/themes.css">
+        <script src="../assets/theme.js"></script>
+    
+
+    
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+    
+
+    <noscript>
+        <style>
+            .scripted {
+                display: none;
+            }
+
+            .hidden-scripted {
+                display: block;
+            }
+        </style>
+    </noscript>
+</head>
+
+
+<body class="h-full w-full">
+    <pre class="code-block"><code><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">rules</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.tag'</span><span class="code-text">)</span><span class="code-text">.</span><span class="code-text">rules</span><span class="code-text">
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">parser</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.parser'</span><span class="code-text">)</span><span class="code-text">
+
+</span><span class="code-comment">--- @{hidden}
+</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
+   </span><span class="code-text">selector</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'@{metamethod}'</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-text">allowed</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">rules</span><span class="code-text">.</span><span class="code-text">kind</span><span class="code-text">(</span><span class="code-string">'function'</span><span class="code-text">)</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-text">fn</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">typ</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">parser</span><span class="code-text">.</span><span class="code-text">Type</span><span class="code-text">)</span><span class="code-text">
+      </span><span class="code-text">(</span><span class="code-text">typ</span><span class="code-text">.</span><span class="code-text">func</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">parser</span><span class="code-text">.</span><span class="code-text">Function</span><span class="code-text">)</span><span class="code-text">.</span><span class="code-text">isMetamethod</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">true</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">,</span><span class="code-text">
+   </span><span class="code-text">err</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'Only functions are allowed to be a metamethod!'</span><span class="code-text">
+</span><span class="code-text">}</span><span class="code-text">
+</span></code></pre>
+</body>

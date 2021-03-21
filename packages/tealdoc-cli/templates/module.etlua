@@ -1,0 +1,91 @@
+<%
+local function toRoot()
+    if not current.tree then return './' end
+
+    local count = 0
+
+    for i = 1, #current.tree do
+        if current.tree:sub(i, i) == '/' then
+            count = count + 1
+        end
+    end
+
+    return './' .. string.rep('../', count)
+end
+%>
+<%- include('head', { current = current }) %>
+
+<body class="h-full">
+    <div class="table w-full h-full">
+        <%- include('sidebar', { current = current}) %>
+        <main class="table-cell">
+            <div class="max-w-6xl mx-auto py-6 px-8">
+                <header class="grid grid-cols-2">
+                    <span class="text-2xl">Module <%- current.name %></span>
+                    <% if current.source then %>
+                        <a class="text-2xl text-right" href="<%= toRoot() %>sources/<%= current.source:gsub('/', '-') %>.html#line-<%= current.yPos %>"><span class="fas fa-code"></span></a>
+                    <% end %>
+                </header>
+
+                <hr class="pb-5">
+
+                <% if current.deprecated then %>
+                    <div class="deprecated">
+                        <h4>Deprecated</h4>
+        
+                        <%- markdown(current.deprecated) %>
+                    </div>
+                <% end %>
+
+                <%- markdown(current.description or '') %>
+
+                <%
+                local contents = {}
+
+                local modules = current.modules ~= nil and current.modules or current.struct.fields
+
+                for i, v in pairs(modules) do
+                    if not v.hidden then
+                        if v.kind == 'custom' and v.struct.isRecord then
+                            if not contents.Records then contents.Records = {} end
+                            contents.Records[i] = v
+                        elseif v.kind == 'custom' then
+                            if not contents.Modules then contents.Modules = {} end
+                            contents.Modules[i] = v
+                        elseif v.kind == 'enum' then
+                            if not contents.Enums then contents.Enums = {} end
+                            contents.Enums[i] = v
+                        elseif v.kind == 'function' then
+                            if not contents.Functions then contents.Functions = {} end
+                            contents.Functions[i] = v
+                        else
+                            if not contents.Variables then contents.Variables = {} end
+                            contents.Variables[i] = v
+                        end
+                    end
+                end
+                %>
+
+                <% for i = 1, #misc.order do %>
+                    <% local name = misc.order[i] %>
+
+                    <% if contents[name] then %>
+                        <h3 class="text-xl pt-6" id="<%= name %>"><%= name %></h3>
+                        <hr class="py-2">
+
+                        <% for i, v in pairs(contents[name]) do %>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <a href="./<%= i %><%= name == 'Modules' and '/index' or '' %>.html" class="text-blue-500"><%= i %></a>
+                                </div>
+                                <div class="col-span-2">
+                                    <%- markdown(v.description:match('^(.-)\n') or v.description) %>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% end %>
+                <% end %>
+            </div>
+        </main>
+    </div>
+</body>

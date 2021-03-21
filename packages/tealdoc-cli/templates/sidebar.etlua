@@ -1,0 +1,203 @@
+<%
+local function toRoot(...)
+    if page then
+        return '../'
+    else
+        return misc.toRoot(...)
+    end
+end
+
+local function trace(parent)
+    parent = current.parent
+
+    local str = {}
+
+    while parent do
+        table.insert(str, parent.name)
+
+        parent = parent.parent
+    end
+
+    local reversed = {}
+
+    for i = #str, 1, -1 do
+        table.insert(reversed, str[i])
+    end
+
+    return table.concat(reversed, '.')
+end
+
+local sectionOrder = {
+    'Pages',
+    'Modules',
+    'Examples'
+}
+
+local foundSections = {}
+
+_G.pageCache = _G.pageCache or {}
+
+if #project.pages > 0 then
+    foundSections.Pages = {}
+
+    for i = 1, #project.pages do
+        local page = project.pages[i]
+
+        if pageCache[page] then
+            foundSections.Pages[page] = _G.pageCache[page]
+        else
+            local f = assert(io.open(page))
+
+            local contents = f:read('*a')
+
+            f:close()
+
+            table.insert(foundSections.Pages, {
+                root = 'pages/' .. page .. '.html',
+                name = contents:match('.-# (.-)\n')
+            })
+        end
+    end
+end
+
+foundSections.Modules = {}
+
+if current and current.parent then
+    local traced = trace(current.parent)
+
+    table.insert(foundSections.Modules, traced)
+
+    local toIndex = '.'
+
+    if current.kind == 'custom' and not current.struct.isRecord then
+        toIndex = '.' .. toIndex
+    end
+
+    table.insert(foundSections.Modules, {
+        relative = toIndex .. '/index.html',
+        name = 'index (virtual)'
+    })
+
+    for field, tp in pairs(current.parent.struct.fields) do
+        local root = field
+
+        if tp.kind == 'custom' and not tp.struct.isRecord then
+            root = root .. '/index.html'
+        else
+            root = root .. '.html'
+        end
+
+        table.insert(foundSections.Modules, {
+            relative = toIndex .. root,
+            name =  field
+        })
+    end
+end
+
+if _G.moduleCache then
+    for i = 1, #_G.moduleCache do
+        table.insert(foundSections.Modules, _G.moduleCache[i])
+    end
+else
+    local modules = project.modules ~= nil and project.modules or project.module.struct.fields
+
+    local sorted = {}
+
+    for field, tp in pairs(modules) do
+        if not tp.hidden then
+            local section = field:match('^(.-)%.')
+
+            if not section then
+                section = field
+            end
+
+            if not sorted[section] then
+                sorted[section] = {}
+            end
+
+            local root = field
+
+            if tp.kind == 'custom' and not tp.struct.isRecord then
+                root = root .. '/index.html'
+            else
+                root = root .. '.html'
+            end
+
+            table.insert(sorted[section], {
+                root = root,
+                name = field,
+                section = section
+            })
+        end
+    end
+
+    for name, v in pairs(sorted) do
+        if #v > 1 then
+            table.insert(foundSections.Modules, name)
+        end
+
+        for i = 1, #v do
+            table.insert(foundSections.Modules, v[i])
+        end
+    end
+
+    _G.moduleCache = foundSections.Modules
+end
+%>
+
+<script src="<%= toRoot(current) %>assets/sidebar.js"></script>
+
+<nav class="table-cell w-72 bg-gray-400 text-gray-200 lg:visible md:invisible">
+    <%- include 'search' %>
+
+    <section class="mx-4 pt-4">
+        <div class="grid grid-cols-2">
+            <div class="text-right">
+                <h1 class="text-2xl font-bold text-white"><%- project.name %></h1>
+                <h3 class="text-lg"><%- project.version:match('^dev') and 'Development' or 'v' .. project.version %></h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="mx-6 pt-2">
+        <ul class="scripted">
+            <% for i = 1, #sectionOrder do %>
+                <% local section = sectionOrder[i] %>
+                <% if foundSections[section] then %>
+                    <li class="pl-4">
+                        <a id="<%= section %>-link" class="transition-colors duration-200 hover:text-white" href="#<%= section %>"><%= section %></a>
+                    </li>
+                <% end %>
+            <% end %>
+        </ul>
+
+        <br class="pt-3 scripted">
+
+        <ul>
+            <% for section, pages in pairs(foundSections) do %>
+                <noscript>
+                    <h2 class="text-lg"><%- section %></h2>
+                </noscript>
+                <li id="<%= section %>-section" class="hidden hidden-scripted">
+                    <ul>
+                        <% for i = 1, #pages do %>
+                            <% 
+                                local page = pages[i]
+                                local name = pages[i].name
+                            %>
+                            <li class="pl-4">
+                                <% if type(page) == 'table' then %>
+                                    <a class="transition-colors duration-200 hover:text-white" href="<%= page.root and toRoot(current) .. page.root or page.relative %>">
+                                        <%= name %>
+                                    </a>
+                                <% else %>
+                                    <div class="text-white text-sm font-bold"><%= page:upper() %></div>
+                                <% end %>
+                            </li>
+                        <% end %>
+                    </ul>
+                </li>
+            <% end %>
+        </ul>
+    </section>
+</nav>

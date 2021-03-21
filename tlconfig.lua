@@ -1,9 +1,11 @@
 return {
    include_dir = {
       'types/',
-      'src/'
+      'packages/'
    },
-   source_dir = 'src',
+   include = {
+      'packages/**/*'
+   },
    build_dir = 'out',
    gen_compat = 'off'
 }
