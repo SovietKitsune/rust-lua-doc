@@ -87,11 +87,6 @@ local record Type
    tp: tl.TypeInfo
 end
 
-local record State
-   report: tl.TypeReport
-   files: {string: string}
-end
-
 -- Token isn't exposed
 local record Token
    x: integer
@@ -109,6 +104,13 @@ local record Node
    x: integer
    tk: string
    kind: string
+end
+
+local record State
+   report: tl.TypeReport
+   files: {string: string}
+   tokens: {string: {Token}}
+   asts: {string: {Node}}
 end
 
 local function generateGlobals(modules: {string}): string
@@ -180,9 +182,11 @@ local function getReport(modules: {string: string}, virtual: boolean, isLua: boo
 
    local oldSearch = tl.search_module
 
-   local state = {
-      files = {}
-   } as State
+   local state: State = {
+      files = {},
+      tokens = {},
+      asts = {}
+   }
 
    tl.search_module = newSearch(modules, virtual, state)
 
@@ -442,12 +446,16 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
          kind = conversions[tp.t]
       }
    elseif tp.t == codes.FUNCTION then
-      local tokens = tl.lex(report.files[tp.file])
+      if not report.tokens[tp.file] then
+         report.tokens[tp.file] = tl.lex(report.files[tp.file]) as {Token}
+      end
+
+      local tokens = report.tokens[tp.file]
 
       local paramNames = {}
 
       local started = false
-      local tokensAtSig = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
+      local tokensAtSig = getTokensAtLine(tokens, tp.y, tp.x)
 
       for i = 1, #tokensAtSig do
          local token = tokensAtSig[i]
@@ -475,8 +483,6 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
          table.insert(rets, createType(tp.rets[i][1], report, noNominal))
       end
 
-      --; TODO - get functions stop
-
       out = {
          kind = 'function',
          description = getDescription(report.files[tp.file], tp.y),
@@ -503,12 +509,16 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
          customName = 'file'
       }
    elseif (tp.t == codes.RECORD or tp.t == codes.ARRAYRECORD) and tp.file then
-      local tokens = tl.lex(report.files[tp.file])
+      if not report.tokens[tp.file] then
+         report.tokens[tp.file] = tl.lex(report.files[tp.file]) as {Token}
+      end
 
-      local tokensAtSig, before = getTokensAtLine(tokens as {Token}, tp.y, tp.x)
+      local tokens = report.tokens[tp.file]
+
+      local tokensAtSig, before = getTokensAtLine(tokens, tp.y, tp.x)
 
       local name: string
-      local lastSig = tokens[#tokensAtSig + #before + 1] as Token
+      local lastSig = tokens[#tokensAtSig + #before + 1]
 
       local isRecord = false
 
@@ -528,9 +538,9 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
          if before[#before].kind == 'identifier' and before[#before - 1] and before[#before - 1].tk == 'record' then
             name = before[#before].tk
             -- Correct the X position to include `record`
-            tp.x = before[#before - 1].x as integer
+            tp.x = before[#before - 1].x
             -- Same with the Y
-            tp.y = before[#before - 1].y as integer
+            tp.y = before[#before - 1].y
 
             lastSig = tokensAtSig[1]
          end
@@ -560,11 +570,11 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
       -- This part is (more) likely to fail
       xpcall(function()
          if name then
-            local lastToken = getStop(tokens as {Token}, tp.y, tp.x)
+            local lastToken = getStop(tokens, tp.y, tp.x)
 
             out.stopY = lastToken.y
 
-            local tokensBetween = getTokensBetween(tokens as {Token}, lastSig.y, lastToken.y, lastSig.x, lastToken.x)
+            local tokensBetween = getTokensBetween(tokens, lastSig.y, lastToken.y, lastSig.x, lastToken.x)
 
             local i = 1
 
@@ -638,7 +648,13 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
                end
             end
          else
-            local _, node = tl.parse_program(tokens)
+            if not report.asts[tp.file] then
+               local _, node = (tl.parse_program as function({Token}): integer, Node)(tokens)
+
+               report.asts[tp.file] = node
+            end
+
+            local node = report.asts[tp.file]
 
             local collectedNode, reason = recursiveFind(node as Node, tp.x, tp.y)
 

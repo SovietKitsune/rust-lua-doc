@@ -11,7 +11,14 @@ function util.require(path: string): any
 
    local data = fs.read(path)
 
-   local fn = assert(load(data, path))
+   local fn: function
+
+   if _VERSION == 'Lua 5.1' then
+      global loadstring: function(string, string): function
+      fn = assert(loadstring(data, path))
+   else
+      fn = assert(load(data, path))
+   end
 
    local res = fn()
 
@@ -32,10 +39,11 @@ function util.loadGlobalConfig(path: string): table -- Let the caller typecast i
 
    local fn: function
 
-   if tonumber(_VERSION:match('Lua ([%d%.]+)')) < 5.2 then
+   if _VERSION == 'Lua 5.1' then
       global setfenv: function(function, table)
+      global loadstring: function(string, string): function
 
-      fn = assert(load(data, path))
+      fn = assert(loadstring(data, path))
 
       setfenv(fn, env)
    else

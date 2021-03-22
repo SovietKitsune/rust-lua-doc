@@ -68,23 +68,23 @@
                color: #C8D3F5;
             }
          
-.moonlight .code-constant { color: #ffdf9b; }
-.moonlight .code-comment { color: #7e8eda; }
-.moonlight .code-identifier { color: #e4f3fa; }
-.moonlight .code-string { color: #7af8ca; }
-.moonlight .code-number { color: #ff9668; }
-.moonlight .code-keyword { color: #baacff; }
 .moonlight .code-library { color: #82AAFF; }
+.moonlight .code-comment { color: #7e8eda; }
+.moonlight .code-string { color: #7af8ca; }
+.moonlight .code-constant { color: #ffdf9b; }
+.moonlight .code-number { color: #ff9668; }
 .moonlight .code-keyword2 { color: #FF5370; }
+.moonlight .code-keyword { color: #baacff; }
+.moonlight .code-identifier { color: #e4f3fa; }
 .moonlight .code-text { color: #e4f3fa; }
 /* light theme */
             .light {
-               background-color: nil;
-               color: nil;
+               background-color: inherit;
+               color: inherit;
             }
 
             .light span {
-               color: nil;
+               color: inherit;
             }
 
             .light .search {
@@ -92,16 +92,16 @@
             }
 
             .light .border-black {
-               border-color: nil;
+               border-color: inherit;
             }
 
             .light .top-border {
-               background-color: nil;
-               border-color: nil;
+               background-color: inherit;
+               border-color: inherit;
             }
 
             .light a {
-               color: nil;
+               color: inherit;
             }
 
             .light nav {
@@ -109,7 +109,7 @@
             }
 
             .light nav a {
-               color: nil;
+               color: inherit;
             }
 
             .light .tippy-box[data-theme~='auto'] {
@@ -127,18 +127,18 @@
             }
 
             .light .dropdown {
-               background-color: nil;
-               color: nil;
+               background-color: inherit;
+               color: inherit;
             }
          
-.light .code-constant { color: #e6c07b; }
-.light .code-comment { color: #a0a1a7; }
-.light .code-identifier { color: #383a42; }
-.light .code-string { color: #50a14f; }
-.light .code-number { color: #d19a66; }
-.light .code-keyword { color: #a626a4; }
 .light .code-library { color: #82AAFF; }
+.light .code-comment { color: #a0a1a7; }
+.light .code-string { color: #50a14f; }
+.light .code-constant { color: #e6c07b; }
+.light .code-number { color: #d19a66; }
 .light .code-keyword2 { color: #FF5370; }
+.light .code-keyword { color: #a626a4; }
+.light .code-identifier { color: #383a42; }
 .light .code-text { color: #383a42; }
 /* nordic theme */
             .nordic {
@@ -194,12 +194,12 @@
                color: #eceff4;
             }
          
-.nordic .code-constant { color: #8fbcbb; }
-.nordic .code-comment { color: #4c566a; }
-.nordic .code-identifier { color: #eceff4; }
-.nordic .code-string { color: #a3be8c; }
-.nordic .code-number { color: #ebcb8b; }
-.nordic .code-keyword { color: #5e81ac; }
 .nordic .code-library { color: #81a1c1; }
+.nordic .code-comment { color: #4c566a; }
+.nordic .code-string { color: #a3be8c; }
+.nordic .code-constant { color: #8fbcbb; }
+.nordic .code-number { color: #ebcb8b; }
 .nordic .code-keyword2 { color: #5e81ac; }
+.nordic .code-keyword { color: #5e81ac; }
+.nordic .code-identifier { color: #eceff4; }
 .nordic .code-text { color: #eceff4; }

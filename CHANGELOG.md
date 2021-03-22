@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.0.1
+
+* Implement token and AST cache
+* Semver!
+* Some memory optimizations
+  * `tl.tl` (Running on 5.4)
+    * `compiling`   - `86708kb`
+    * `documenting` - `95252kb`
+  * `tealdoc` (Running on 5.4)
+    * `compiling`   - `77576kb` (`cyan build` - clean build)
+    * `documenting` - `23036kb`
+* Fix Lua 5.1 cli issues
+
 ## dev-11
 
 * Fix some responsive issues
