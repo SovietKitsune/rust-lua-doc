@@ -1,5 +1,23 @@
 # Changelog
 
+## tealdoc-0.0.2
+
+* Implement LDoc style comments while still retaining EmmyLua style comments (basically before [#392](https://github.com/sumneko/lua-language-server/issues/392))
+  ```lua
+  --- This
+  -- is
+  -- valid
+  local function test()
+  end
+  ```
+  ```lua
+  --- Same
+  --- with
+  --- this
+  local function test()
+  end
+  ```
+
 ## 0.0.1
 
 * Implement token and AST cache

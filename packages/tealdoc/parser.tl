@@ -247,6 +247,8 @@ local function getDescription(contents: string, y: integer): string
 
    local i = y - 1
 
+   local isLDoc = false
+
    while true do
       local line = split[i]
 
@@ -255,12 +257,24 @@ local function getDescription(contents: string, y: integer): string
       else
          i = i - 1
 
-         if line and line:match('%s*%-%-%-%.*') then
+         if not isLDoc and line and line:match('%s*%-%-.*') then
+            table.insert(descLines, line:match('%s*%-%- ?(.*)'))
+
+            if line:match('%s*%-%-%-.*') then
+               isLDoc = true
+
+               descLines[#descLines] = line:match('%s*%-%-%- ?(.*)')
+            end
+         elseif isLDoc and line and line:match('%s*%-%-%-.*') then
             table.insert(descLines, line:match('%s*%-%-%- ?(.*)'))
          else
             break
          end
       end
+   end
+
+   if not isLDoc then
+      return ''
    end
 
    local reversed = {}
@@ -370,6 +384,7 @@ local function parseKind(toParse: Node, lines: {string: integer})
    else
       -- `local_type` would be a record which we can already parse
       -- Records are easier to parse since it isn't the entire Lua syntax
+      -- Although, the AST would be used if it contained record field locations
       error('Unexpected kind: ' .. toParse.kind)
    end
 end

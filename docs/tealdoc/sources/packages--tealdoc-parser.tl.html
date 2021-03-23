@@ -51,6 +51,8 @@
 </span><span class="code-keyword">end</span><span class="code-text">
 
 </span><span class="code-comment">--- A structure that represents a bare record or table
+</span><span class="code-comment">--- abc
+</span><span class="code-comment">--- foo
 </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">record</span><span class="code-text"> </span><span class="code-text">Struct</span><span class="code-text">
    </span><span class="code-text">fields</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Type</span><span class="code-text">}</span><span class="code-text">
    </span><span class="code-text">isRecord</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span><span class="code-text">
@@ -288,6 +290,8 @@
 
    </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">y</span><span class="code-text"> </span><span class="code-text">-</span><span class="code-text"> </span><span class="code-number">1</span><span class="code-text">
 
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">isLDoc</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span class="code-text">
+
    </span><span class="code-keyword">while</span><span class="code-text"> </span><span class="code-keyword">true</span><span class="code-text"> </span><span class="code-keyword">do</span><span class="code-text">
       </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">split</span><span class="code-text">[</span><span class="code-text">i</span><span class="code-text">]</span><span class="code-text">
 
@@ -296,12 +300,24 @@
       </span><span class="code-keyword">else</span><span class="code-text">
          </span><span class="code-text">i</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text"> </span><span class="code-text">-</span><span class="code-text"> </span><span class="code-number">1</span><span class="code-text">
 
-         </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text">:</span><span class="code-text">match</span><span class="code-text">(</span><span class="code-string">'%s*%-%-%-%.*'</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+         </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-keyword">not</span><span class="code-text"> </span><span class="code-text">isLDoc</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text">:</span><span class="code-text">match</span><span class="code-text">(</span><span class="code-string">'%s*%-%-.*'</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+            </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">descLines</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text">:</span><span class="code-text">match</span><span class="code-text">(</span><span class="code-string">'%s*%-%- ?(.*)'</span><span class="code-text">)</span><span class="code-text">)</span><span class="code-text">
+
+            </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text">:</span><span class="code-text">match</span><span class="code-text">(</span><span class="code-string">'%s*%-%-%-.*'</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+               </span><span class="code-text">isLDoc</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">true</span><span class="code-text">
+
+               </span><span class="code-text">descLines</span><span class="code-text">[</span><span class="code-text">#</span><span class="code-text">descLines</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text">:</span><span class="code-text">match</span><span class="code-text">(</span><span class="code-string">'%s*%-%-%- ?(.*)'</span><span class="code-text">)</span><span class="code-text">
+            </span><span class="code-keyword">end</span><span class="code-text">
+         </span><span class="code-keyword">elseif</span><span class="code-text"> </span><span class="code-text">isLDoc</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text">:</span><span class="code-text">match</span><span class="code-text">(</span><span class="code-string">'%s*%-%-%-.*'</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
             </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">descLines</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text">:</span><span class="code-text">match</span><span class="code-text">(</span><span class="code-string">'%s*%-%-%- ?(.*)'</span><span class="code-text">)</span><span class="code-text">)</span><span class="code-text">
          </span><span class="code-keyword">else</span><span class="code-text">
             </span><span class="code-keyword">break</span><span class="code-text">
          </span><span class="code-keyword">end</span><span class="code-text">
       </span><span class="code-keyword">end</span><span class="code-text">
+   </span><span class="code-keyword">end</span><span class="code-text">
+
+   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-keyword">not</span><span class="code-text"> </span><span class="code-text">isLDoc</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">''</span><span class="code-text">
    </span><span class="code-keyword">end</span><span class="code-text">
 
    </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">reversed</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">}</span><span class="code-text">
@@ -411,6 +427,7 @@
    </span><span class="code-keyword">else</span><span class="code-text">
       </span><span class="code-comment">-- `local_type` would be a record which we can already parse
 </span><span class="code-text">      </span><span class="code-comment">-- Records are easier to parse since it isn't the entire Lua syntax
+</span><span class="code-text">      </span><span class="code-comment">-- Although, the AST would be used if it contained record field locations
 </span><span class="code-text">      </span><span class="code-text">error</span><span class="code-text">(</span><span class="code-string">'Unexpected kind: '</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">toParse</span><span class="code-text">.</span><span class="code-text">kind</span><span class="code-text">)</span><span class="code-text">
    </span><span class="code-keyword">end</span><span class="code-text">
 </span><span class="code-keyword">end</span><span class="code-text">

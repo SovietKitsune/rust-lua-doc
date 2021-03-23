@@ -8,14 +8,14 @@ xpcall(
       -- logger.level = 5
 
       -- local tree = {
-      --    ['tl'] = './examples/tl/tl.tl'
+      --    ['tl'] = './test.tl'
       -- }
 
       -- local state = parser.getReport(tree, false, false)
 
       -- local mods = parser.extractModules(state, tree)
 
-      -- parser.createType(mods.tl, state)
+      -- logger.debug(parser.createType(mods.tl, state))
    end,
    function(err)
       err = (err .. '\n' .. debug.traceback())
