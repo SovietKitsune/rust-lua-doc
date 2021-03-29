@@ -1,0 +1,761 @@
+
+
+<!DOCTYPE html>
+<html lang="en" class="nordic h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    
+        <meta property="og:title" content="pages/tl-internals.md - Tealdoc">
+
+        <title>pages/tl-internals.md - Tealdoc</title>
+
+        <link rel="stylesheet" href="../assets/themes.css">
+        <script src="../assets/theme.js"></script>
+    
+
+    
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+    
+
+    <noscript>
+        <style>
+            .scripted {
+                display: none;
+            }
+
+            .hidden-scripted {
+                display: block;
+            }
+        </style>
+    </noscript>
+</head>
+
+
+<body class="h-full">
+    <div class="table w-full h-full">
+        
+
+<script src="../assets/sidebar.js"></script>
+
+<nav class="w-72 bg-gray-400 text-gray-200 lg:table-cell hidden" id="sidebar">
+    
+
+<script src="../assets/search.js"></script>
+
+
+    <section class="mx-2 scripted">
+        <form class="search py-2 rounded-md" id="search-form">
+            <button type="submit" class="pl-1 search-area">
+                <span class="fas fa-search search-area"></span>
+            </button>
+            <label>
+                <input class="search search-area focus:outline-none" type="text" placeholder="Search..." autocomplete="off" id="search-box">
+            </label>
+            <button type="button" class="pr-1 dropdown-btn" onclick="dropdown()">
+                <span class="fas fa-paint-brush dropdown-btn"></span>
+            </button>
+        </form>
+
+        <div id="dropdown" class="ml-3 relative hidden">
+            <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white text-gray-700 dropdown">
+                
+                    <button type="button" onclick="changeTheme('moonlight')" class="block px-4 py-2 text-sm">
+                        moonlight
+                    </button>
+                
+                    <button type="button" onclick="changeTheme('light')" class="block px-4 py-2 text-sm">
+                        light
+                    </button>
+                
+                    <button type="button" onclick="changeTheme('nordic')" class="block px-4 py-2 text-sm">
+                        nordic
+                    </button>
+                
+            </div>
+        </div>
+
+        <div class="relative hidden" id="results-parent">
+            <ul class="origin-center absolute mt-2 rounded-md py-1 bg-white dropdown" id="results">
+                
+            </ul>
+        </div>
+    </section>
+
+
+
+    <section class="mx-4 pt-4">
+        <div class="grid grid-cols-2">
+            <div class="text-right">
+                <h1 class="text-2xl font-bold text-white">Tealdoc</h1>
+                <h3 class="text-lg">Development</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="mx-6 pt-2">
+        <ul class="scripted">
+            
+                
+                
+                    <li class="pl-4">
+                        <a id="Pages-link" class="transition-colors duration-200 hover:text-white" href="#Pages">Pages</a>
+                    </li>
+                
+            
+                
+                
+                    <li class="pl-4">
+                        <a id="Modules-link" class="transition-colors duration-200 hover:text-white" href="#Modules">Modules</a>
+                    </li>
+                
+            
+                
+                
+            
+        </ul>
+
+        <br class="pt-3 scripted">
+
+        <ul>
+            
+                <noscript>
+                    <h2 class="text-lg">Pages</h2>
+                </noscript>
+                <li id="Pages-section" class="hidden hidden-scripted">
+                    <ul>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../pages/pages-tl-internals.md.html">
+                                        Teal API (somewhat) explained
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../pages/readme.md.html">
+                                        Tealdoc
+                                    </a>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+                <noscript>
+                    <h2 class="text-lg">Modules</h2>
+                </noscript>
+                <li id="Modules-section" class="hidden hidden-scripted">
+                    <ul>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <div class="text-white text-sm font-bold">TEALDOC-CLI</div>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.generator/index.html">
+                                        tealdoc-cli.generator
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.humanize.html">
+                                        tealdoc-cli.humanize
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.fs/index.html">
+                                        tealdoc-cli.fs
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.version.html">
+                                        tealdoc-cli.version
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.markdown.html">
+                                        tealdoc-cli.markdown
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.theme/index.html">
+                                        tealdoc-cli.theme
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.misc/index.html">
+                                        tealdoc-cli.misc
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.highlight.html">
+                                        tealdoc-cli.highlight
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.command/index.html">
+                                        tealdoc-cli.command
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc-cli.util/index.html">
+                                        tealdoc-cli.util
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <div class="text-white text-sm font-bold">TEALDOC</div>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc.version.html">
+                                        tealdoc.version
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc.parser/index.html">
+                                        tealdoc.parser
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc.logger/index.html">
+                                        tealdoc.logger
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="../tealdoc.tag/index.html">
+                                        tealdoc.tag
+                                    </a>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+        </ul>
+    </section>
+</nav>
+
+<button class="scripted lg:hidden pl-4 table-cell focus:outline-none" onclick="openSidebar()">
+    <span class="fas fa-bars"></span>
+</button>
+
+
+        <main>
+            <div class="mx-auto py-6 px-8 max-w-6xl">
+                <h1 class="text-3xl py-2">Teal API (somewhat) explained<hr /></h1>
+
+<p>Some of these are just guesses for what structures in Teal actually are.</p>
+
+<p><strong>This is a work in progress.</strong></p>
+
+<h2 class="text-2xl py-2">Exposed apis</h2>
+
+<h3 class="text-xl py-2">tl.LoadMode</h3>
+
+<p>Type: <code>enum</code></p>
+
+<p>Only used within <a href="#tl.load" class="text-blue-500" >tl.load</a>. Equivalent to the <code>mode</code> option of <a href="https://www.lua.org/manual/5.4/manual.html#pdf-load" class="text-blue-500" >load</a>.</p>
+
+<ul>
+<li><code>b</code> - The input data is binary</li>
+<li><code>t</code> - The input data is text</li>
+<li><code>bt</code> - The input data is both text and binary</li>
+</ul>
+
+<h3 class="text-xl py-2">tl.LoadFunction</h3>
+
+<p>Type: <code>type</code></p>
+
+<p>Only used within <a href="#tl.load" class="text-blue-500" >tl.load</a> and is the return value of <a href="https://www.lua.org/manual/5.4/manual.html#pdf-load" class="text-blue-500" >load</a>.</p>
+
+<h3 class="text-xl py-2">tl.CompatMode</h3>
+
+<p>Type: <code>enum</code></p>
+
+<p>Defines whether the compiler should either:</p>
+
+<ul>
+<li><code>off</code> - Don&#39;t generate any code to attempt to load <code>compat53</code></li>
+<li><code>optional</code> - Only generate code to load <code>compat53</code> if Lua 5.3 features are used</li>
+<li><code>required</code> - Require that code to load <code>compat53</code> is generated</li>
+</ul>
+
+<h3 class="text-xl py-2">tl.TargetMode</h3>
+
+<p>Type: <code>enum</code></p>
+
+<p>The Lua version that should be target. Teal will attempt to polyfill any missing apis that are not supported by the target version.</p>
+
+<p>Teal is designed to be a language that can target all modern Lua versions (5.1 to 5.4 including LuaJIT) so compatibility is needed.</p>
+
+<ul>
+<li><code>5.1</code> - Intended for both Lua 5.1 and Lua 5.2, polyfills missing syntax and apis.</li>
+</ul>
+
+<pre class="code-block px-4"><code><span class="code-comment">-- Input
+</span><span class="code-text">print</span><span class="code-text">(</span><span class="code-number">1</span><span class="code-text"> </span><span class="code-text">&lt;</span><span class="code-text">&lt;</span><span class="code-text"> </span><span class="code-number">2</span><span class="code-text">)</span><span class="code-text">
+</span><span class="code-comment">-- Output
+</span><span class="code-text">print</span><span class="code-text">(</span><span class="code-text">bit32</span><span class="code-text">.</span><span class="code-text">lshift</span><span class="code-text">(</span><span class="code-number">1</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-number">2</span><span class="code-text">)</span><span class="code-text">)</span><span class="code-text">
+</span></code></pre>
+
+<ul>
+<li><code>5.3</code> - Indented for 5.3 and above. This should touch any syntax.</li>
+</ul>
+
+<pre class="code-block px-4"><code><span class="code-comment">-- Input
+</span><span class="code-text">print</span><span class="code-text">(</span><span class="code-number">1</span><span class="code-text"> </span><span class="code-text">&lt;</span><span class="code-text">&lt;</span><span class="code-text"> </span><span class="code-number">2</span><span class="code-text">)</span><span class="code-text">
+</span><span class="code-comment">-- Output
+</span><span class="code-text">print</span><span class="code-text">(</span><span class="code-number">1</span><span class="code-text"> </span><span class="code-text">&lt;</span><span class="code-text">&lt;</span><span class="code-text"> </span><span class="code-number">2</span><span class="code-text">)</span><span class="code-text">
+</span></code></pre>
+
+<h3 class="text-xl py-2">tl.TypeCheckOptions</h3>
+
+<p>Type: <code>record</code></p>
+
+<p>Defines what options to use when type checking a Teal/Lua script.</p>
+
+<p>Since Teal is a Superset of Lua, being able to write plain Lua is important.</p>
+
+<ul>
+<li><code>lax</code> - <code>boolean</code></li>
+</ul>
+
+<p>Tell the type checker to be more lax on types.</p>
+
+<ul>
+<li><p>Allow normal Lua files to pass through <code>required_module</code></p>
+
+<ul>
+<li>Mark <code>utf8</code> as the only library that needs <code>compat53</code></li>
+<li>Allow <code>unknown</code> types (they won&#39;t throw errors)</li>
+<li><code>invalid</code> types will instead of <code>unknown</code></li>
+</ul></li>
+<li><p><code>filename</code> - <code>string</code></p></li>
+</ul>
+
+<p>The filename that will be attached to all types</p>
+
+<ul>
+<li><code>gen_compat</code> - <a href="#tl.CompatMode" class="text-blue-500" >tl.CompatMode</a></li>
+<li><code>gen_target</code> - <a href="#tl.TargetMode" class="text-blue-500" >tl.TargetMode</a></li>
+<li><code>env</code> - <a href="#tl.Env" class="text-blue-500" >tl.Env</a></li>
+<li><code>run_internal_compiler_checks</code> - <code>boolean</code></li>
+</ul>
+
+<p>Tell the teal compiler to not run internal/runtime type checking by setting <code>visit_node</code> and <code>visit_type</code> to nil.</p>
+
+<pre class="code-block px-4"><code><span class="code-comment">-- visit_type.after
+</span><span class="code-text">after</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">typ</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Type</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">_children</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">Type</span><span class="code-text">}</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">ret</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Type</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Type</span><span class="code-text">
+    </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">type</span><span class="code-text">(</span><span class="code-text">ret</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">~=</span><span class="code-text"> </span><span class="code-string">"table"</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+        </span><span class="code-text">error</span><span class="code-text">(</span><span class="code-text">typ</span><span class="code-text">.</span><span class="code-text">typename</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">" did not produce a type"</span><span class="code-text">)</span><span class="code-text">
+    </span><span class="code-keyword">end</span><span class="code-text">
+    </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">type</span><span class="code-text">(</span><span class="code-text">ret</span><span class="code-text">.</span><span class="code-text">typename</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">~=</span><span class="code-text"> </span><span class="code-string">"string"</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+        </span><span class="code-text">error</span><span class="code-text">(</span><span class="code-string">"type node does not have a typename"</span><span class="code-text">)</span><span class="code-text">
+    </span><span class="code-keyword">end</span><span class="code-text">
+    </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">ret</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+</span><span class="code-comment">-- visit_node.after
+</span><span class="code-text">visit_node</span><span class="code-text">.</span><span class="code-text">after</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text">(</span><span class="code-text">node</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Node</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">_children</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">Type</span><span class="code-text">}</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">Type</span><span class="code-text">
+    </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">type</span><span class="code-text">(</span><span class="code-text">node</span><span class="code-text">.</span><span class="code-text">type</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">~=</span><span class="code-text"> </span><span class="code-string">"table"</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+        </span><span class="code-text">error</span><span class="code-text">(</span><span class="code-text">node</span><span class="code-text">.</span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">" did not produce a type"</span><span class="code-text">)</span><span class="code-text">
+    </span><span class="code-keyword">end</span><span class="code-text">
+    </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">type</span><span class="code-text">(</span><span class="code-text">node</span><span class="code-text">.</span><span class="code-text">type</span><span class="code-text">.</span><span class="code-text">typename</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">~=</span><span class="code-text"> </span><span class="code-string">"string"</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
+        </span><span class="code-text">error</span><span class="code-text">(</span><span class="code-text">node</span><span class="code-text">.</span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">" type does not have a typename"</span><span class="code-text">)</span><span class="code-text">
+    </span><span class="code-keyword">end</span><span class="code-text">
+    </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">node</span><span class="code-text">.</span><span class="code-text">type</span><span class="code-text">
+</span><span class="code-keyword">end</span><span class="code-text">
+</span></code></pre>
+
+<h3 class="text-xl py-2">tl.Env</h3>
+
+<p>Type: <code>record</code></p>
+
+<p>The environment that the type checker write and reads from. The record may also contain information on if the parser should keep going on fails or generation details.</p>
+
+<ul>
+<li><code>globals</code> - <code>{ string:</code> <a href="#private.Variables" class="text-blue-500" >Variable</a> <code>}</code></li>
+</ul>
+
+<p>The globals that are defined (<code>global x = ...</code>) and the standard library.</p>
+
+<ul>
+<li><code>modules</code> - <code>{</code> <a href="#private.Type" class="text-blue-500" >Types</a> <code>}</code></li>
+</ul>
+
+<p>A module is defined as a required file (<code>require &#39;...&#39;</code>).</p>
+
+<ul>
+<li><code>loaded</code> - <code>{</code> <a href="#tl.Result" class="text-blue-500" >Result</a> <code>}</code></li>
+</ul>
+
+<p>Unlike <code>modules</code>, <code>loaded</code> stored the current file as well. <code>loaded</code> also stores Results instead of Types (although Results do contain a type field).</p>
+
+<ul>
+<li><code>loaded_order</code> - Array of the filenames of loaded modules (stored as strings)</li>
+</ul>
+
+<p>Every time a file is loaded, a new string is pushed onto this array allowing the order of loads to be guaranteed.</p>
+
+<ul>
+<li><code>gen_compat</code> - <a href="#tl.CompatMode" class="text-blue-500" >tl.CompatMode</a></li>
+<li><code>gen_target</code> - <a href="#tl.GenTarget" class="text-blue-500" >tl.GenTarget</a></li>
+<li><code>keep_going</code> - <code>boolean</code></li>
+</ul>
+
+<p>Prevents syntax errors from causing the compiler to return in panic. This is usually only used within <code>tl types</code> (technically text editors since anywhere else invalid syntax is bad).</p>
+
+<h3 class="text-xl py-2">tl.Symbol</h3>
+
+<p>Type: <code>record</code></p>
+
+<p>A symbol can be thought of a variable (not to be confused with the <a href="#private.Variable" class="text-blue-500" >Variable</a> type). Symbols can also represent an opening or closing of a scope (with the name of <code>@{</code> or <code>@}</code>).</p>
+
+<ul>
+<li><code>x</code> - <code>integer</code></li>
+</ul>
+
+<p>The position of the symbol in terms of the <code>x</code> axis (or column)</p>
+
+<ul>
+<li><code>y</code> - <code>integer</code></li>
+</ul>
+
+<p>The position of the symbol in terms of the <code>y</code> axis (or line)</p>
+
+<ul>
+<li><code>name</code> - <code>string</code></li>
+</ul>
+
+<p>The name of the symbol. There are some special names such as <code>@{</code> and <code>@}</code> for specifying which symbols are within a certain scope.</p>
+
+<ul>
+<li><code>typ</code> - <a href="#private.Type" class="text-blue-500" >Type</a></li>
+</ul>
+
+<p>The specific type of the symbol.</p>
+
+<ul>
+<li><code>other</code> - <code>integer</code></li>
+</ul>
+
+<p>Unused? (The creation of symbols doesn&#39;t specify any sort of <code>other</code> field and no other field is ever created)</p>
+
+<ul>
+<li><code>skip</code> - <code>boolean</code></li>
+</ul>
+
+<p>Signifies that the symbol should be skipped (Only used internally to resolve scopes)</p>
+
+<h3 class="text-xl py-2">tl.Result</h3>
+
+<p>Type: <code>record</code></p>
+
+<p>Results are what is returned from functions which process teal code (<a href="#tl.process" class="text-blue-500" >tl.process</a>, <a href="#tl.process_string" class="text-blue-500" >tl.process_string</a>, and <a href="#tl.type_check" class="text-blue-500" >tl.type_check</a>).</p>
+
+<ul>
+<li><code>filename</code> - <code>string</code></li>
+</ul>
+
+<p>The filename of the file that was processed (usually an argument of processor functions)</p>
+
+<ul>
+<li><code>ast</code> - <a href="#private.Node" class="text-blue-500" >Node</a></li>
+</ul>
+
+<p>The AST of the processed file.</p>
+
+<ul>
+<li><code>type</code> - <a href="#private.Type" class="text-blue-500" >Type</a></li>
+</ul>
+
+<p>The type of the data that was returned from the processed code (if anything was returned).</p>
+
+<ul>
+<li><code>syntax_errors</code> - <code>{</code> <a href="#tl.Error" class="text-blue-500" >Error</a> <code>}</code></li>
+</ul>
+
+<p>All the syntax errors that were encountered when processing the file. Example:</p>
+
+<blockquote>
+<p>syntax error, expected &#39;=&#39;</p>
+</blockquote>
+
+<ul>
+<li><code>type_errors</code> - <code>{</code> <a href="#tl.Error" class="text-blue-500" >Error</a> <code>}</code></li>
+</ul>
+
+<p>All the type errors that were encountered when processing the file. Example:</p>
+
+<blockquote>
+<p>in assignment: got string &#39;hi&#39;, expected integer</p>
+</blockquote>
+
+<ul>
+<li><code>warnings</code> - <code>{</code> <a href="#tl.Error" class="text-blue-500" >Error</a> <code>}</code></li>
+</ul>
+
+<p>Warnings are items that are technically valid but should be changed or hints on how to fix an error. Examples:</p>
+
+<ul>
+<li><blockquote>
+<p>hint: if you want to iterate over fields of a record, cast it to {string:any}</p>
+</blockquote></li>
+<li><blockquote>
+<p>unused variable i: string</p>
+</blockquote></li>
+<li><p><code>symbol_list</code> - <code>{</code> <a href="#tl.Symbol" class="text-blue-500" >Symbol</a> <code>}</code></p></li>
+</ul>
+
+<p>All the symbols within the file.</p>
+
+<ul>
+<li><code>env</code> - <a href="#tl.Env" class="text-blue-500" >Env</a></li>
+</ul>
+
+<p>The environment used when processing the file.</p>
+
+<ul>
+<li><code>dependencies</code> - <code>{ string: string }</code></li>
+</ul>
+
+<p>All the dependencies of the file, sorted as module name to the file found.</p>
+
+<h3 class="text-xl py-2">tl.WarningKind</h3>
+
+<p>Type: <code>enum</code></p>
+
+<p>The different kinds of warnings that could arise during parsing/processing.</p>
+
+<ul>
+<li><code>unknown</code> - An unknown variable is found (isn&#39;t a warning when lax mode is enabled).</li>
+<li><code>unused</code> - An unused variable is found.</li>
+<li><code>redeclaration</code> - A variable is redeclared (ie <code>local x = 5; local x = 2</code>)</li>
+<li><code>branch</code> - A branch that will either always be true or always be false is encountered.</li>
+<li><code>hint</code> - A hint is something that can help the user fix another warning.</li>
+<li><code>debug</code> - A debug warning is only used to figure out what type a certain variable is. (This is thrown when the special function of <code>print_type</code> is called.)</li>
+</ul>
+
+<h3 class="text-xl py-2">tl.warning_kinds</h3>
+
+<p>Type: <code>{ string: boolean }</code></p>
+
+<p>A map from warning kinds to boolean values in order to do a quick check if a certain warning exists (Used only within the CLI).</p>
+
+<h3 class="text-xl py-2">tl.Error</h3>
+
+<p>Type: <code>record</code></p>
+
+<p>An error gives positions and a message to what went wrong within a file.</p>
+
+<ul>
+<li><code>x</code> - <code>integer</code></li>
+</ul>
+
+<p>The position of the error in terms of the <code>x</code> axis (or column)</p>
+
+<ul>
+<li><code>y</code> - <code>integer</code></li>
+</ul>
+
+<p>The position of the error in terms of the <code>y</code> axis (or line)</p>
+
+<ul>
+<li><code>msg</code> - <code>string</code></li>
+</ul>
+
+<p>The message associated with the error</p>
+
+<ul>
+<li><code>filename</code> - <code>string</code></li>
+</ul>
+
+<p>The file that generated the error message</p>
+
+<ul>
+<li><code>tag</code> - <a href="#tl.WarningKind" class="text-blue-500" >tl.WarningKind</a></li>
+</ul>
+
+<p>The kind of warning that was thrown</p>
+
+<ul>
+<li><code>i</code> - <code>integer</code></li>
+</ul>
+
+<blockquote>
+<p>used temporarily for stable-sorting</p>
+</blockquote>
+
+<h3 class="text-xl py-2">tl.typecodes</h3>
+
+<p>Type: <code>{ string: number }</code></p>
+
+<p>A dictionary linking names of types to their associated number values.</p>
+
+<blockquote>
+<p>Implementation rationale:</p>
+
+<ul>
+<li>bit 31: (MSB) special (&quot;any&quot;, &quot;unknown&quot;, &quot;invalid&quot;)</li>
+<li>&quot;any&quot; satisfies all Lua masks</li>
+<li>bits 30-27: if valid: other Teal types (&quot;nominal&quot;, &quot;poly&quot;, &quot;union&quot;, &quot;typevar&quot;)</li>
+<li>bits 24-26: reserved</li>
+<li>bits 16-19: if valid: Teal types (&quot;array&quot;, &quot;record&quot;, &quot;arrayrecord&quot;, &quot;map&quot;, &quot;tuple&quot;, &quot;enum&quot;) that map to a Lua type (&quot;table&quot;, &quot;string&quot;)</li>
+<li>bit 15: if not valid: value is unknown</li>
+<li>bits 8-14: reserved</li>
+<li>bits 0-7: (LSB) Lua types, one bit for each (&quot;nil&quot;, &quot;number&quot;, &quot;boolean&quot;, &quot;string&quot;, table, &quot;function&quot;, &quot;userdata&quot;, &quot;thread&quot;)</li>
+<li>every valid value has a Lua type bit set</li>
+</ul>
+</blockquote>
+
+<ul>
+<li><code>NIL</code> - <code>0x00000001</code></li>
+<li><code>NUMBER</code> - <code>0x00000002</code></li>
+<li><code>BOOLEAN</code> - <code>0x00000004</code></li>
+<li><code>STRING</code> - <code>0x00000008</code></li>
+<li><code>TABLE</code> - <code>0x00000010</code></li>
+<li><code>FUNCTION</code> - <code>0x00000020</code></li>
+<li><code>USERDATA</code> - <code>0x00000040</code></li>
+<li><code>IS_TABLE</code> - <code>0x00000008</code></li>
+<li><code>IS_NUMBER</code> - <code>0x00000002</code> or <code>NUMBER</code></li>
+<li><code>IS_STRING</code> - <code>0x00000004</code></li>
+<li><code>LUA_MASK</code> - <code>0x00000fff</code></li>
+<li><code>INTEGER</code> - <code>0x00010002</code></li>
+<li><code>ARRAY</code> - <code>0x00010008</code></li>
+<li><code>RECORD</code> - <code>0x00020008</code></li>
+<li><code>ARRAYRECORD</code> - <code>0x00030008</code></li>
+<li><code>MAP</code> - <code>0x00040008</code></li>
+<li><code>TUPLE</code> - <code>0x00080008</code></li>
+<li><code>EMPTY_TABLE</code> - <code>0x00000008</code> or <code>IS_TABLE</code></li>
+<li><code>ENUM</code> - <code>0x00010004</code></li>
+<li><code>IS_ARRAY</code> - <code>0x00010008</code> or <code>ARRAY</code></li>
+<li><code>IS_POLY</code> - <code>0x20000020</code></li>
+<li><code>ANY</code> - <code>0xffffffff</code></li>
+<li><code>UNKNOWN</code> - <code>0x80008000</code></li>
+<li><code>INVALID</code> - <code>0x80000000</code></li>
+<li><code>IS_SPECIAL</code> - <code>0x80000000</code> or <code>INVALID</code></li>
+<li><code>IS_VALID</code> - <code>0x00000fff</code> or <code>LUA_MASK</code></li>
+</ul>
+
+<h3 class="text-xl py-2">tl.TypeInfo</h3>
+
+<p>Type: <code>record</code></p>
+
+<p>TypeInfo is the more bare-bones version of <a href="#private.Type" class="text-blue-500" >Type</a>. It contains the more needed information of <a href="#private.Type" class="text-blue-500" >Type</a> and none of the debug information (like where the type was inferred). Unlike <a href="#private.Type" class="text-blue-500" >Type</a>, however, it relies on the parent construct (<a href="#tl.TypeReport" class="text-blue-500" >TypeReport</a>) as all of the types are relative to <code>TypeReport.types</code>.</p>
+
+<ul>
+<li><code>t</code> - <code>integer</code></li>
+</ul>
+
+<p>The specific typecode of the type. See <a href="#tl.typecodes" class="text-blue-500" >tl.typecodes</a>.</p>
+
+<ul>
+<li><code>str</code> - <code>string</code></li>
+</ul>
+
+<p>The more humanized representation of the type (extracted from <code>show_type_base</code>).</p>
+
+<ul>
+<li><code>file</code> - <code>string</code></li>
+</ul>
+
+<p>The file where this type came from (usually provided by <code>require</code> and the processor functions).</p>
+
+<ul>
+<li><code>x</code> - <code>integer</code></li>
+</ul>
+
+<p>The position of the error in terms of the <code>x</code> axis (or column)</p>
+
+<ul>
+<li><code>y</code> - <code>integer</code></li>
+</ul>
+
+<p>The position of the error in terms of the <code>y</code> axis (or line)</p>
+
+<ul>
+<li><code>ref</code> - <code>integer</code> (index to <code>TypeReport.types</code>)</li>
+</ul>
+
+<p>The type which this type refers to. This only exists on nominals.</p>
+
+<ul>
+<li><code>fields</code> - <code>{ string: integer }</code> (index to <code>TypeReport.types</code>)</li>
+</ul>
+
+<p>A dictionary linking from the name of the field to an index to <code>TypeReport.types</code>. This only exists on records or arrayrecords.</p>
+
+<h1 class="text-3xl py-2">TODO; rest<hr /></h1>
+            </div>
+        </main>
+    </div>
+</body>

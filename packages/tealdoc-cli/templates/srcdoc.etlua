@@ -1,5 +1,5 @@
 <%- include('head', { current = current }) %>
 
 <body class="h-full w-full">
-    <%- highlight(code) %>
+    <%- highlight(code, false, true) %>
 </body>

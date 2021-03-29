@@ -28,7 +28,12 @@ writer.header = function(str: string, level: integer): {string}
       'base'
    }
 
-   return {'<h', tostring(level), ' class="text-', textMaps[level], ' pt-2">', str, '</h', tostring(level), '>'}
+   return {
+      '<h', tostring(level), ' class="text-', textMaps[level], ' py-2">',
+         str,
+         level == 1 and '<hr />' or '',
+      '</h', tostring(level), '>'
+   }
 end
 
 writer.fenced_code = function(code: string, language: string): {string} --;ignore

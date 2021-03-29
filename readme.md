@@ -17,7 +17,7 @@ Tealdoc converts comments within either Teal or Lua code into a verity of output
     * The only current form of internal linking is within source inspection
   * [ ] - External linking
     * Reading from the rockspec wouldn't be needed
-        * Falling-back the search function to the default search would suffice for searching
+      * Falling-back the search function to the default search would suffice for searching
     * The approach would be like rustdoc and storing modules like `docs/<mod-name>` instead of just `docs/`
 
 ## Minimum Teal version

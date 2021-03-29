@@ -39,34 +39,34 @@
 
 
 <body class="h-full w-full">
-    <pre class="code-block"><code><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">parser</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.parser'</span><span class="code-text">)</span><span class="code-text">
+    <pre class="code-block px-4"><code><span id="line-1"></span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">parser</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.parser'</span><span class="code-text">)</span><span id="line-3"></span><span class="code-text">
 
-</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">toRoot</span><span class="code-text">(</span><span class="code-text">current</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">parser</span><span class="code-text">.</span><span class="code-text">Type</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
-   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-keyword">not</span><span class="code-text"> </span><span class="code-text">current</span><span class="code-text">.</span><span class="code-text">tree</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text"> </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'./'</span><span class="code-text"> </span><span class="code-keyword">end</span><span class="code-text">
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">toRoot</span><span class="code-text">(</span><span class="code-text">current</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">parser</span><span class="code-text">.</span><span class="code-text">Type</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-4"></span><span class="code-text">
+   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-keyword">not</span><span class="code-text"> </span><span class="code-text">current</span><span class="code-text">.</span><span class="code-text">tree</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text"> </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'./'</span><span class="code-text"> </span><span class="code-keyword">end</span><span id="line-6"></span><span class="code-text">
 
-   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">count</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">0</span><span class="code-text">
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">count</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">0</span><span id="line-8"></span><span class="code-text">
 
-   </span><span class="code-keyword">for</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">1</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">#</span><span class="code-text">current</span><span class="code-text">.</span><span class="code-text">tree</span><span class="code-text"> </span><span class="code-keyword">do</span><span class="code-text">
-      </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">current</span><span class="code-text">.</span><span class="code-text">tree</span><span class="code-text">:</span><span class="code-text">sub</span><span class="code-text">(</span><span class="code-text">i</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'/'</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
-         </span><span class="code-text">count</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">count</span><span class="code-text"> </span><span class="code-text">+</span><span class="code-text"> </span><span class="code-number">1</span><span class="code-text">
-      </span><span class="code-keyword">end</span><span class="code-text">
-   </span><span class="code-keyword">end</span><span class="code-text">
+   </span><span class="code-keyword">for</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">1</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">#</span><span class="code-text">current</span><span class="code-text">.</span><span class="code-text">tree</span><span class="code-text"> </span><span class="code-keyword">do</span><span id="line-9"></span><span class="code-text">
+      </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">current</span><span class="code-text">.</span><span class="code-text">tree</span><span class="code-text">:</span><span class="code-text">sub</span><span class="code-text">(</span><span class="code-text">i</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">i</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'/'</span><span class="code-text"> </span><span class="code-keyword">then</span><span id="line-10"></span><span class="code-text">
+         </span><span class="code-text">count</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">count</span><span class="code-text"> </span><span class="code-text">+</span><span class="code-text"> </span><span class="code-number">1</span><span id="line-11"></span><span class="code-text">
+      </span><span class="code-keyword">end</span><span id="line-12"></span><span class="code-text">
+   </span><span class="code-keyword">end</span><span id="line-14"></span><span class="code-text">
 
-   </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'./'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">.</span><span class="code-text">rep</span><span class="code-text">(</span><span class="code-string">'../'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">count</span><span class="code-text">)</span><span class="code-text">
-</span><span class="code-keyword">end</span><span class="code-text">
+   </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'./'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">.</span><span class="code-text">rep</span><span class="code-text">(</span><span class="code-string">'../'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">count</span><span class="code-text">)</span><span id="line-15"></span><span class="code-text">
+</span><span class="code-keyword">end</span><span id="line-17"></span><span class="code-text">
 
-</span><span class="code-comment">--- Things used in templates that are not large enough for their own file
-</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
-   </span><span class="code-comment">--- The order in which module contents are sorted
-</span><span class="code-text">   </span><span class="code-text">order</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
-      </span><span class="code-string">'Modules'</span><span class="code-text">,</span><span class="code-text">
-      </span><span class="code-string">'Records'</span><span class="code-text">,</span><span class="code-text">
-      </span><span class="code-string">'Enums'</span><span class="code-text">,</span><span class="code-text">
-      </span><span class="code-string">'Functions'</span><span class="code-text">,</span><span class="code-text">
-      </span><span class="code-string">'Variables'</span><span class="code-text">
-   </span><span class="code-text">}</span><span class="code-text">,</span><span class="code-text">
-   </span><span class="code-comment">--- The tippy configuration used
-</span><span class="code-text">   </span><span class="code-text">tippy</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">[[
+</span><span id="line-18"></span><span class="code-comment">--- Things used in templates that are not large enough for their own file
+</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-19"></span><span class="code-text">
+   </span><span id="line-20"></span><span class="code-comment">--- The order in which module contents are sorted
+</span><span class="code-text">   </span><span class="code-text">order</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-21"></span><span class="code-text">
+      </span><span class="code-string">'Modules'</span><span class="code-text">,</span><span id="line-22"></span><span class="code-text">
+      </span><span class="code-string">'Records'</span><span class="code-text">,</span><span id="line-23"></span><span class="code-text">
+      </span><span class="code-string">'Enums'</span><span class="code-text">,</span><span id="line-24"></span><span class="code-text">
+      </span><span class="code-string">'Functions'</span><span class="code-text">,</span><span id="line-25"></span><span class="code-text">
+      </span><span class="code-string">'Variables'</span><span id="line-26"></span><span class="code-text">
+   </span><span class="code-text">}</span><span class="code-text">,</span><span id="line-27"></span><span class="code-text">
+   </span><span id="line-28"></span><span class="code-comment">--- The tippy configuration used
+</span><span class="code-text">   </span><span class="code-text">tippy</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span id="line-40"></span><span class="code-string">[[
       &lt;script src="https://unpkg.com/@popperjs/core@2"&gt;&lt;/script&gt;
       &lt;script src="https://unpkg.com/tippy.js@6"&gt;&lt;/script&gt;
       &lt;script&gt;
@@ -78,9 +78,9 @@
             }
          });
       &lt;/script&gt;
-   ]]</span><span class="code-text">,</span><span class="code-text">
-   </span><span class="code-comment">--- Get the root of the documentation output
-</span><span class="code-text">   </span><span class="code-text">toRoot</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">toRoot</span><span class="code-text">,</span><span class="code-text">
-</span><span class="code-text">}</span><span class="code-text">
+   ]]</span><span class="code-text">,</span><span id="line-41"></span><span class="code-text">
+   </span><span id="line-42"></span><span class="code-comment">--- Get the root of the documentation output
+</span><span class="code-text">   </span><span class="code-text">toRoot</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">toRoot</span><span class="code-text">,</span><span id="line-43"></span><span class="code-text">
+</span><span class="code-text">}</span><span id="line-44"></span><span class="code-text">
 </span></code></pre>
 </body>

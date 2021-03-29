@@ -5,5 +5,8 @@ return {
    functionStyle = 'lua',
    output = 'docs/tealdoc',
    source = 'packages/',
-   theme = 'nordic'
+   theme = 'nordic',
+   pages = {
+      'pages/tl-internals.md'
+   }
 }

@@ -69,16 +69,16 @@
         <div id="dropdown" class="ml-3 relative hidden">
             <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white text-gray-700 dropdown">
                 
-                    <button type="button" onclick="changeTheme('nordic')" class="block px-4 py-2 text-sm">
-                        nordic
+                    <button type="button" onclick="changeTheme('moonlight')" class="block px-4 py-2 text-sm">
+                        moonlight
                     </button>
                 
                     <button type="button" onclick="changeTheme('light')" class="block px-4 py-2 text-sm">
                         light
                     </button>
                 
-                    <button type="button" onclick="changeTheme('moonlight')" class="block px-4 py-2 text-sm">
-                        moonlight
+                    <button type="button" onclick="changeTheme('nordic')" class="block px-4 py-2 text-sm">
+                        nordic
                     </button>
                 
             </div>
@@ -129,6 +129,33 @@
         <ul>
             
                 <noscript>
+                    <h2 class="text-lg">Pages</h2>
+                </noscript>
+                <li id="Pages-section" class="hidden hidden-scripted">
+                    <ul>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../pages/pages-tl-internals.md.html">
+                                        Teal API (somewhat) explained
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../pages/readme.md.html">
+                                        Tealdoc
+                                    </a>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+                <noscript>
                     <h2 class="text-lg">Modules</h2>
                 </noscript>
                 <li id="Modules-section" class="hidden hidden-scripted">
@@ -153,6 +180,15 @@
                             
                             <li class="pl-4">
                                 
+                                    <a class="transition-colors duration-200 hover:text-white" href=".level.html">
+                                        level
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
                                     <a class="transition-colors duration-200 hover:text-white" href=".log.html">
                                         log
                                     </a>
@@ -162,8 +198,26 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href=".level.html">
-                                        level
+                                    <a class="transition-colors duration-200 hover:text-white" href=".debug.html">
+                                        debug
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href=".color.html">
+                                        color
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href=".warn.html">
+                                        warn
                                     </a>
                                 
                             </li>
@@ -198,77 +252,16 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href=".color.html">
-                                        color
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <a class="transition-colors duration-200 hover:text-white" href=".debug.html">
-                                        debug
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <a class="transition-colors duration-200 hover:text-white" href=".warn.html">
-                                        warn
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <div class="text-white text-sm font-bold">TEALDOC</div>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.logger/index.html">
-                                        tealdoc.logger
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.parser/index.html">
-                                        tealdoc.parser
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.tag/index.html">
-                                        tealdoc.tag
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.version.html">
-                                        tealdoc.version
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
                                     <div class="text-white text-sm font-bold">TEALDOC-CLI</div>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.generator/index.html">
+                                        tealdoc-cli.generator
+                                    </a>
                                 
                             </li>
                         
@@ -277,6 +270,15 @@
                                 
                                     <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.humanize.html">
                                         tealdoc-cli.humanize
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.fs/index.html">
+                                        tealdoc-cli.fs
                                     </a>
                                 
                             </li>
@@ -320,15 +322,6 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.command/index.html">
-                                        tealdoc-cli.command
-                                    </a>
-                                
-                            </li>
-                        
-                            
-                            <li class="pl-4">
-                                
                                     <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.highlight.html">
                                         tealdoc-cli.highlight
                                     </a>
@@ -338,8 +331,8 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.fs/index.html">
-                                        tealdoc-cli.fs
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.command/index.html">
+                                        tealdoc-cli.command
                                     </a>
                                 
                             </li>
@@ -356,26 +349,42 @@
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc-cli.generator/index.html">
-                                        tealdoc-cli.generator
-                                    </a>
+                                    <div class="text-white text-sm font-bold">TEALDOC</div>
                                 
                             </li>
-                        
-                    </ul>
-                </li>
-            
-                <noscript>
-                    <h2 class="text-lg">Pages</h2>
-                </noscript>
-                <li id="Pages-section" class="hidden hidden-scripted">
-                    <ul>
                         
                             
                             <li class="pl-4">
                                 
-                                    <a class="transition-colors duration-200 hover:text-white" href="./../pages/readme.md.html">
-                                        Tealdoc
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.version.html">
+                                        tealdoc.version
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.parser/index.html">
+                                        tealdoc.parser
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.logger/index.html">
+                                        tealdoc.logger
+                                    </a>
+                                
+                            </li>
+                        
+                            
+                            <li class="pl-4">
+                                
+                                    <a class="transition-colors duration-200 hover:text-white" href="./../tealdoc.tag/index.html">
+                                        tealdoc.tag
                                     </a>
                                 
                             </li>
@@ -393,7 +402,7 @@
 
 
         <main>
-            <div class="mx-auto py-6 px-8 container">
+            <div class="mx-auto py-6 px-8 container max-w-6xl">
                 <header class="grid grid-cols-2">
                     <span class="text-2xl">Function error</span>
                     
@@ -406,11 +415,8 @@
                 
                     
                         
-                        <h3 class="text-xl pt-6">Signature</h3>
 
-                        <div class="pt-2">
-                            <pre class="code-block"><code><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">error</span><span class="code-text">(</span><span class="code-text">message</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span></code></pre>
-                        </div>
+                        <pre class="code-block py-2 px-2"><code><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">error</span><span class="code-text">(</span><span class="code-text">message</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span></code></pre>
 
                         
                             <h3 class="text-xl pt-6">Description</h3>

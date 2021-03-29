@@ -39,11 +39,11 @@
 
 
 <body class="h-full w-full">
-    <pre class="code-block"><code><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">logger</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.logger'</span><span class="code-text">)</span><span class="code-text">
-</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">fs</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.fs'</span><span class="code-text">)</span><span class="code-text">
+    <pre class="code-block px-4"><code><span id="line-1"></span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">logger</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc.logger'</span><span class="code-text">)</span><span id="line-2"></span><span class="code-text">
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">fs</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.fs'</span><span class="code-text">)</span><span id="line-4"></span><span class="code-text">
 
-</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">main</span><span class="code-text">(</span><span class="code-text">)</span><span class="code-text">
-   </span><span class="code-text">fs</span><span class="code-text">.</span><span class="code-text">write</span><span class="code-text">(</span><span class="code-string">'tealdoc.lua'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">[[
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">main</span><span class="code-text">(</span><span class="code-text">)</span><span id="line-5"></span><span class="code-text">
+   </span><span class="code-text">fs</span><span class="code-text">.</span><span class="code-text">write</span><span class="code-text">(</span><span class="code-string">'tealdoc.lua'</span><span class="code-text">,</span><span class="code-text"> </span><span id="line-20"></span><span class="code-string">[[
 return {
    -- name = '&lt;taken from rockspec&gt;', -- The name of the project
    -- version = '&lt;taken from rockspec&gt;', -- The version of the project
@@ -58,15 +58,15 @@ return {
    -- pages = {'readme.md'}, -- All the pages that should be added
    -- noIncludeReadme = false -- If the readme should be included
 }
-]]</span><span class="code-text">)</span><span class="code-text">
-   </span><span class="code-text">logger</span><span class="code-text">.</span><span class="code-text">info</span><span class="code-text">(</span><span class="code-string">'Wrote tealdoc.lua'</span><span class="code-text">)</span><span class="code-text">
-</span><span class="code-keyword">end</span><span class="code-text">
+]]</span><span class="code-text">)</span><span id="line-21"></span><span class="code-text">
+   </span><span class="code-text">logger</span><span class="code-text">.</span><span class="code-text">info</span><span class="code-text">(</span><span class="code-string">'Wrote tealdoc.lua'</span><span class="code-text">)</span><span id="line-22"></span><span class="code-text">
+</span><span class="code-keyword">end</span><span id="line-24"></span><span class="code-text">
 
-</span><span class="code-comment">--- @{hidden}
-</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
-   </span><span class="code-text">name</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'init'</span><span class="code-text">,</span><span class="code-text">
-   </span><span class="code-text">description</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'Create the base `tealdoc.lua` config file'</span><span class="code-text">,</span><span class="code-text">
-   </span><span class="code-text">main</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">main</span><span class="code-text">,</span><span class="code-text">
-</span><span class="code-text">}</span><span class="code-text">
+</span><span id="line-25"></span><span class="code-comment">--- @{hidden}
+</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-26"></span><span class="code-text">
+   </span><span class="code-text">name</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'init'</span><span class="code-text">,</span><span id="line-27"></span><span class="code-text">
+   </span><span class="code-text">description</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'Create the base `tealdoc.lua` config file'</span><span class="code-text">,</span><span id="line-28"></span><span class="code-text">
+   </span><span class="code-text">main</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">main</span><span class="code-text">,</span><span id="line-29"></span><span class="code-text">
+</span><span class="code-text">}</span><span id="line-30"></span><span class="code-text">
 </span></code></pre>
 </body>

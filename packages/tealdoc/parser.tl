@@ -1,11 +1,12 @@
 local logger = require('tealdoc.logger')
 local tl = require('tl')
 
+local statedTip = false
+
 --- A structure that represents a bare function
 local record Function
    params: {Type}
    returns: {Type}
-   vararg: boolean
    isMetamethod: boolean
 end
 
@@ -96,21 +97,10 @@ local record Token
    kind: string
 end
 
--- Same with Node
-local record Node
-   {Node}
-
-   y: integer
-   x: integer
-   tk: string
-   kind: string
-end
-
 local record State
    report: tl.TypeReport
    files: {string: string}
    tokens: {string: {Token}}
-   asts: {string: {Node}}
 end
 
 local function generateGlobals(modules: {string}): string
@@ -184,8 +174,7 @@ local function getReport(modules: {string: string}, virtual: boolean, isLua: boo
 
    local state: State = {
       files = {},
-      tokens = {},
-      asts = {}
+      tokens = {}
    }
 
    tl.search_module = newSearch(modules, virtual, state)
@@ -372,58 +361,6 @@ local function getStop(tokens: {Token}, y: integer, x: integer, allowFunction: b
    end
 end
 
-local function parseKind(toParse: Node, lines: {string: integer})
-   if toParse.kind == 'expression_list' then
-      for i = 1, #toParse do
-         parseKind(toParse[i], lines)
-      end
-   elseif toParse.kind == 'table_literal' then
-      for i = 1, #toParse do
-         lines[toParse[i].tk] = toParse[i].y
-      end
-   else
-      -- `local_type` would be a record which we can already parse
-      -- Records are easier to parse since it isn't the entire Lua syntax
-      -- Although, the AST would be used if it contained record field locations
-      error('Unexpected kind: ' .. toParse.kind)
-   end
-end
-
-local function recursiveFind(node: Node, x: integer, y: integer, visited: {Node: boolean}, depth: integer): node, string
-   visited = visited or {}
-   depth = depth or 0
-
-   if depth > 10000 then
-      return nil, 'max-depth'
-   end
-
-   if visited[node] then
-      return nil, 'visited'
-   end
-
-   visited[node] = true
-
-   local viewed = {}
-
-   for _, v in pairs(node as {string: Node}) do
-      if type(v) == 'table' and v.x and v.y then
-         table.insert(viewed, v)
-
-         if v.x == x and v.y == y then
-            return v
-         else
-            local succ = recursiveFind(v, x, y, visited, depth + 1)
-
-            if succ then
-               return succ
-            end
-         end
-      end
-   end
-
-   return nil, 'viewed-all'
-end
-
 --- Create a (parsable) type from an index and a report
 local function createType(index: integer, report: State, noNominal: boolean): Type
    local tp = report.report.types[index]
@@ -498,16 +435,17 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
          table.insert(rets, createType(tp.rets[i][1], report, noNominal))
       end
 
+      local func: Function = {
+         params = params,
+         returns = rets
+      }
+
       out = {
          kind = 'function',
          description = getDescription(report.files[tp.file], tp.y),
          source = tp.file,
          yPos = tp.y,
-         func = {
-            params = params,
-            returns = rets,
-            vararg = tp.vararg
-         }
+         func = func
       }
    elseif tp.t == codes.ARRAY then
       out = {
@@ -578,13 +516,30 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
 
          typ.name = i
          typ.parent = out
+         typ.yPos = typ.yPos or typ.tp.y -- table fields have the Y
+
+         if tl.is_modified and not typ.yPos and tp.positions then
+            typ.yPos = tp.positions[i][2]
+         elseif not tp.positions then
+            logger.debug('No positions?', tp)
+         end
+
+         if typ.yPos and typ.description ~= '' then
+            typ.description = getDescription(report.files[tp.file], typ.yPos)
+         end
 
          out.struct.fields[i] = typ
       end
 
       -- This part is (more) likely to fail
       xpcall(function()
-         if name then
+         if name and not tl.is_modified then -- Record
+            if not statedTip then
+               logger.info('Tip: Use https://github.com/SovietKitsune/tl for more stable record parsing')
+
+               statedTip = true
+            end
+
             local lastToken = getStop(tokens, tp.y, tp.x)
 
             out.stopY = lastToken.y
@@ -661,28 +616,6 @@ local function createType(index: integer, report: State, noNominal: boolean): Ty
                      end
                   end
                end
-            end
-         else
-            if not report.asts[tp.file] then
-               local _, node = (tl.parse_program as function({Token}): integer, Node)(tokens)
-
-               report.asts[tp.file] = node
-            end
-
-            local node = report.asts[tp.file]
-
-            local collectedNode, reason = recursiveFind(node as Node, tp.x, tp.y)
-
-            if not collectedNode then
-               error('Unable to find node: ' .. tostring(reason))
-            end
-
-            local lines = {}
-
-            parseKind(collectedNode, lines)
-
-            for i, v in pairs(lines) do
-               out.struct.fields[i].description = getDescription(report.files[tp.file], v)
             end
          end
       end, function(err)

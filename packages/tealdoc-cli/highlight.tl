@@ -24,7 +24,7 @@ local function escape(text: string): string
 end
 
 -- No teal involved here, just highlighting
-local function fastHighlight(text: string, noWrap: boolean): string
+local function fastHighlight(text: string, noWrap: boolean, srcDoc: boolean): string
    local body = {}
 
    local stream = lexer.lua(text, {
@@ -35,7 +35,17 @@ local function fastHighlight(text: string, noWrap: boolean): string
       string = false
    })
 
+   local previousLine = 0.0
+
    for kind, text in stream do
+      local line = lexer.lineno(stream)
+
+      if previousLine ~= line and srcDoc then
+         previousLine = line
+
+         table.insert(body, '<span id="line-' .. line .. '"></span>')
+      end
+
       kind = castKind(kind, text)
 
       if kind == 'whitespace' then
@@ -50,7 +60,7 @@ local function fastHighlight(text: string, noWrap: boolean): string
    if noWrap then
       return table.concat(body)
    else
-      return '<pre class="code-block"><code>' .. table.concat(body) .. '</code></pre>'
+      return '<pre class="code-block px-4"><code>' .. table.concat(body) .. '</code></pre>'
    end
 end
 

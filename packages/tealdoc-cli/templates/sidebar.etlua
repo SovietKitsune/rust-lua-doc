@@ -53,7 +53,7 @@ if #project.pages > 0 then
             f:close()
 
             table.insert(foundSections.Pages, {
-                root = 'pages/' .. page .. '.html',
+                root = 'pages/' .. page:gsub('/', '-') .. '.html',
                 name = contents:match('.-# (.-)\n')
             })
         end

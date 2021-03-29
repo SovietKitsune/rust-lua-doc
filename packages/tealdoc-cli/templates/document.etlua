@@ -19,7 +19,7 @@ end
         <%- include('sidebar', { current = current }) %>
 
         <main>
-            <div class="mx-auto py-6 px-8 container">
+            <div class="mx-auto py-6 px-8 container max-w-6xl">
                 <header class="grid grid-cols-2">
                     <span class="text-2xl"><%= transform(current) %> <%= current.name %></span>
                     <% if current.source then %>
@@ -91,8 +91,6 @@ end
                                 <%
                                 --[[; TODO
                                     generate documents for undocumented properties
-
-                                    The teal module is a bit module as it gets flagged as a record so its properties don't get generated 
                                 ]]
                                 %>
                             </h4>
@@ -106,11 +104,8 @@ end
                         <% if current.func.isMetamethod then %>
                             <small>Metamethod</small>
                         <% end %>
-                        <h3 class="text-xl pt-6">Signature</h3>
 
-                        <div class="pt-2">
-                            <%- highlight(humanize(current)) %>
-                        </div>
+                        <pre class="code-block py-2 px-2"><code><%- highlight(humanize(current), true) %></code></pre>
 
                         <% if current.description ~= '' then %>
                             <h3 class="text-xl pt-6">Description</h3>

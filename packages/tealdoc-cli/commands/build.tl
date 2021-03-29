@@ -362,7 +362,7 @@ local function main()
 
       local contents = fs.read(name)
 
-      fs.write(config.output .. '/pages/' .. name .. '.html', generator.gen('page', {
+      fs.write(config.output .. '/pages/' .. name:gsub('/', '-') .. '.html', generator.gen('page', {
          contents = contents,
          page = name
       }))

@@ -39,215 +39,225 @@
 
 
 <body class="h-full w-full">
-    <pre class="code-block"><code><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">theme</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.theme'</span><span class="code-text">)</span><span class="code-text">
-</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">lexer</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'pl.lexer'</span><span class="code-text">)</span><span class="code-text">
+    <pre class="code-block px-4"><code><span id="line-1"></span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">theme</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'tealdoc-cli.theme'</span><span class="code-text">)</span><span id="line-2"></span><span class="code-text">
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">lexer</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">require</span><span class="code-text">(</span><span class="code-string">'pl.lexer'</span><span class="code-text">)</span><span id="line-4"></span><span class="code-text">
 
-</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">castKind</span><span class="code-text">(</span><span class="code-text">kind</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
-   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'identifier'</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'_G'</span><span class="code-text"> </span><span class="code-keyword">or</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'_ENV'</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
-      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'constant'</span><span class="code-text">
-   </span><span class="code-keyword">elseif</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'identifier'</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">(</span><span class="code-text">_G</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">any</span><span class="code-text">}</span><span class="code-text">)</span><span class="code-text">[</span><span class="code-text">text</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
-      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'library'</span><span class="code-text">
-   </span><span class="code-keyword">elseif</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'identifier'</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'self'</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
-      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'keyword2'</span><span class="code-text">
-   </span><span class="code-keyword">else</span><span class="code-text">
-      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text">
-   </span><span class="code-keyword">end</span><span class="code-text">
-</span><span class="code-keyword">end</span><span class="code-text">
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">castKind</span><span class="code-text">(</span><span class="code-text">kind</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-5"></span><span class="code-text">
+   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'identifier'</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'_G'</span><span class="code-text"> </span><span class="code-keyword">or</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'_ENV'</span><span class="code-text"> </span><span class="code-keyword">then</span><span id="line-6"></span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'constant'</span><span id="line-7"></span><span class="code-text">
+   </span><span class="code-keyword">elseif</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'identifier'</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">(</span><span class="code-text">_G</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">string</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">any</span><span class="code-text">}</span><span class="code-text">)</span><span class="code-text">[</span><span class="code-text">text</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-keyword">then</span><span id="line-8"></span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'library'</span><span id="line-9"></span><span class="code-text">
+   </span><span class="code-keyword">elseif</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'identifier'</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'self'</span><span class="code-text"> </span><span class="code-keyword">then</span><span id="line-10"></span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'keyword2'</span><span id="line-11"></span><span class="code-text">
+   </span><span class="code-keyword">else</span><span id="line-12"></span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">kind</span><span id="line-13"></span><span class="code-text">
+   </span><span class="code-keyword">end</span><span id="line-14"></span><span class="code-text">
+</span><span class="code-keyword">end</span><span id="line-16"></span><span class="code-text">
 
-</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">entities</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
-   </span><span class="code-text">[</span><span class="code-string">'&lt;'</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'&amp;lt;'</span><span class="code-text">,</span><span class="code-text">
-   </span><span class="code-text">[</span><span class="code-string">'&gt;'</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'&amp;gt;'</span><span class="code-text">,</span><span class="code-text">
-   </span><span class="code-text">[</span><span class="code-string">'&amp;'</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'&amp;amp;'</span><span class="code-text">
-</span><span class="code-text">}</span><span class="code-text">
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">entities</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-17"></span><span class="code-text">
+   </span><span class="code-text">[</span><span class="code-string">'&lt;'</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'&amp;lt;'</span><span class="code-text">,</span><span id="line-18"></span><span class="code-text">
+   </span><span class="code-text">[</span><span class="code-string">'&gt;'</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'&amp;gt;'</span><span class="code-text">,</span><span id="line-19"></span><span class="code-text">
+   </span><span class="code-text">[</span><span class="code-string">'&amp;'</span><span class="code-text">]</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-string">'&amp;amp;'</span><span id="line-20"></span><span class="code-text">
+</span><span class="code-text">}</span><span id="line-22"></span><span class="code-text">
 
-</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">escape</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
-   </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text">gsub</span><span class="code-text">(</span><span class="code-string">'[&lt;&gt;&amp;]'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">entities</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
-</span><span class="code-keyword">end</span><span class="code-text">
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">escape</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-23"></span><span class="code-text">
+   </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text">gsub</span><span class="code-text">(</span><span class="code-string">'[&lt;&gt;&amp;]'</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">entities</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">as</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-24"></span><span class="code-text">
+</span><span class="code-keyword">end</span><span id="line-26"></span><span class="code-text">
 
-</span><span class="code-comment">-- No teal involved here, just highlighting
-</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">fastHighlight</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">noWrap</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">
-   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">body</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">}</span><span class="code-text">
+</span><span id="line-27"></span><span class="code-comment">-- No teal involved here, just highlighting
+</span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-keyword">function</span><span class="code-text"> </span><span class="code-text">fastHighlight</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">noWrap</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">srcDoc</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">boolean</span><span class="code-text">)</span><span class="code-text">:</span><span class="code-text"> </span><span class="code-text">string</span><span id="line-28"></span><span class="code-text">
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">body</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">}</span><span id="line-30"></span><span class="code-text">
 
-   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">stream</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">lexer</span><span class="code-text">.</span><span class="code-text">lua</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
-      </span><span class="code-text">space</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span class="code-text">,</span><span class="code-text">
-      </span><span class="code-text">comments</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span class="code-text">
-   </span><span class="code-text">}</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">{</span><span class="code-text">
-      </span><span class="code-text">number</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span class="code-text">,</span><span class="code-text">
-      </span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span class="code-text">
-   </span><span class="code-text">}</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">stream</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">lexer</span><span class="code-text">.</span><span class="code-text">lua</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-31"></span><span class="code-text">
+      </span><span class="code-text">space</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span class="code-text">,</span><span id="line-32"></span><span class="code-text">
+      </span><span class="code-text">comments</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span id="line-33"></span><span class="code-text">
+   </span><span class="code-text">}</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">{</span><span id="line-34"></span><span class="code-text">
+      </span><span class="code-text">number</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span class="code-text">,</span><span id="line-35"></span><span class="code-text">
+      </span><span class="code-text">string</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-keyword">false</span><span id="line-36"></span><span class="code-text">
+   </span><span class="code-text">}</span><span class="code-text">)</span><span id="line-38"></span><span class="code-text">
 
-   </span><span class="code-keyword">for</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-keyword">in</span><span class="code-text"> </span><span class="code-text">stream</span><span class="code-text"> </span><span class="code-keyword">do</span><span class="code-text">
-      </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">castKind</span><span class="code-text">(</span><span class="code-text">kind</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text">)</span><span class="code-text">
+   </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">previousLine</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-number">0.0</span><span id="line-40"></span><span class="code-text">
 
-      </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'whitespace'</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
-         </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text">)</span><span class="code-text">
-      </span><span class="code-keyword">elseif</span><span class="code-text"> </span><span class="code-text">theme</span><span class="code-text">.</span><span class="code-text">isNonText</span><span class="code-text">(</span><span class="code-text">kind</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
-         </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&lt;span class="code-'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'"&gt;'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">escape</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'&lt;/span&gt;'</span><span class="code-text">)</span><span class="code-text">
-      </span><span class="code-keyword">else</span><span class="code-text">
-         </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&lt;span class="code-text"&gt;'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">escape</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'&lt;/span&gt;'</span><span class="code-text">)</span><span class="code-text">
-      </span><span class="code-keyword">end</span><span class="code-text">
-   </span><span class="code-keyword">end</span><span class="code-text">
+   </span><span class="code-keyword">for</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text"> </span><span class="code-keyword">in</span><span class="code-text"> </span><span class="code-text">stream</span><span class="code-text"> </span><span class="code-keyword">do</span><span id="line-41"></span><span class="code-text">
+      </span><span class="code-keyword">local</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">lexer</span><span class="code-text">.</span><span class="code-text">lineno</span><span class="code-text">(</span><span class="code-text">stream</span><span class="code-text">)</span><span id="line-43"></span><span class="code-text">
 
-   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">noWrap</span><span class="code-text"> </span><span class="code-keyword">then</span><span class="code-text">
-      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">concat</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">)</span><span class="code-text">
-   </span><span class="code-keyword">else</span><span class="code-text">
-      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'&lt;pre class="code-block"&gt;&lt;code&gt;'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">concat</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'&lt;/code&gt;&lt;/pre&gt;'</span><span class="code-text">
-   </span><span class="code-keyword">end</span><span class="code-text">
-</span><span class="code-keyword">end</span><span class="code-text">
+      </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">previousLine</span><span class="code-text"> </span><span class="code-text">~=</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text"> </span><span class="code-keyword">and</span><span class="code-text"> </span><span class="code-text">srcDoc</span><span class="code-text"> </span><span class="code-keyword">then</span><span id="line-44"></span><span class="code-text">
+         </span><span class="code-text">previousLine</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">line</span><span id="line-46"></span><span class="code-text">
 
-</span><span class="code-comment">--- Highlight and optionally give types to a piece of text
-</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">fastHighlight</span><span class="code-text">
+         </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&lt;span id="line-'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">line</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'"&gt;&lt;/span&gt;'</span><span class="code-text">)</span><span id="line-47"></span><span class="code-text">
+      </span><span class="code-keyword">end</span><span id="line-49"></span><span class="code-text">
 
-</span><span class="code-comment">-- Wait until `tl.lex` preserves comments
-</span><span class="code-comment">-- `tl.lex` is fast at lexing teal so its somewhat needed
-</span><span class="code-comment">-- For now `pl.lexer` is used
-</span><span class="code-text">
-</span><span class="code-comment">-- local function parse(file: string, search: function(module: string): string, FILE, {string}): {Token}, tl.TypeReport
-</span><span class="code-comment">--    local f = io.open(file)
-</span><span class="code-text">
-</span><span class="code-comment">--    local contents = f:read('*a')
-</span><span class="code-text">
-</span><span class="code-comment">--    f:close()
-</span><span class="code-text">
-</span><span class="code-comment">--    local oldSearch = tl.search_module
-</span><span class="code-text">
-</span><span class="code-comment">--    -- The new search isolates context which is needed to prevent external modules
-</span><span class="code-comment">--    tl.search_module = search
-</span><span class="code-text">
-</span><span class="code-comment">--    local result = tl.process_string(contents, false, nil, file)
-</span><span class="code-comment">--    local report = tl.get_types(result)
-</span><span class="code-text">
-</span><span class="code-comment">--    tl.search_module = oldSearch
-</span><span class="code-text">
-</span><span class="code-comment">--    local tokens = {} as {Token}
-</span><span class="code-text">
-</span><span class="code-comment">--    local stream = lexer.lua(contents, {
-</span><span class="code-comment">--       space = false,
-</span><span class="code-comment">--       comments = false
-</span><span class="code-comment">--    }, {
-</span><span class="code-comment">--       number = false,
-</span><span class="code-comment">--       string = false
-</span><span class="code-comment">--    })
-</span><span class="code-text">
-</span><span class="code-comment">--    local x = 1
-</span><span class="code-comment">--    local y = 1
-</span><span class="code-text">
-</span><span class="code-comment">--    for kind, text in stream do
-</span><span class="code-comment">--       kind = castKind(kind, text)
-</span><span class="code-text">
-</span><span class="code-comment">--       local line = stream(0) as integer
-</span><span class="code-text">
-</span><span class="code-comment">--       if y ~= line then
-</span><span class="code-comment">--          y = line
-</span><span class="code-comment">--          x = 1
-</span><span class="code-comment">--       end
-</span><span class="code-text">
-</span><span class="code-comment">--       x = x + #text
-</span><span class="code-text">
-</span><span class="code-comment">--       local types = tl.symbols_in_scope(report, line, x)
-</span><span class="code-text">
-</span><span class="code-comment">--       local index: integer
-</span><span class="code-text">
-</span><span class="code-comment">--       for i, v in pairs(types) do
-</span><span class="code-comment">--          if i == text then
-</span><span class="code-comment">--             index = v
-</span><span class="code-comment">--             break
-</span><span class="code-comment">--          end
-</span><span class="code-comment">--       end
-</span><span class="code-text">
-</span><span class="code-comment">--       local token = {
-</span><span class="code-comment">--          kind = kind,
-</span><span class="code-comment">--          str = text,
-</span><span class="code-comment">--          line = line,
-</span><span class="code-comment">--          typ = report.types[index]
-</span><span class="code-comment">--       } as Token
-</span><span class="code-text">
-</span><span class="code-comment">--       table.insert(tokens, token)
-</span><span class="code-comment">--    end
-</span><span class="code-text">
-</span><span class="code-comment">--    return tokens
-</span><span class="code-comment">-- end
-</span><span class="code-text">
-</span><span class="code-comment">-- local function fullDocument(tokens: {Token}, current: string, selectedTheme: string, noOutline: boolean, toRoot: string): string
-</span><span class="code-comment">--    toRoot = toRoot or '../'
-</span><span class="code-text">
-</span><span class="code-comment">--    local body = {}
-</span><span class="code-text">
-</span><span class="code-comment">--    local y = 1
-</span><span class="code-text">
-</span><span class="code-comment">--    for i = 1, #tokens do
-</span><span class="code-comment">--       local token = tokens[i]
-</span><span class="code-comment">--       local within = {}
-</span><span class="code-comment">--       local tag = 'span'
-</span><span class="code-comment">--       local extra = ''
-</span><span class="code-text">
-</span><span class="code-comment">--       if token.kind == 'whitespace' then
-</span><span class="code-comment">--          table.insert(body, token.str)
-</span><span class="code-comment">--       else
-</span><span class="code-comment">--          if token.line ~= y then
-</span><span class="code-comment">--             y = token.line
-</span><span class="code-text">
-</span><span class="code-comment">--             table.insert(body, '&lt;span id="line-' .. y .. '"&gt;&lt;/span&gt;')
-</span><span class="code-comment">--          end
-</span><span class="code-text">
-</span><span class="code-comment">--          if token.typ then
-</span><span class="code-comment">--             table.insert(within, 'data-tippy-content')
-</span><span class="code-text">
-</span><span class="code-comment">--             extra = '&lt;span style="display: none;"&gt;&lt;code&gt;' .. fastHighlight(token.typ.str, true) .. '&lt;/code&gt;&lt;/span&gt;'
-</span><span class="code-text">
-</span><span class="code-comment">--             if token.typ.y then
-</span><span class="code-comment">--                tag = 'a'
-</span><span class="code-text">
-</span><span class="code-comment">--                local src = token.typ.file
-</span><span class="code-text">
-</span><span class="code-comment">--                local href: string
-</span><span class="code-text">
-</span><span class="code-comment">--                if src ~= current and src then
-</span><span class="code-comment">--                   href = toRoot .. 'sources/' .. src:gsub('/', '-') .. '.html'
-</span><span class="code-comment">--                else
-</span><span class="code-comment">--                   href = '#line-' .. token.typ.y
-</span><span class="code-comment">--                end
-</span><span class="code-text">
-</span><span class="code-comment">--                table.insert(within, 'href="' .. href .. '"')
-</span><span class="code-comment">--             end
-</span><span class="code-comment">--          end
-</span><span class="code-text">
-</span><span class="code-comment">--          local color = theme.isNonText(token.kind) and token.kind or 'text'
-</span><span class="code-text">
-</span><span class="code-comment">--          if token.str == 'true' or token.str == 'false' or token.str == 'nil' then
-</span><span class="code-comment">--             color = 'number'
-</span><span class="code-comment">--          end
-</span><span class="code-text">
-</span><span class="code-comment">--          table.insert(within, 'class="code-' .. color .. '"')
-</span><span class="code-text">
-</span><span class="code-comment">--          table.insert(body, '&lt;' .. tag .. ' ' .. table.concat(within, ' ') .. '&gt;' .. escape(token.str) .. extra .. '&lt;/' .. tag .. '&gt;')
-</span><span class="code-comment">--       end
-</span><span class="code-comment">--    end
-</span><span class="code-text">
-</span><span class="code-comment">--    if noOutline then
-</span><span class="code-comment">--       return table.concat(body)
-</span><span class="code-comment">--    end
-</span><span class="code-text">
-</span><span class="code-comment">--    return ([[
-</span><span class="code-comment">--    &lt;!DOCTYPE html&gt;
-</span><span class="code-comment">--    &lt;html lang="en"&gt;
-</span><span class="code-text">
-</span><span class="code-comment">--    &lt;head&gt;
-</span><span class="code-comment">--       &lt;meta charset="UTF-8"&gt;
-</span><span class="code-comment">--       &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
-</span><span class="code-comment">--       &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-</span><span class="code-comment">--       &lt;style&gt;
-</span><span class="code-comment">--          a { text-decoration: none; }
-</span><span class="code-comment">--          %s
-</span><span class="code-comment">--       &lt;/style&gt;
-</span><span class="code-comment">--    &lt;/head&gt;
-</span><span class="code-comment">--    &lt;body class="%s"&gt;
-</span><span class="code-comment">--       &lt;pre class="code-block"&gt;&lt;code&gt;
-</span><span class="code-comment">-- %s
-</span><span class="code-comment">--       &lt;/code&gt;&lt;/pre&gt;
-</span><span class="code-comment">--       %s
-</span><span class="code-comment">--    &lt;/body&gt;
-</span><span class="code-comment">--    ]]):format(theme.css, selectedTheme, table.concat(body), tippy)
-</span><span class="code-comment">-- end
+      </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">=</span><span class="code-text"> </span><span class="code-text">castKind</span><span class="code-text">(</span><span class="code-text">kind</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text">)</span><span id="line-51"></span><span class="code-text">
+
+      </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">==</span><span class="code-text"> </span><span class="code-string">'whitespace'</span><span class="code-text"> </span><span class="code-keyword">then</span><span id="line-52"></span><span class="code-text">
+         </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-text">text</span><span class="code-text">)</span><span id="line-53"></span><span class="code-text">
+      </span><span class="code-keyword">elseif</span><span class="code-text"> </span><span class="code-text">theme</span><span class="code-text">.</span><span class="code-text">isNonText</span><span class="code-text">(</span><span class="code-text">kind</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-keyword">then</span><span id="line-54"></span><span class="code-text">
+         </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&lt;span class="code-'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">kind</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'"&gt;'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">escape</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'&lt;/span&gt;'</span><span class="code-text">)</span><span id="line-55"></span><span class="code-text">
+      </span><span class="code-keyword">else</span><span id="line-56"></span><span class="code-text">
+         </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">insert</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">,</span><span class="code-text"> </span><span class="code-string">'&lt;span class="code-text"&gt;'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">escape</span><span class="code-text">(</span><span class="code-text">text</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'&lt;/span&gt;'</span><span class="code-text">)</span><span id="line-57"></span><span class="code-text">
+      </span><span class="code-keyword">end</span><span id="line-58"></span><span class="code-text">
+   </span><span class="code-keyword">end</span><span id="line-60"></span><span class="code-text">
+
+   </span><span class="code-keyword">if</span><span class="code-text"> </span><span class="code-text">noWrap</span><span class="code-text"> </span><span class="code-keyword">then</span><span id="line-61"></span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">concat</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">)</span><span id="line-62"></span><span class="code-text">
+   </span><span class="code-keyword">else</span><span id="line-63"></span><span class="code-text">
+      </span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-string">'&lt;pre class="code-block px-4"&gt;&lt;code&gt;'</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-text">table</span><span class="code-text">.</span><span class="code-text">concat</span><span class="code-text">(</span><span class="code-text">body</span><span class="code-text">)</span><span class="code-text"> </span><span class="code-text">..</span><span class="code-text"> </span><span class="code-string">'&lt;/code&gt;&lt;/pre&gt;'</span><span id="line-64"></span><span class="code-text">
+   </span><span class="code-keyword">end</span><span id="line-65"></span><span class="code-text">
+</span><span class="code-keyword">end</span><span id="line-67"></span><span class="code-text">
+
+</span><span id="line-68"></span><span class="code-comment">--- Highlight and optionally give types to a piece of text
+</span><span class="code-keyword">return</span><span class="code-text"> </span><span class="code-text">fastHighlight</span><span id="line-70"></span><span class="code-text">
+
+</span><span id="line-71"></span><span class="code-comment">-- Wait until `tl.lex` preserves comments
+</span><span id="line-72"></span><span class="code-comment">-- `tl.lex` is fast at lexing teal so its somewhat needed
+</span><span id="line-73"></span><span class="code-comment">-- For now `pl.lexer` is used
+</span><span id="line-74"></span><span class="code-text">
+</span><span id="line-75"></span><span class="code-comment">-- local function parse(file: string, search: function(module: string): string, FILE, {string}): {Token}, tl.TypeReport
+</span><span id="line-76"></span><span class="code-comment">--    local f = io.open(file)
+</span><span id="line-77"></span><span class="code-text">
+</span><span id="line-78"></span><span class="code-comment">--    local contents = f:read('*a')
+</span><span id="line-79"></span><span class="code-text">
+</span><span id="line-80"></span><span class="code-comment">--    f:close()
+</span><span id="line-81"></span><span class="code-text">
+</span><span id="line-82"></span><span class="code-comment">--    local oldSearch = tl.search_module
+</span><span id="line-83"></span><span class="code-text">
+</span><span id="line-84"></span><span class="code-comment">--    -- The new search isolates context which is needed to prevent external modules
+</span><span id="line-85"></span><span class="code-comment">--    tl.search_module = search
+</span><span id="line-86"></span><span class="code-text">
+</span><span id="line-87"></span><span class="code-comment">--    local result = tl.process_string(contents, false, nil, file)
+</span><span id="line-88"></span><span class="code-comment">--    local report = tl.get_types(result)
+</span><span id="line-89"></span><span class="code-text">
+</span><span id="line-90"></span><span class="code-comment">--    tl.search_module = oldSearch
+</span><span id="line-91"></span><span class="code-text">
+</span><span id="line-92"></span><span class="code-comment">--    local tokens = {} as {Token}
+</span><span id="line-93"></span><span class="code-text">
+</span><span id="line-94"></span><span class="code-comment">--    local stream = lexer.lua(contents, {
+</span><span id="line-95"></span><span class="code-comment">--       space = false,
+</span><span id="line-96"></span><span class="code-comment">--       comments = false
+</span><span id="line-97"></span><span class="code-comment">--    }, {
+</span><span id="line-98"></span><span class="code-comment">--       number = false,
+</span><span id="line-99"></span><span class="code-comment">--       string = false
+</span><span id="line-100"></span><span class="code-comment">--    })
+</span><span id="line-101"></span><span class="code-text">
+</span><span id="line-102"></span><span class="code-comment">--    local x = 1
+</span><span id="line-103"></span><span class="code-comment">--    local y = 1
+</span><span id="line-104"></span><span class="code-text">
+</span><span id="line-105"></span><span class="code-comment">--    for kind, text in stream do
+</span><span id="line-106"></span><span class="code-comment">--       kind = castKind(kind, text)
+</span><span id="line-107"></span><span class="code-text">
+</span><span id="line-108"></span><span class="code-comment">--       local line = stream(0) as integer
+</span><span id="line-109"></span><span class="code-text">
+</span><span id="line-110"></span><span class="code-comment">--       if y ~= line then
+</span><span id="line-111"></span><span class="code-comment">--          y = line
+</span><span id="line-112"></span><span class="code-comment">--          x = 1
+</span><span id="line-113"></span><span class="code-comment">--       end
+</span><span id="line-114"></span><span class="code-text">
+</span><span id="line-115"></span><span class="code-comment">--       x = x + #text
+</span><span id="line-116"></span><span class="code-text">
+</span><span id="line-117"></span><span class="code-comment">--       local types = tl.symbols_in_scope(report, line, x)
+</span><span id="line-118"></span><span class="code-text">
+</span><span id="line-119"></span><span class="code-comment">--       local index: integer
+</span><span id="line-120"></span><span class="code-text">
+</span><span id="line-121"></span><span class="code-comment">--       for i, v in pairs(types) do
+</span><span id="line-122"></span><span class="code-comment">--          if i == text then
+</span><span id="line-123"></span><span class="code-comment">--             index = v
+</span><span id="line-124"></span><span class="code-comment">--             break
+</span><span id="line-125"></span><span class="code-comment">--          end
+</span><span id="line-126"></span><span class="code-comment">--       end
+</span><span id="line-127"></span><span class="code-text">
+</span><span id="line-128"></span><span class="code-comment">--       local token = {
+</span><span id="line-129"></span><span class="code-comment">--          kind = kind,
+</span><span id="line-130"></span><span class="code-comment">--          str = text,
+</span><span id="line-131"></span><span class="code-comment">--          line = line,
+</span><span id="line-132"></span><span class="code-comment">--          typ = report.types[index]
+</span><span id="line-133"></span><span class="code-comment">--       } as Token
+</span><span id="line-134"></span><span class="code-text">
+</span><span id="line-135"></span><span class="code-comment">--       table.insert(tokens, token)
+</span><span id="line-136"></span><span class="code-comment">--    end
+</span><span id="line-137"></span><span class="code-text">
+</span><span id="line-138"></span><span class="code-comment">--    return tokens
+</span><span id="line-139"></span><span class="code-comment">-- end
+</span><span id="line-140"></span><span class="code-text">
+</span><span id="line-141"></span><span class="code-comment">-- local function fullDocument(tokens: {Token}, current: string, selectedTheme: string, noOutline: boolean, toRoot: string): string
+</span><span id="line-142"></span><span class="code-comment">--    toRoot = toRoot or '../'
+</span><span id="line-143"></span><span class="code-text">
+</span><span id="line-144"></span><span class="code-comment">--    local body = {}
+</span><span id="line-145"></span><span class="code-text">
+</span><span id="line-146"></span><span class="code-comment">--    local y = 1
+</span><span id="line-147"></span><span class="code-text">
+</span><span id="line-148"></span><span class="code-comment">--    for i = 1, #tokens do
+</span><span id="line-149"></span><span class="code-comment">--       local token = tokens[i]
+</span><span id="line-150"></span><span class="code-comment">--       local within = {}
+</span><span id="line-151"></span><span class="code-comment">--       local tag = 'span'
+</span><span id="line-152"></span><span class="code-comment">--       local extra = ''
+</span><span id="line-153"></span><span class="code-text">
+</span><span id="line-154"></span><span class="code-comment">--       if token.kind == 'whitespace' then
+</span><span id="line-155"></span><span class="code-comment">--          table.insert(body, token.str)
+</span><span id="line-156"></span><span class="code-comment">--       else
+</span><span id="line-157"></span><span class="code-comment">--          if token.line ~= y then
+</span><span id="line-158"></span><span class="code-comment">--             y = token.line
+</span><span id="line-159"></span><span class="code-text">
+</span><span id="line-160"></span><span class="code-comment">--             table.insert(body, '&lt;span id="line-' .. y .. '"&gt;&lt;/span&gt;')
+</span><span id="line-161"></span><span class="code-comment">--          end
+</span><span id="line-162"></span><span class="code-text">
+</span><span id="line-163"></span><span class="code-comment">--          if token.typ then
+</span><span id="line-164"></span><span class="code-comment">--             table.insert(within, 'data-tippy-content')
+</span><span id="line-165"></span><span class="code-text">
+</span><span id="line-166"></span><span class="code-comment">--             extra = '&lt;span style="display: none;"&gt;&lt;code&gt;' .. fastHighlight(token.typ.str, true) .. '&lt;/code&gt;&lt;/span&gt;'
+</span><span id="line-167"></span><span class="code-text">
+</span><span id="line-168"></span><span class="code-comment">--             if token.typ.y then
+</span><span id="line-169"></span><span class="code-comment">--                tag = 'a'
+</span><span id="line-170"></span><span class="code-text">
+</span><span id="line-171"></span><span class="code-comment">--                local src = token.typ.file
+</span><span id="line-172"></span><span class="code-text">
+</span><span id="line-173"></span><span class="code-comment">--                local href: string
+</span><span id="line-174"></span><span class="code-text">
+</span><span id="line-175"></span><span class="code-comment">--                if src ~= current and src then
+</span><span id="line-176"></span><span class="code-comment">--                   href = toRoot .. 'sources/' .. src:gsub('/', '-') .. '.html'
+</span><span id="line-177"></span><span class="code-comment">--                else
+</span><span id="line-178"></span><span class="code-comment">--                   href = '#line-' .. token.typ.y
+</span><span id="line-179"></span><span class="code-comment">--                end
+</span><span id="line-180"></span><span class="code-text">
+</span><span id="line-181"></span><span class="code-comment">--                table.insert(within, 'href="' .. href .. '"')
+</span><span id="line-182"></span><span class="code-comment">--             end
+</span><span id="line-183"></span><span class="code-comment">--          end
+</span><span id="line-184"></span><span class="code-text">
+</span><span id="line-185"></span><span class="code-comment">--          local color = theme.isNonText(token.kind) and token.kind or 'text'
+</span><span id="line-186"></span><span class="code-text">
+</span><span id="line-187"></span><span class="code-comment">--          if token.str == 'true' or token.str == 'false' or token.str == 'nil' then
+</span><span id="line-188"></span><span class="code-comment">--             color = 'number'
+</span><span id="line-189"></span><span class="code-comment">--          end
+</span><span id="line-190"></span><span class="code-text">
+</span><span id="line-191"></span><span class="code-comment">--          table.insert(within, 'class="code-' .. color .. '"')
+</span><span id="line-192"></span><span class="code-text">
+</span><span id="line-193"></span><span class="code-comment">--          table.insert(body, '&lt;' .. tag .. ' ' .. table.concat(within, ' ') .. '&gt;' .. escape(token.str) .. extra .. '&lt;/' .. tag .. '&gt;')
+</span><span id="line-194"></span><span class="code-comment">--       end
+</span><span id="line-195"></span><span class="code-comment">--    end
+</span><span id="line-196"></span><span class="code-text">
+</span><span id="line-197"></span><span class="code-comment">--    if noOutline then
+</span><span id="line-198"></span><span class="code-comment">--       return table.concat(body)
+</span><span id="line-199"></span><span class="code-comment">--    end
+</span><span id="line-200"></span><span class="code-text">
+</span><span id="line-201"></span><span class="code-comment">--    return ([[
+</span><span id="line-202"></span><span class="code-comment">--    &lt;!DOCTYPE html&gt;
+</span><span id="line-203"></span><span class="code-comment">--    &lt;html lang="en"&gt;
+</span><span id="line-204"></span><span class="code-text">
+</span><span id="line-205"></span><span class="code-comment">--    &lt;head&gt;
+</span><span id="line-206"></span><span class="code-comment">--       &lt;meta charset="UTF-8"&gt;
+</span><span id="line-207"></span><span class="code-comment">--       &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+</span><span id="line-208"></span><span class="code-comment">--       &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+</span><span id="line-209"></span><span class="code-comment">--       &lt;style&gt;
+</span><span id="line-210"></span><span class="code-comment">--          a { text-decoration: none; }
+</span><span id="line-211"></span><span class="code-comment">--          %s
+</span><span id="line-212"></span><span class="code-comment">--       &lt;/style&gt;
+</span><span id="line-213"></span><span class="code-comment">--    &lt;/head&gt;
+</span><span id="line-214"></span><span class="code-comment">--    &lt;body class="%s"&gt;
+</span><span id="line-215"></span><span class="code-comment">--       &lt;pre class="code-block"&gt;&lt;code&gt;
+</span><span id="line-216"></span><span class="code-comment">-- %s
+</span><span id="line-217"></span><span class="code-comment">--       &lt;/code&gt;&lt;/pre&gt;
+</span><span id="line-218"></span><span class="code-comment">--       %s
+</span><span id="line-219"></span><span class="code-comment">--    &lt;/body&gt;
+</span><span id="line-220"></span><span class="code-comment">--    ]]):format(theme.css, selectedTheme, table.concat(body), tippy)
+</span><span id="line-221"></span><span class="code-comment">-- end
 </span></code></pre>
 </body>

@@ -5,6 +5,7 @@ node_modules
 # Testing
 examples/tl
 docs/tl
+test.tl
 # Tailwind intellisense
 tailwind.config.js
 package.json
