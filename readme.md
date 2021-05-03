@@ -1,6 +1,6 @@
 # Tealdoc
 
-Tealdoc converts comments within either Teal or Lua code into a verity of outputs.
+An documentation generator for Teal.
 
 ## Tealdocs status on [#233](https://github.com/teal-language/tl/issues/233)
 
